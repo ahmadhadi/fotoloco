@@ -64,13 +64,31 @@ button,input,select,textarea{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
 .lbl{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
 
-/* header */
-header{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px 24px;border-bottom:1px solid var(--line);
-  padding-block:16px 14px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-.mark{display:flex;flex-direction:column;gap:4px;margin-right:auto}
-.mark h1{margin:0;font:700 58px/0.85 var(--display);letter-spacing:.005em;text-transform:uppercase}
-.mark h1 span{display:inline-block;background:var(--chalk);color:var(--ink);padding:.04em .1em 0;margin-left:.06em;transform:rotate(-2deg)}
-.actions{display:flex;flex-wrap:wrap;gap:8px}
+/* top bar — slim, like a design tool's */
+.topbar{display:flex;align-items:center;gap:10px;min-height:56px;border-bottom:1px solid var(--line);background:var(--ink);position:relative;z-index:60;
+  padding-block:6px;padding-left:max(14px,env(safe-area-inset-left,0px));padding-right:max(14px,env(safe-area-inset-right,0px))}
+.mark h1{margin:0 6px 0 0;font:700 30px/0.9 var(--display);letter-spacing:.005em;text-transform:uppercase;white-space:nowrap}
+.mark h1 span{display:inline-block;background:var(--chalk);color:var(--ink);padding:.05em .1em 0;margin-left:.06em;transform:rotate(-2deg)}
+.tbtn{height:34px;min-width:34px;padding:0 10px;border:1px solid transparent;background:transparent;color:var(--chalk);cursor:pointer;font-size:12px;letter-spacing:.06em}
+.tbtn:hover,.tbtn[aria-expanded=true]{border-color:var(--line);background:var(--ink-3)}
+.tbtn.ic{font-size:18px;padding:0 8px}
+.tbtn:disabled{opacity:.3;cursor:default;background:transparent;border-color:transparent}
+.tmenu{position:relative}
+.fmenu{position:absolute;left:0;top:calc(100% + 6px);min-width:240px;background:var(--chalk);color:var(--ink);border:1px solid var(--ink);box-shadow:6px 6px 0 rgba(0,0,0,.55);padding:4px 0;z-index:130}
+.fmenu .fi{display:flex;align-items:center;gap:10px;width:100%;border:0;background:transparent;padding:8px 14px;cursor:pointer;color:var(--ink);font-size:12px;text-align:left}
+.fmenu .fi span{flex:1}
+.fmenu .fi kbd{font:500 10px var(--mono);color:#777}
+.fmenu .fi:hover,.fmenu .fi:focus-visible{background:var(--ink);color:var(--chalk);outline:none}
+.fmenu hr{border:0;border-top:1px solid #cfcdc6;margin:4px 0}
+.statbar{display:flex;flex-wrap:wrap;gap:2px 14px;margin-left:6px;min-width:0}
+.statbar b{color:var(--chalk);font-weight:600}
+.statbar .warn b{color:var(--flag)}
+.tgrow{flex:1 1 auto}
+.doctitle{width:min(260px,26vw);height:34px;background:transparent;border:1px solid transparent;color:var(--chalk);padding:0 10px;font:700 18px/1 var(--display);text-transform:uppercase;letter-spacing:.02em;text-align:right;text-overflow:ellipsis}
+.doctitle:hover{border-color:var(--line)}
+.doctitle:focus{border-color:var(--chalk);outline:none;text-align:left;background:var(--ink-2)}
+.topbar .btn{height:34px}
+
 .btn{appearance:none;border:1px solid var(--chalk);background:transparent;padding:8px 12px;cursor:pointer;
   text-transform:uppercase;letter-spacing:.12em;font-size:11px;font-weight:600;white-space:nowrap}
 .btn:hover{background:var(--ink-3)}
@@ -78,18 +96,38 @@ header{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px 24px;border-bot
 .btn.solid:hover{background:#fff}
 .btn:disabled{opacity:.35;cursor:not-allowed}
 .btn.small{padding:5px 8px;font-size:10px}
-.statbar{width:100%;display:flex;flex-wrap:wrap;gap:4px 18px}
-.statbar b{color:var(--chalk);font-weight:600}
-.statbar .warn b{color:var(--flag)}
 
-/* app grid */
-/* three fixed panes: project tree | book (the only thing that scrolls the spreads) | settings.
-   Each pane scrolls on its own, so the wheel moves whichever pane the mouse is over. */
+/* shell: icon rail | one panel at a time | the book */
 body{display:grid;grid-template-rows:auto minmax(0,1fr);overflow:hidden}
-.app{display:grid;grid-template-columns:250px minmax(0,1fr) 300px;min-height:0;height:100%}
+.app{display:grid;grid-template-columns:76px auto minmax(0,1fr);min-height:0;height:100%;position:relative}
+.rail{grid-column:1}.flyout{grid-column:2}.center{grid-column:3}
 .pane{min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
-.tree{border-right:1px solid var(--line);padding-block:14px 24px;padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:10px}
-aside{border-left:1px solid var(--line);padding-block:12px 0;padding-left:16px;padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:0}
+.rail{display:flex;flex-direction:column;gap:2px;padding:8px 6px;border-right:1px solid var(--line);background:var(--ink);padding-left:max(6px,env(safe-area-inset-left,0px))}
+.rb{display:flex;flex-direction:column;align-items:center;gap:4px;border:0;background:transparent;color:var(--mute);padding:9px 2px 8px;cursor:pointer;font-size:10px;letter-spacing:.08em;text-transform:uppercase}
+.rb svg{width:24px;height:24px}
+.rb:hover{color:var(--chalk);background:var(--ink-2)}
+.rb[aria-pressed=true]{color:var(--ink);background:var(--chalk)}
+.flyout{width:330px;background:var(--ink-2);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:14px 16px 0}
+.app.nopanel .flyout{display:none}
+.flyhandle{position:absolute;top:50%;z-index:20;width:14px;height:64px;margin-top:-32px;border:1px solid var(--line);border-left:0;background:var(--ink-2);color:var(--mute);cursor:pointer;font-size:12px;padding:0;left:calc(76px + 330px)}
+.flyhandle:hover{color:var(--chalk)}
+.app.nopanel .flyhandle{left:76px}
+.fp{display:flex;flex-direction:column;gap:14px;padding-bottom:18px}
+.fph{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.fph h2{margin:0;font:700 28px/1 var(--display);text-transform:uppercase;letter-spacing:.01em}
+.fpx{border:0;background:transparent;color:var(--mute);font-size:22px;line-height:1;cursor:pointer;padding:2px 6px}
+.fpx:hover{color:var(--chalk)}
+.fpa{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fh{margin:8px 0 0;font:700 18px/1 var(--display);text-transform:uppercase;letter-spacing:.02em;color:var(--chalk)}
+.btn.big{padding:12px;font-size:12px}
+.presets{display:flex;flex-direction:column;gap:6px}
+.pre{border:1px solid var(--line);background:var(--ink);color:var(--chalk);text-align:left;padding:12px 12px;cursor:pointer}
+.pre:hover{border-color:var(--chalk)}
+.pre.h{font:700 24px/1.05 var(--display);text-transform:uppercase}
+.pre.s{font:700 16px/1.1 var(--display);letter-spacing:.02em}
+.pre.b{font:400 12px/1.4 var(--mono)}
+.ptree{margin:0 -6px}
+.ptree .thead{display:none}
 
 /* collapsible settings */
 .sechead{display:flex;justify-content:space-between;align-items:center;gap:8px;padding-bottom:10px;border-bottom:1px solid var(--line)}
@@ -227,6 +265,9 @@ input[type=range]{width:100%;accent-color:var(--chalk)}
 .tpg .tblk{outline:none}
 /* text toolbar (bottom bar) */
 .ttb{display:flex;flex-wrap:wrap;align-items:center;gap:6px;flex-basis:100%}
+.ctx .ttb{flex-basis:auto}
+.ctx select{height:30px;border:1px solid #c9c7c0;background:#fff;color:#111;font-size:11px;padding:0 6px;max-width:150px}
+.ctx .tpop{flex-basis:100%;justify-content:center}
 .ttb .tb{display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:30px;padding:0 7px;border:1px solid #c9c7c0;background:#fff;color:#111;cursor:pointer;font:600 14px/1 Georgia,"Times New Roman",serif}
 .ttb .tb:hover{border-color:var(--ink)}
 .ttb .tb[aria-pressed=true]{background:var(--ink);color:var(--chalk);border-color:var(--ink)}
@@ -313,7 +354,28 @@ input[type=range]{width:100%;accent-color:var(--chalk)}
 .titlepage p{margin:0;letter-spacing:.06em;line-height:1.5}
 .pcap{position:absolute;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:start;pointer-events:none}
 
-/* inspector */
+/* context toolbar: floats above the canvas for whatever is selected */
+.ctxband{flex:none;height:58px;position:relative;z-index:45;border-bottom:1px solid var(--line);background:var(--ink)}
+/* fixed-height band: extra toolbar rows float over the canvas instead of pushing the book down */
+.ctx.inspector{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:max-content;max-width:calc(100% - 24px);max-height:none;overflow:visible;border-radius:0;box-shadow:5px 5px 0 rgba(0,0,0,.5);
+  padding:6px 8px;gap:6px 8px;align-items:center;justify-content:center}
+.ctx.idle{background:transparent;box-shadow:none;color:var(--mute);font-size:11px;letter-spacing:.12em;text-transform:uppercase;top:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ctx .vbar{width:1px;height:22px;background:#c9c7c0}
+.ctx .chipname{max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;font-weight:600;padding:0 4px}
+.ctx .chipname small{display:block;font-weight:400;color:#666;font-size:10px;letter-spacing:.04em}
+.ctx .row2{flex-basis:100%;display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;justify-content:center;border-top:1px solid #d6d4cd;padding-top:6px}
+.ctx .ib{display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:30px;padding:0 6px;border:1px solid transparent;background:transparent;color:var(--ink);cursor:pointer;font-size:12px;letter-spacing:.04em;gap:6px;white-space:nowrap}
+.ctx .ib:hover{border-color:#c9c7c0;background:#fff}
+.ctx .ib[aria-pressed=true]{background:var(--ink);color:var(--chalk)}
+.ctx .ib svg{width:18px;height:18px}
+/* quick actions above the selected item */
+.mini{position:fixed;z-index:70;display:flex;gap:2px;background:var(--chalk);color:var(--ink);border:1px solid var(--ink);box-shadow:3px 3px 0 rgba(0,0,0,.5);padding:2px}
+.mini button{width:30px;height:28px;border:0;background:transparent;color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.mini button:hover{background:var(--ink);color:var(--chalk)}
+.mini svg{width:17px;height:17px}
+/* editing text right on the page */
+.inl{position:absolute;inset:0;width:100%;height:100%;margin:0;padding:0;border:0;outline:2px solid var(--sel);outline-offset:1px;background:rgba(255,255,255,.04);resize:none;overflow:hidden;white-space:pre-wrap;unicode-bidi:plaintext;z-index:8;font-kerning:normal}
+.tblk .inl{position:relative;inset:auto;display:block;min-height:1em}
 .inspector{flex:none;z-index:50;background:var(--chalk);color:var(--ink);
   display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;max-height:45%;overflow:auto;overscroll-behavior:contain;
   padding-block:10px calc(10px + env(safe-area-inset-bottom,0px));padding-inline:16px}
@@ -347,20 +409,27 @@ footer{margin-top:auto;border-top:1px solid var(--line);display:flex;flex-wrap:w
 footer a,footer button{color:var(--chalk);background:none;border:0;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:3px;font-size:10px;letter-spacing:.1em;text-transform:uppercase}
 
 @media (max-width:1180px) and (min-width:901px){
-  .app{grid-template-columns:210px minmax(0,1fr) 270px}
-  .mark h1{font-size:48px}
+  .flyout{width:280px}.flyhandle{left:calc(76px + 280px)}
+  .statbar{display:none}
 }
 /* phones and narrow windows: one column, the whole page scrolls */
 @media (max-width:900px){
   body{display:block;overflow:visible;height:auto}
+  .topbar{flex-wrap:wrap}
+  .statbar{display:none}
+  .doctitle{order:9;flex:1 1 100%;width:auto;text-align:left}
   .app{display:flex;flex-direction:column;height:auto}
   .pane{overflow:visible}
-  .center{order:1}
-  .tree{order:2;border-right:0;border-top:1px solid var(--line);padding-right:max(16px,env(safe-area-inset-right,0px));padding-left:max(16px,env(safe-area-inset-left,0px))}
-  aside{order:3;border-left:0;border-top:1px solid var(--line);padding-left:max(16px,env(safe-area-inset-left,0px))}
-  main{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-bottom:200px}
-  .inspector{position:fixed;left:0;right:0;bottom:0;max-height:60vh;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-  .mark h1{font-size:46px}
+  .rail{flex-direction:row;overflow-x:auto;border-right:0;border-bottom:1px solid var(--line);order:1;padding-right:max(6px,env(safe-area-inset-right,0px))}
+  .rb{flex:1 0 64px}
+  .flyout{order:2;width:auto;border-right:0;border-bottom:1px solid var(--line);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .flyhandle{display:none}
+  .center{order:0}
+  main{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-bottom:40px}
+  .ctxband{position:sticky;top:0;z-index:40;height:auto;min-height:58px}
+  .ctx.inspector{position:static;transform:none;width:auto;margin:8px auto}
+  .ctx.idle{white-space:normal;text-align:center;display:block;font-size:10px;line-height:1.5;margin:10px 12px}
+  .mark h1{font-size:26px}
 }
 @media (max-width:520px){
   .spread{grid-template-columns:1fr;gap:18px}
@@ -371,115 +440,83 @@ footer a,footer button{color:var(--chalk);background:none;border:0;padding:0;cur
 </head>
 <body>
 
-<header>
-  <div class="mark">
-    <span class="lbl">No crops · no stretch · 300 DPI</span>
-    <h1>Foto<span>Loco</span></h1>
+<header class="topbar">
+  <div class="mark"><h1>Foto<span>Loco</span></h1></div>
+  <div class="tmenu">
+    <button class="tbtn" type="button" id="bFile" aria-haspopup="menu" aria-expanded="false">File <span aria-hidden="true">▾</span></button>
+    <div class="fmenu" id="fileMenu" role="menu" hidden>
+      <button class="fi" role="menuitem" type="button" id="bAddM"><span>Add photos…</span></button>
+      <button class="fi" role="menuitem" type="button" id="bFolder"><span>Add a folder…</span></button>
+      <button class="fi" role="menuitem" type="button" id="bFontM"><span>Upload a font…</span></button>
+      <hr>
+      <button class="fi" role="menuitem" type="button" id="bRebuild"><span>Rebuild layout</span><kbd>re-run solver</kbd></button>
+      <hr>
+      <button class="fi" role="menuitem" type="button" id="bExportM"><span>Export PDF</span><kbd>300 DPI</kbd></button>
+      <button class="fi" role="menuitem" type="button" id="bHowM"><span>How it works</span></button>
+    </div>
   </div>
-  <div class="actions">
-    <button class="btn" id="bAdd" type="button">Add photos</button>
-    <button class="btn" id="bFolder" type="button">Add folder</button>
-    <button class="btn" id="bRebuild" type="button" title="Re-run page assignment and layouts">Rebuild</button>
-    <button class="btn" id="bUndo" type="button" title="Ctrl+Z">Undo</button>
-    <button class="btn solid" id="bExport" type="button">Export PDF</button>
-  </div>
-  <div class="statbar lbl" id="stats"></div>
+  <button class="tbtn ic" type="button" id="bUndo" title="Undo (Ctrl+Z)" aria-label="Undo">↶</button>
+  <button class="tbtn ic" type="button" id="bRedo" title="Redo (Ctrl+Shift+Z)" aria-label="Redo">↷</button>
+  <span class="statbar lbl" id="stats"></span>
+  <span class="tgrow"></span>
+  <input class="doctitle" id="docTitle" type="text" dir="auto" maxlength="60" aria-label="Book title" title="Book title">
+  <button class="btn" id="bAdd" type="button">Add photos</button>
+  <button class="btn solid" id="bExport" type="button">Export PDF</button>
   <input type="file" id="fFiles" accept="image/jpeg,image/png,image/webp,image/gif,image/avif" multiple hidden>
   <input type="file" id="fFolder" webkitdirectory directory multiple hidden>
   <input type="file" id="fFont" accept=".ttf,.otf,.woff,.woff2,font/ttf,font/otf,font/woff,font/woff2" multiple hidden>
 </header>
 
-<div class="app">
-  <nav class="tree pane" id="tree" aria-label="Project folders"></nav>
-  <div class="center">
-    <main class="pane" id="main">
-      <div class="notice" id="notice">
-        <span class="tape">Sample roll</span>
-        <p>These are generated test frames. Drop your photos or whole folders anywhere on this page. Each folder becomes a chapter, and folder names sort the book, so <b>2026-03 Market</b> comes before <b>2026-05 Coast</b>.</p>
-        <button class="btn small" id="bAdd2" type="button">Add photos</button>
+<div class="app" id="app">
+  <nav class="rail" aria-label="Tools">
+    <button class="rb" type="button" data-panel="photos" aria-pressed="false" title="Photos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 8"/></svg><span>Photos</span></button>
+    <button class="rb" type="button" data-panel="text" aria-pressed="false" title="Text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 6V4h14v2M12 4v16M9 20h6"/></svg><span>Text</span></button>
+    <button class="rb" type="button" data-panel="cover" aria-pressed="false" title="Cover"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3h11a3 3 0 0 1 3 3v15H8a3 3 0 0 1-3-3z"/><path d="M5 18a3 3 0 0 1 3-3h11"/><path d="M9 8h6"/></svg><span>Cover</span></button>
+    <button class="rb" type="button" data-panel="layout" aria-pressed="false" title="Layout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="8" height="7"/><rect x="13" y="4" width="8" height="11"/><rect x="3" y="13" width="8" height="7"/><rect x="13" y="17" width="8" height="3"/></svg><span>Layout</span></button>
+    <button class="rb" type="button" data-panel="format" aria-pressed="false" title="Format"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h9l3 3v15H6z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg><span>Format</span></button>
+  </nav>
+  <aside class="flyout pane" id="flyout" aria-label="Panel">
+    <section class="fp" data-panel="photos" aria-label="Photos" hidden>
+      <div class="fph"><h2>Photos</h2><button class="fpx" type="button" data-closepanel aria-label="Close panel">×</button></div>
+      <div class="fpa"><button class="btn solid" type="button" id="bAddP">Add photos</button><button class="btn" type="button" id="bFolderP">Add folder</button></div>
+      <div class="ptree" id="tree" aria-label="Project folders"></div>
+      <h3 class="fh">Unused</h3>
+      <fieldset>
+      <div class="pool" id="pool" aria-label="Unused photos"></div>
+      <p class="hint">Drag a frame here to pull it from the book. Drag it onto a page to put it back, or tap it to add it to the selected page.</p>
+    </fieldset>
+    </section>
+    <section class="fp" data-panel="text" aria-label="Text" hidden>
+      <div class="fph"><h2>Text</h2><button class="fpx" type="button" data-closepanel aria-label="Close panel">×</button></div>
+      <button class="btn solid big" type="button" data-preset="box">Add a text box</button>
+      <div class="presets">
+        <button type="button" class="pre h" data-preset="heading">Add a heading</button>
+        <button type="button" class="pre s" data-preset="sub">Add a subheading</button>
+        <button type="button" class="pre b" data-preset="body">Add a little bit of body text</button>
       </div>
-      <div class="book" id="book"></div>
-    </main>
-    <div class="inspector" id="insp" hidden></div>
-    <div class="strip" id="strip" role="listbox" aria-label="Pages" aria-orientation="horizontal"></div>
-    <div class="viewbar" role="toolbar" aria-label="View">
-      <div class="seg views" id="views" style="--n:3" role="group" aria-label="View mode">
-        <button type="button" data-v="spreads" title="Facing pages, scroll down the book">Spreads</button>
-        <button type="button" data-v="page" title="One page at a time">Page</button>
-        <button type="button" data-v="grid" title="All pages at a glance">Grid</button>
-      </div>
-      <div class="pager">
-        <button class="vb" type="button" id="bPrev" aria-label="Previous page" title="Previous page (←)">‹</button>
-        <span id="pgCount" class="pgcount" aria-live="polite">1 / 1</span>
-        <button class="vb" type="button" id="bNext" aria-label="Next page" title="Next page (→)">›</button>
-      </div>
-      <span class="vspacer"></span>
-      <div class="zoomer">
-        <button class="vb" type="button" id="bZoomOut" aria-label="Zoom out">−</button>
-        <input type="range" id="zoom" min="25" max="300" step="5" aria-label="Zoom">
-        <button class="vb" type="button" id="bZoomIn" aria-label="Zoom in">+</button>
-        <button class="vb pct" type="button" id="bZoomFit" title="Fit to screen (click), Ctrl + scroll to zoom">100%</button>
-      </div>
-      <button class="vb wide" type="button" id="bStrip" aria-pressed="true" title="Show or hide the page strip">▭ Pages</button>
-      <button class="vb" type="button" id="bFull" aria-label="Fullscreen" title="Fullscreen">⤢</button>
-    </div>
-  </div>
-  <aside class="pane" aria-label="Settings">
-    <div class="sechead"><span class="lbl">Settings</span><span><button class="linkbtn" type="button" id="bOpenAll">Open all</button> · <button class="linkbtn" type="button" id="bCloseAll">Close all</button></span></div>
-    <details class="sec" data-sec="format" open>
-      <summary>Format</summary>
-    <fieldset>
+      <p class="hint">Text boxes land on the page you're viewing and sit in the photo grid. Double-click any text to edit it on the page.</p>
+      <h3 class="fh">Cover text</h3>
+      <div class="row two"><button class="btn small" type="button" data-cover-edit="@title">Edit title</button><button class="btn small" type="button" data-cover-edit="@sub">Edit subtitle</button></div>
+      <h3 class="fh">Book fonts</h3>
+      <fieldset>
       <div class="field">
-        <label class="lbl" for="preset">Page size</label>
-        <select id="preset">
-          <option value="297x210">A4 landscape · 297×210</option>
-          <option value="210x297">A4 portrait · 210×297</option>
-          <option value="210x210">Square · 210×210</option>
-          <option value="300x300">Large square · 300×300</option>
-          <option value="279.4x215.9">US Letter landscape</option>
-          <option value="420x297">A3 landscape · 420×297</option>
-          <option value="custom">Custom</option>
-        </select>
-      </div>
-      <div class="row two">
-        <div class="field"><label class="lbl" for="cW">Width mm</label><input id="cW" type="number" min="50" max="1000" step="0.1"></div>
-        <div class="field"><label class="lbl" for="cH">Height mm</label><input id="cH" type="number" min="50" max="1000" step="0.1"></div>
-      </div>
-      <div class="row">
-        <div class="field"><label class="lbl" for="cBleed">Bleed</label><input id="cBleed" type="number" min="0" max="10" step="0.5"></div>
-        <div class="field"><label class="lbl" for="cMargin">Margin</label><input id="cMargin" type="number" min="0" max="60" step="0.5"></div>
-        <div class="field"><label class="lbl" for="cGap">Gap</label><input id="cGap" type="number" min="0" max="30" step="0.5"></div>
+        <label class="lbl" for="fEn">English font</label>
+        <select id="fEn"></select>
       </div>
       <div class="field">
-        <label class="lbl" for="cDpi">Export resolution</label>
-        <select id="cDpi"><option value="300">300 DPI · print</option><option value="200">200 DPI · lighter file</option><option value="150">150 DPI · proof</option></select>
+        <label class="lbl" for="fAr">Arabic font</label>
+        <select id="fAr"></select>
       </div>
-      <span class="lbl">Paper</span>
-      <div class="seg" id="paper">
-        <button type="button" data-v="#ffffff"><i class="sw" style="background:#ffffff"></i>White</button>
-        <button type="button" data-v="#f1efe8"><i class="sw" style="background:#f1efe8"></i>Natural</button>
-        <button type="button" data-v="#111111"><i class="sw" style="background:#111111"></i>Black</button>
-      </div>
+      <div class="sample" id="fSample"><span dir="ltr">Summer Roll 26</span> <span dir="rtl">ألبوم الصيف</span><small id="fSampleNote"></small></div>
+      <div class="field"><label class="lbl" for="cCapPt">Caption size pt</label><input id="cCapPt" type="number" min="5" max="24" step="0.5"></div>
+      <button class="btn" id="bFont" type="button">Upload your own font</button>
+      <div class="myfonts" id="myFonts"></div>
+      <p class="hint">TTF, OTF, WOFF or WOFF2. Uploaded fonts appear in every font list. These are the defaults: captions use them, and so does any text box, title or subtitle left on Book default. Each text box and the cover title and subtitle can pick their own fonts instead.</p>
     </fieldset>
-    </details>
-
-    <details class="sec" data-sec="layout-engine" open>
-      <summary>Layout engine</summary>
-    <fieldset>
-      <div class="row">
-        <div class="field"><label class="lbl" for="cMin">Min</label><input id="cMin" type="number" min="1" max="12"></div>
-        <div class="field"><label class="lbl" for="cTarget">Aim</label><input id="cTarget" type="number" min="1" max="12" step="0.5"></div>
-        <div class="field"><label class="lbl" for="cMax">Max</label><input id="cMax" type="number" min="1" max="12"></div>
-      </div>
-      <p class="hint">Photos per page. Starred photos count double or more, so they get room to breathe. Each folder stays together where it can.</p>
-      <label class="check"><input type="checkbox" id="cEven"> Pad to even page count</label>
-      <label class="check"><input type="checkbox" id="cGuides"> Show margin guides</label>
-    </fieldset>
-    </details>
-
-    <details class="sec" data-sec="cover-page" open>
-      <summary>Cover page</summary>
-    <fieldset>
+    </section>
+    <section class="fp" data-panel="cover" aria-label="Cover page" hidden>
+      <div class="fph"><h2>Cover page</h2><button class="fpx" type="button" data-closepanel aria-label="Close panel">×</button></div>
+<fieldset>
       <label class="check"><input type="checkbox" id="cTitle"> Include cover page</label>
       <div class="field"><label class="lbl" for="cTitleText">Title</label><input id="cTitleText" type="text" maxlength="60" dir="auto"></div>
       <div class="field"><label class="lbl" for="cSubText">Line under title</label><input id="cSubText" type="text" maxlength="80" dir="auto"></div>
@@ -523,43 +560,100 @@ footer a,footer button{color:var(--chalk);background:none;border:0;padding:0;cur
       </div>
       <p class="hint">At 0% the background colour is solid. At 100% it disappears and the photo or paper shows through.</p>
     </fieldset>
-    </details>
-
-    <details class="sec" data-sec="type" open>
-      <summary>Book fonts</summary>
-    <fieldset>
+    </section>
+    <section class="fp" data-panel="layout" aria-label="Layout engine" hidden>
+      <div class="fph"><h2>Layout engine</h2><button class="fpx" type="button" data-closepanel aria-label="Close panel">×</button></div>
+<fieldset>
+      <div class="row">
+        <div class="field"><label class="lbl" for="cMin">Min</label><input id="cMin" type="number" min="1" max="12"></div>
+        <div class="field"><label class="lbl" for="cTarget">Aim</label><input id="cTarget" type="number" min="1" max="12" step="0.5"></div>
+        <div class="field"><label class="lbl" for="cMax">Max</label><input id="cMax" type="number" min="1" max="12"></div>
+      </div>
+      <p class="hint">Photos per page. Starred photos count double or more, so they get room to breathe. Each folder stays together where it can.</p>
+      <label class="check"><input type="checkbox" id="cEven"> Pad to even page count</label>
+      <label class="check"><input type="checkbox" id="cGuides"> Show margin guides</label>
+    </fieldset>
+      <button class="btn" type="button" id="bRebuildP">Rebuild layout</button>
+    </section>
+    <section class="fp" data-panel="format" aria-label="Format & print" hidden>
+      <div class="fph"><h2>Format & print</h2><button class="fpx" type="button" data-closepanel aria-label="Close panel">×</button></div>
+<fieldset>
       <div class="field">
-        <label class="lbl" for="fEn">English font</label>
-        <select id="fEn"></select>
+        <label class="lbl" for="preset">Page size</label>
+        <select id="preset">
+          <option value="297x210">A4 landscape · 297×210</option>
+          <option value="210x297">A4 portrait · 210×297</option>
+          <option value="210x210">Square · 210×210</option>
+          <option value="300x300">Large square · 300×300</option>
+          <option value="279.4x215.9">US Letter landscape</option>
+          <option value="420x297">A3 landscape · 420×297</option>
+          <option value="custom">Custom</option>
+        </select>
+      </div>
+      <div class="row two">
+        <div class="field"><label class="lbl" for="cW">Width mm</label><input id="cW" type="number" min="50" max="1000" step="0.1"></div>
+        <div class="field"><label class="lbl" for="cH">Height mm</label><input id="cH" type="number" min="50" max="1000" step="0.1"></div>
+      </div>
+      <div class="row">
+        <div class="field"><label class="lbl" for="cBleed">Bleed</label><input id="cBleed" type="number" min="0" max="10" step="0.5"></div>
+        <div class="field"><label class="lbl" for="cMargin">Margin</label><input id="cMargin" type="number" min="0" max="60" step="0.5"></div>
+        <div class="field"><label class="lbl" for="cGap">Gap</label><input id="cGap" type="number" min="0" max="30" step="0.5"></div>
       </div>
       <div class="field">
-        <label class="lbl" for="fAr">Arabic font</label>
-        <select id="fAr"></select>
+        <label class="lbl" for="cDpi">Export resolution</label>
+        <select id="cDpi"><option value="300">300 DPI · print</option><option value="200">200 DPI · lighter file</option><option value="150">150 DPI · proof</option></select>
       </div>
-      <div class="sample" id="fSample"><span dir="ltr">Summer Roll 26</span> <span dir="rtl">ألبوم الصيف</span><small id="fSampleNote"></small></div>
-      <div class="field"><label class="lbl" for="cCapPt">Caption size pt</label><input id="cCapPt" type="number" min="5" max="24" step="0.5"></div>
-      <button class="btn" id="bFont" type="button">Upload your own font</button>
-      <div class="myfonts" id="myFonts"></div>
-      <p class="hint">TTF, OTF, WOFF or WOFF2. Uploaded fonts appear in every font list. These are the defaults: captions use them, and so does any text box, title or subtitle left on Book default. Each text box and the cover title and subtitle can pick their own fonts instead.</p>
+      <span class="lbl">Paper</span>
+      <div class="seg" id="paper">
+        <button type="button" data-v="#ffffff"><i class="sw" style="background:#ffffff"></i>White</button>
+        <button type="button" data-v="#f1efe8"><i class="sw" style="background:#f1efe8"></i>Natural</button>
+        <button type="button" data-v="#111111"><i class="sw" style="background:#111111"></i>Black</button>
+      </div>
     </fieldset>
-    </details>
-
-    <details class="sec" data-sec="unused" open>
-      <summary>Unused</summary>
-    <fieldset>
-      <div class="pool" id="pool" aria-label="Unused photos"></div>
-      <p class="hint">Drag a frame here to pull it from the book. Drag it onto a page to put it back, or tap it to add it to the selected page.</p>
-    </fieldset>
-    </details>
-
+    </section>
     <footer>
-      <span>FotoLoco v1.6</span>
+      <span>FotoLoco v1.7</span>
       <button type="button" id="bHow">How it works</button>
       <span>Runs in your browser. Your photos never leave your device.</span>
       <span>Layout ideas from <a href="https://github.com/EddyXorb/fotobuch" target="_blank" rel="noopener">fotobuch</a></span>
     </footer>
   </aside>
+  <button class="flyhandle" type="button" id="flyToggle" aria-label="Hide panel" title="Hide panel">‹</button>
+  <div class="center">
+    <div class="ctxband" id="ctxband"><div class="ctx inspector" id="insp"></div></div>
+    <main class="pane" id="main" aria-label="Book">
+      <div class="notice" id="notice">
+        <span class="tape">Sample roll</span>
+        <p>These are generated test frames. Drop your photos or whole folders anywhere on this page. Each folder becomes a chapter, and folder names sort the book, so <b>2026-03 Market</b> comes before <b>2026-05 Coast</b>.</p>
+        <button class="btn small" id="bAdd2" type="button">Add photos</button>
+      </div>
+      <div class="book" id="book"></div>
+    </main>
+    <div class="strip" id="strip" role="listbox" aria-label="Pages" aria-orientation="horizontal"></div>
+    <div class="viewbar" role="toolbar" aria-label="View">
+      <div class="seg views" id="views" style="--n:3" role="group" aria-label="View mode">
+        <button type="button" data-v="spreads" title="Facing pages, scroll down the book">Spreads</button>
+        <button type="button" data-v="page" title="One page at a time">Page</button>
+        <button type="button" data-v="grid" title="All pages at a glance">Grid</button>
+      </div>
+      <div class="pager">
+        <button class="vb" type="button" id="bPrev" aria-label="Previous page" title="Previous page (←)">‹</button>
+        <span id="pgCount" class="pgcount" aria-live="polite">1 / 1</span>
+        <button class="vb" type="button" id="bNext" aria-label="Next page" title="Next page (→)">›</button>
+      </div>
+      <span class="vspacer"></span>
+      <div class="zoomer">
+        <button class="vb" type="button" id="bZoomOut" aria-label="Zoom out">−</button>
+        <input type="range" id="zoom" min="25" max="300" step="5" aria-label="Zoom">
+        <button class="vb" type="button" id="bZoomIn" aria-label="Zoom in">+</button>
+        <button class="vb pct" type="button" id="bZoomFit" title="Fit to screen (click), Ctrl + scroll to zoom">100%</button>
+      </div>
+      <button class="vb wide" type="button" id="bStrip" aria-pressed="true" title="Show or hide the page strip">▭ Pages</button>
+      <button class="vb" type="button" id="bFull" aria-label="Fullscreen" title="Fullscreen">⤢</button>
+    </div>
+  </div>
 </div>
+<div class="mini" id="mini" role="toolbar" aria-label="Quick actions" hidden></div>
 
 <div class="cmenu" id="cmenu" role="menu" hidden></div>
 <div class="drop" id="drop" hidden><span>Drop photos,<br>folders or fonts</span></div>
@@ -576,6 +670,7 @@ footer a,footer button{color:var(--chalk);background:none;border:0;padding:0;cur
     <li><b>Add text.</b> + Text under a page adds a text box that sits in the grid like a photo. Pick its shape, size and alignment in the bar at the bottom. Text never spills out of its box: when it runs long, the size steps down until it fits.</li>
     <li><b>Rotate and crop.</b> Rotate a photo with ⟲ ⟳ or R. Photos are never cropped unless you ask: pick a crop shape (square, rounded, circle, oval, arch, hexagon or a rectangle at a set ratio), then drag the picture inside the mask and scroll to zoom. The shape becomes the frame the layout works with.</li>
     <li><b>Free transform inside a mask.</b> In adjust mode a blue box surrounds the whole picture: drag to move it, pull a corner to scale it (it can be smaller than the mask), and turn the round knob to straighten or tilt. Fit, Fill and Keep filled are in the bar below. Unmasked photos get the same tools through Free transform, which puts them in a rectangle first.</li>
+    <li><b>Find your way around.</b> The icons on the left open one panel at a time: Photos (folders and unused photos), Text (add text, presets, book fonts), Cover, Layout and Format. Click the active icon again, or the edge tab, to hide the panel. Whatever you select gets its tools in the bar above the book, plus a small quick-action bar right above it. Undo and redo are in the top bar.</li>
     <li><b>View the book your way.</b> Spreads, Page or Grid at the bottom of the book, a strip of page thumbnails that scrolls sideways (drop a photo on a thumbnail to move it there), ← → to page through, a zoom slider or Ctrl + scroll, and fullscreen.</li>
     <li><b>Right-click anything.</b> Photos and text boxes in the book, the folder tree and Unused all have a menu with every action and its shortcut.</li>
     <li><b>Use the folder tree.</b> The left pane lists every folder and photo with the page it's on. Click a photo to jump to it, drag a folder onto another to change the chapter order, and use Hide or Show to take a whole folder out of the book or put it back.</li>
@@ -996,7 +1091,7 @@ const LTR_RE=/[A-Za-z\u00C0-\u024F]/;
 const SHAPES=[["3","Wide 3:1"],["2","Banner 2:1"],["1.5","Landscape 3:2"],["1","Square"],["0.667","Portrait 2:3"],["0.5","Tall 1:2"]];
 
 const S={
-  photos:new Map(), pages:[], pool:[], sel:null, sample:true, undo:[], myFonts:[], groupOrder:[], closed:new Set(), cropEdit:null,
+  photos:new Map(), pages:[], pool:[], sel:null, sample:true, undo:[], redo:[], textEdit:null, panel:"photos", myFonts:[], groupOrder:[], closed:new Set(), cropEdit:null,
   view:"spreads", lastView:"spreads", zoom:100, cur:0, strip:true, selText:null, spacingOpen:false,
   cfg:{w:297,h:210,bleed:3,margin:10,gap:3,dpi:300,min:1,max:6,target:3.5,paper:"#ffffff",
        even:true,guides:false,title:true,titleText:"Sample Roll",subText:"Test frames · 2026",
@@ -1162,23 +1257,24 @@ function relayout(pg,fresh){
 function relayoutAll(){S.pages.forEach(pg=>relayout(pg))}
 
 /* ───── undo ───── */
-function snap(){
-  S.undo.push(JSON.stringify({
+function stateNow(){
+  return JSON.stringify({
     pages:S.pages.map(p=>({ids:p.ids,seed:p.seed,caption:p.caption||"",pins:p.pins||{},tree:p.tree})),pool:S.pool,
     w:[...S.photos.values()].filter(p=>p.kind!=="text").map(p=>[p.id,p.weight,p.rot||0,p.crop?{...p.crop}:null]),
-    texts:[...S.photos.values()].filter(p=>p.kind==="text").map(p=>({...p})),groupOrder:S.groupOrder}));
-  if(S.undo.length>80) S.undo.shift();
+    texts:[...S.photos.values()].filter(p=>p.kind==="text").map(p=>({...p})),groupOrder:S.groupOrder});
 }
-function undo(){
-  const s=S.undo.pop(); if(!s) return;
-  const o=JSON.parse(s);
+function snap(){S.undo.push(stateNow()); if(S.undo.length>80) S.undo.shift(); S.redo.length=0}
+function undo(){const s=S.undo.pop(); if(!s) return; S.redo.push(stateNow()); restoreState(s)}
+function redo(){const s=S.redo.pop(); if(!s) return; S.undo.push(stateNow()); restoreState(s)}
+function restoreState(s){
+  const o=JSON.parse(s); S.textEdit=null;
   for(const p of [...S.photos.values()]) if(p.kind==="text") S.photos.delete(p.id);
   o.texts.forEach(t=>S.photos.set(t.id,t));
   o.w.forEach(([id,w,rot,crop])=>{const p=S.photos.get(id);if(p){p.weight=w;p.rot=rot||0;p.crop=crop||null;updateRatio(p)}});
   S.cropEdit=null;
   S.groupOrder=o.groupOrder||[];
   S.pages=o.pages.filter(p=>p.ids.every(id=>S.photos.has(id))).map(p=>({...p,rects:[]}));
-  S.pool=o.pool.filter(id=>S.photos.has(id)); S.pages.forEach(pg=>relayout(pg)); S.sel=null; render();
+  S.pool=o.pool.filter(id=>S.photos.has(id)); S.pages.forEach(pg=>relayout(pg)); if(S.sel&&!S.photos.has(S.sel)) S.sel=null; render();
 }
 
 /* ───── edits ───── */
@@ -1232,13 +1328,23 @@ function scaleSel(f){
   const pins={...pg.pins,[S.sel]:(w*w/ar)/(W*H)};
   commitPlan(L.p,pins,planPage(pg,pins,false)); render();
 }
-function addText(pi){
-  snap(); const pg=S.pages[pi], id="t"+(++uid);
+const TEXT_PRESETS={
+  box:{text:"",pt:12,fw:400,r:1.5},
+  heading:{text:"Add a heading",pt:30,fw:700,r:3,valign:"bottom"},
+  sub:{text:"Add a subheading",pt:18,fw:700,r:3,valign:"middle"},
+  body:{text:"Add a little bit of body text",pt:11,fw:400,r:1.5}
+};
+function addText(pi,preset="box"){
+  if(pi==null||!S.pages[pi]){                       // the page you're looking at, else the last page
+    const it=displayPages()[S.cur]; pi=it&&it.type==="photo"?it.i:S.pages.length-1;
+  }
+  if(pi<0) return;
+  snap(); const pg=S.pages[pi], id="t"+(++uid), P=TEXT_PRESETS[preset]||TEXT_PRESETS.box;
   let k=pg.ids.length; const L=S.sel&&locate(S.sel); if(L&&L.p===pi) k=L.k+1;
   const prev=k>0?S.photos.get(pg.ids[k-1]):S.photos.get(pg.ids[0]);
-  S.photos.set(id,{id,kind:"text",name:"Text box",group:prev?prev.group:"",text:"",r:1.5,weight:1,pt:12,align:"start",valign:"top",fw:400,w:0,h:0});
-  pg.ids.splice(k,0,id); relayout(pg); S.sel=id; render();
-  setTimeout(()=>$("#tText")?.focus(),0);
+  S.photos.set(id,{id,kind:"text",name:"Text box",group:prev?prev.group:"",text:P.text,r:P.r,weight:1,pt:P.pt,align:"start",valign:P.valign||"top",fw:P.fw,w:0,h:0});
+  pg.ids.splice(k,0,id); relayout(pg);
+  startTextEdit(id,!!P.text);
 }
 /* re-fit the page an item sits on after its frame shape changed; extra items flow to a new page */
 function refitFor(id){
@@ -1583,7 +1689,8 @@ function figHTML(r,pi,pins,live){
     const L=layoutText(p,r.w,r.h), st=L.st;
     const body=String(p.text||"").trim()?linesHTML(L,c.w)
       :`<div class="tl empty" style="height:${(L.lh/c.w*100).toFixed(4)}cqw;line-height:${(L.lh/c.w*100).toFixed(4)}cqw;text-align:${st.align==="justify"?"start":st.align}">Text box</div>`;
-    h+=`<div class="txt" style="justify-content:${VAL[p.valign]};${blockCSS(L,c.w,st.color||inkFor(c.paper))}">${body}</div>`;
+    if(S.textEdit===r.id) h+=`<textarea class="inl" data-inl="${r.id}" dir="auto" spellcheck="true" aria-label="Text box text" placeholder="Type here" style="${inlineStyle(r.id,L,c.w,st.color||inkFor(c.paper))}">${esc(p.text)}</textarea>`;
+    else h+=`<div class="txt" style="justify-content:${VAL[p.valign]};${blockCSS(L,c.w,st.color||inkFor(c.paper))}">${body}</div>`;
   } else {
     const dpi=effDpi(p,r);
     const clip=clipCSS(p,r.w,r.h);
@@ -1618,8 +1725,8 @@ function pageContent(item,live){
     h+=coverImgHTML()+`<div class="cov" style="background:${c.coverColor};opacity:${((100-c.coverTr)/100).toFixed(2)}"></div>`;
     const CL=coverLayout(), ink=coverInk(), sel=S.selText;
     h+=`<div class="titlepage" style="padding:${pct(c.margin,c.w)};justify-content:${{t:"flex-start",m:"center",b:"flex-end"}[v]}">`+
-       `<div class="tblk${sel==="@title"?" tsel":""}" data-tsel="@title" title="Click to style the title" style="${blockCSS(CL.T,c.w,ink)}">${linesHTML(CL.T,c.w)}</div>`+
-       (CL.Sb?`<div class="tblk${sel==="@sub"?" tsel":""}" data-tsel="@sub" title="Click to style the subtitle" style="margin-top:${(CL.gap/c.w*100).toFixed(4)}cqw;${blockCSS(CL.Sb,c.w,CL.Sb.st.color||ink)}">${linesHTML(CL.Sb,c.w)}</div>`:"")+`</div>`;
+       `<div class="tblk${sel==="@title"?" tsel":""}" data-tsel="@title" title="Click to style, double-click to type" style="${blockCSS(CL.T,c.w,ink)}">${S.textEdit==="@title"?inlTA("@title",CL.T,c.titleText,ink):linesHTML(CL.T,c.w)}</div>`+
+       (CL.Sb?`<div class="tblk${sel==="@sub"?" tsel":""}" data-tsel="@sub" title="Click to style, double-click to type" style="margin-top:${(CL.gap/c.w*100).toFixed(4)}cqw;${blockCSS(CL.Sb,c.w,CL.Sb.st.color||ink)}">${S.textEdit==="@sub"?inlTA("@sub",CL.Sb,c.subText,CL.Sb.st.color||ink):linesHTML(CL.Sb,c.w)}</div>`:"")+`</div>`;
   }
   return h;
 }
@@ -1859,7 +1966,9 @@ function renderBook(){
   $("#stats").innerHTML=`<span><b>${inBook}</b> photos in book</span><span><b>${d.length}</b> pages</span><span><b>${fmt(c.w)}×${fmt(c.h)}</b> mm + ${fmt(c.bleed)} bleed</span>`+
     (low?`<span class="warn"><b>${low}</b> below ${LOWRES} dpi</span>`:"")+(S.pool.length?`<span><b>${S.pool.length}</b> unused</span>`:"");
   $("#notice").hidden=!S.sample;
-  $("#bUndo").disabled=!S.undo.length;
+  $("#bUndo").disabled=!S.undo.length; $("#bRedo").disabled=!S.redo.length;
+  if(document.activeElement!==$("#docTitle")) $("#docTitle").value=S.cfg.titleText||"";
+  restoreInlineFocus(); scheduleMini();
   $("#bExport").disabled=!S.pages.length&&!S.cfg.title;
 }
 function renderSide(){
@@ -1923,54 +2032,135 @@ function textToolbar(t){
     <button class="btn small" type="button" data-ts="resetStyle" title="Back to book default font, automatic colour and plain style">Clear style</button>
   </div>`:""}`;
 }
+/* ───── floating context toolbar (top of the canvas) ───── */
+const IC={
+  rotl:SVG('<path d="M4 4v6h6"/><path d="M5.5 15a7 7 0 1 0 1.6-7.4L4 10"/>'), rotr:SVG('<path d="M20 4v6h-6"/><path d="M18.5 15a7 7 0 1 1-1.6-7.4L20 10"/>'),
+  trash:SVG('<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>'), more:SVG('<circle cx="5" cy="12" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/><circle cx="19" cy="12" r="1.2" fill="currentColor"/>'),
+  close:SVG('<path d="M6 6l12 12M18 6L6 18"/>'), edit:SVG('<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M14 6l4 4"/>'),
+  move:SVG('<path d="M12 3v18M3 12h18M12 3l-3 3M12 3l3 3M12 21l-3-3M12 21l3-3M3 12l3-3M3 12l3 3M21 12l-3-3M21 12l-3 3"/>'),
+  cover:SVG('<path d="M5 3h11a3 3 0 0 1 3 3v15H8a3 3 0 0 1-3-3z"/><path d="M5 18a3 3 0 0 1 3-3h11"/>'),
+  prev:SVG('<path d="M15 5l-7 7 7 7"/>'), next:SVG('<path d="M9 5l7 7-7 7"/>'),
+  vtop:SVG('<path d="M5 4h14M12 8v12M8 12l4-4 4 4"/>'), vmid:SVG('<path d="M5 12h14M12 3v5M12 16v5M9 6l3 3 3-3M9 18l3-3 3 3"/>'), vbot:SVG('<path d="M5 20h14M12 4v12M8 12l4 4 4-4"/>')
+};
+const ib=(act,icon,label,extra="")=>`<button class="ib" type="button" data-act="${act}" title="${label}" aria-label="${label}" ${extra}>${icon}</button>`;
 function renderInspector(){
-  const el=$("#insp");
+  const el=$("#insp"); el.classList.remove("idle");
   if(S.selText){
     const isT=S.selText==="@title", c=S.cfg;
-    el.innerHTML=`<div class="tedit"><span class="lbl">${isT?"Cover title":"Cover subtitle"}</span><input id="tbText" type="text" dir="auto" maxlength="${isT?60:80}" value="${esc(isT?c.titleText:c.subText)}" aria-label="${isT?"Title":"Subtitle"} text"></div>
-      <div class="grp"><span class="lbl">Position</span>${[["t","Top"],["m","Middle"],["b","Bottom"]].map(([v,l])=>`<button class="btn small" type="button" data-tpos="${v}" aria-pressed="${c.tPos[0]===v}">${l}</button>`).join("")}</div>
-      <button class="btn small" type="button" data-act="tclose">Done</button>
-      ${textToolbar(S.selText)}`;
-    el.hidden=false; return;
+    el.innerHTML=`<span class="chipname">${isT?"Cover title":"Cover subtitle"}<small>Double-click to type</small></span>
+      ${ib("tedit",IC.edit+"<span>Edit</span>",isT?"Edit the title text":"Edit the subtitle text")}<span class="vbar"></span>
+      ${[["t","vtop","Top"],["m","vmid","Middle"],["b","vbot","Bottom"]].map(([v,i,l])=>`<button class="ib" type="button" data-tpos="${v}" aria-pressed="${c.tPos[0]===v}" title="Place at the ${l.toLowerCase()} of the cover" aria-label="${l}">${IC[i]}</button>`).join("")}
+      <span class="vbar"></span>${textToolbar(S.selText)}${ib("tclose",IC.close,"Done (Esc)")}`;
+    return;
   }
   const id=S.sel; const p=id&&S.photos.get(id);
-  if(!p){el.hidden=true;return}
+  if(!p){el.classList.add("idle");el.innerHTML=S.photos.size?`Click a photo or text to edit it · double-click text to type · right-click for everything`:`Add photos to start your book`;return}
   const L=locate(id), onPage=L&&!L.pool, pg=onPage&&S.pages[L.p], r=pg&&pg.rects.find(x=>x.id===id), pinned=pg&&pg.pins[id];
-  const sizeGrp=r?`<div class="grp" role="group" aria-label="Size"><span class="lbl">Size</span><button class="btn small" data-act="shrink" aria-label="Smaller">−</button><button class="btn small" data-act="grow" aria-label="Larger">+</button>${pinned?`<button class="btn small" data-act="unpin">Auto size</button>`:""}</div>`:"";
-  const moveGrp=`<div class="grp">${onPage?`<button class="btn small" data-act="prev">◀ Prev page</button><button class="btn small" data-act="next">Next page ▶</button><button class="btn small" data-act="split">New page after</button><button class="btn small" data-act="pool">Remove</button>`:""}`;
+  const size=r?`<span class="vbar"></span>${ib("shrink","−","Smaller (−)")}${ib("grow","+","Bigger (+)")}${pinned?ib("unpin","Auto","Back to automatic size"):""}`:"";
+  const pager=onPage?`<span class="vbar"></span>${ib("prev",IC.prev,"Move to previous page ([)")}${ib("next",IC.next,"Move to next page (])")}`:"";
+  const tail=`<span class="vbar"></span>${ib("more",IC.more,"More actions")}${ib("close",IC.close,"Deselect (Esc)")}`;
   if(p.kind==="text"){
-    const vseg=`<div class="grp" role="group" aria-label="Vertical position">${[["top","Top"],["middle","Middle"],["bottom","Bottom"]].map(([v,l])=>`<button class="btn small" data-tset="valign" data-v="${v}" aria-pressed="${p.valign===v}">${l}</button>`).join("")}</div>`;
-    el.innerHTML=`<textarea id="tText" dir="auto" placeholder="Type here. English and Arabic both work." aria-label="Text box content" style="font-family:${textStack(p,isRTL(p.text))};font-weight:${p.fw};font-style:${p.italic?"italic":"normal"}">${esc(p.text)}</textarea>
-      <div class="grp" style="flex-direction:column;align-items:flex-start;gap:6px">
-        <div class="grp"><span class="lbl">Box shape</span><select id="tShape">${SHAPES.map(([v,l])=>`<option value="${v}"${Math.abs(+v-p.r)<0.01?" selected":""}>${l}</option>`).join("")}</select></div>
-        ${vseg}
-      </div>
-      ${sizeGrp}${moveGrp}<button class="btn small" data-act="delete">Delete text</button><button class="btn small" data-act="close">Done</button></div>
-      ${textToolbar(p.id)}
-      <div class="note" id="tNote"></div>`;
-    el.hidden=false; updateTextNote(); return;
+    const vi={top:"vtop",middle:"vmid",bottom:"vbot"}[p.valign], nextV={top:"middle",middle:"bottom",bottom:"top"}[p.valign];
+    el.innerHTML=`${textToolbar(p.id)}<span class="vbar"></span>
+      ${ib("edit",IC.edit,"Edit text on the page (Enter)")}
+      <button class="ib" type="button" data-tset="valign" data-v="${nextV}" title="Vertical position: ${p.valign} (click to change)" aria-label="Vertical position, ${p.valign}">${IC[vi]}</button>
+      <select id="tShape" title="Box shape" aria-label="Box shape">${SHAPES.map(([v,l])=>`<option value="${v}"${Math.abs(+v-p.r)<0.01?" selected":""}>${l}</option>`).join("")}</select>
+      ${size}${pager}${tail}
+      <div class="row2"><span class="note" id="tNote"></span></div>`;
+    updateTextNote(); return;
   }
-  let dpiTxt="";
-  if(r){const d=effDpi(p,r);dpiTxt=` · ${fmt(r.w)}×${fmt(r.h)} mm`+(d===Infinity?" · sample frame":` · ${Math.round(d)} dpi`+(d<LOWRES?" (low)":""))}
+  let dpiTxt="sample frame";
+  if(r){const d=effDpi(p,r);dpiTxt=`${fmt(r.w)}×${fmt(r.h)} mm`+(d===Infinity?" · sample":` · ${Math.round(d)} dpi`+(d<LOWRES?" ⚠":""))}
   const cr=p.crop, editing=S.cropEdit===id;
-  const rotGrp=`<div class="grp" role="group" aria-label="Rotate"><span class="lbl">Rotate</span><button class="btn small" data-act="rotl" title="Rotate left (Shift+R)" aria-label="Rotate left">⟲</button><button class="btn small" data-act="rotr" title="Rotate right (R)" aria-label="Rotate right">⟳</button></div>`;
-  const cropGrp=`<div class="grp" role="group" aria-label="Crop"><span class="lbl">Crop</span>
-     <select id="cShape" aria-label="Crop shape"><option value="">None · whole photo</option>${CROP_SHAPES.map(([v,l])=>`<option value="${v}"${cr&&cr.shape===v?" selected":""}>${l}</option>`).join("")}</select>
-     ${cr&&!FIXED_RATIO[cr.shape]?`<select id="cRatio" aria-label="Crop ratio">${CROP_RATIOS.map(([v,l])=>`<option value="${v}"${String(cr.ratio)===v?" selected":""}>${l}</option>`).join("")}</select>`:""}
-     ${cr?`<button class="btn small" data-act="adjust" aria-pressed="${editing}" title="Free transform inside the mask (Enter)">${editing?"Done adjusting":"Adjust"}</button>`
-         :`<button class="btn small" data-act="free" title="Scale, move and straighten the picture inside a rectangle">Free transform</button>`}</div>
-   ${cr?`<div class="grp" role="group" aria-label="Transform">
-     <span class="lbl">Scale</span><input type="range" id="cZoom" min="${ZMIN*100}" max="${ZMAX*100}" step="1" value="${Math.round(cr.zoom*100)}" aria-label="Scale inside the mask"><output id="cZoomOut" class="lbl">${Math.round(cr.zoom*100)}%</output>
-     <span class="lbl">Tilt</span><input type="range" id="cTilt" min="-45" max="45" step="0.1" value="${Math.max(-45,Math.min(45,cr.tilt||0))}" aria-label="Tilt angle"><input type="number" id="cTiltNum" min="-180" max="180" step="0.1" value="${+(cr.tilt||0).toFixed(1)}" aria-label="Tilt in degrees">°
-     <button class="btn small" data-act="xfit" title="Show the whole picture inside the mask">Fit</button><button class="btn small" data-act="xfill" title="Cover the mask completely">Fill</button><button class="btn small" data-act="xreset">Reset</button>
-     <button class="btn small" data-act="xlock" aria-pressed="${!!cr.fill}" title="While on, the picture always covers the mask">Keep filled</button></div>`:""}`;
-  el.innerHTML=`<div class="info"><b>${esc(p.name)}</b><span class="lbl">${esc(p.group)} · ${p.w}×${p.h}px${dpiTxt}</span></div>
-   <div class="grp" role="group" aria-label="Solver weight">${[1,2,3].map(w=>`<button class="btn small" data-w="${w}" aria-pressed="${p.weight===w}">${"★".repeat(w)}</button>`).join("")}</div>
-   ${sizeGrp}${rotGrp}${cropGrp}${moveGrp}<button class="btn small" data-act="cover">Set as cover</button><button class="btn small" data-act="close">Done</button></div>
-   ${editing?`<div class="note">Free transform: drag to move, pull a corner to scale (smaller than the ${CROP_SHAPES.find(s=>s[0]===cr.shape)[1].toLowerCase()} works too), turn the round knob to straighten or tilt. Shift snaps to 15°. Scroll to scale, arrow keys nudge. Esc or Enter when you're done.</div>`:""}`;
-  el.hidden=false;
+  el.innerHTML=`<span class="chipname" title="${esc(p.name)} · ${esc(p.group)}">${esc(p.name)}<small>${dpiTxt}</small></span><span class="vbar"></span>
+    ${[1,2,3].map(w=>`<button class="ib" type="button" data-w="${w}" aria-pressed="${p.weight===w}" title="Rating ${w} (press ${w})">${"★".repeat(w)}</button>`).join("")}
+    ${size}<span class="vbar"></span>${ib("rotl",IC.rotl,"Rotate left (Shift+R)")}${ib("rotr",IC.rotr,"Rotate right (R)")}
+    <span class="vbar"></span><select id="cShape" title="Crop shape" aria-label="Crop shape"><option value="">No crop</option>${CROP_SHAPES.map(([v,l])=>`<option value="${v}"${cr&&cr.shape===v?" selected":""}>${l}</option>`).join("")}</select>
+    ${cr&&!FIXED_RATIO[cr.shape]?`<select id="cRatio" title="Crop ratio" aria-label="Crop ratio">${CROP_RATIOS.map(([v,l])=>`<option value="${v}"${String(cr.ratio)===v?" selected":""}>${l}</option>`).join("")}</select>`:""}
+    ${cr?ib("adjust",IC.move+"<span>"+(editing?"Done":"Adjust")+"</span>","Free transform inside the mask (Enter)",`aria-pressed="${editing}"`):ib("free",IC.move+"<span>Straighten</span>","Free transform: scale, move and tilt inside a rectangle")}
+    <span class="vbar"></span>${ib("cover",IC.cover,"Use as cover photo")}${pager}${tail}
+    ${cr&&editing?`<div class="row2">
+      <span class="lbl">Scale</span><input type="range" id="cZoom" min="${ZMIN*100}" max="${ZMAX*100}" step="1" value="${Math.round(cr.zoom*100)}" aria-label="Scale inside the mask"><output id="cZoomOut" class="lbl">${Math.round(cr.zoom*100)}%</output>
+      <span class="lbl">Tilt</span><input type="range" id="cTilt" min="-45" max="45" step="0.1" value="${Math.max(-45,Math.min(45,cr.tilt||0))}" aria-label="Tilt angle"><input type="number" id="cTiltNum" min="-180" max="180" step="0.1" value="${+(cr.tilt||0).toFixed(1)}" aria-label="Tilt in degrees">°
+      <button class="btn small" data-act="xfit" title="Show the whole picture inside the mask">Fit</button><button class="btn small" data-act="xfill" title="Cover the mask completely">Fill</button><button class="btn small" data-act="xreset">Reset</button>
+      <button class="btn small" data-act="xlock" aria-pressed="${!!cr.fill}" title="While on, the picture always covers the mask">Keep filled</button>
+      <span class="note" style="flex-basis:auto">Drag to move · corners scale · knob tilts · Shift snaps 15°</span></div>`:""}`;
 }
-
+/* ───── quick actions just above the selected item ───── */
+let miniQueued=false;
+function scheduleMini(){if(miniQueued)return;miniQueued=true;requestAnimationFrame(()=>{miniQueued=false;positionMini()})}
+function positionMini(){
+  const m=$("#mini");
+  const el=S.textEdit?null:(S.selText?document.querySelector("#book .tblk.tsel"):S.sel&&!S.cropEdit?document.querySelector("#book .ph.sel"):null);
+  if(!el){m.hidden=true;return}
+  const r=el.getBoundingClientRect(), mr=mainEl.getBoundingClientRect();
+  if(r.bottom<mr.top+20||r.top>mr.bottom-20){m.hidden=true;return}
+  const p=S.sel&&S.photos.get(S.sel);
+  m.innerHTML=S.selText?ib("tedit",IC.edit,"Edit text")
+    :p.kind==="text"?ib("edit",IC.edit,"Edit text")+ib("delete",IC.trash,"Delete text box")+ib("more",IC.more,"More")
+    :ib("rotr",IC.rotr,"Rotate right")+ib(p.crop?"adjust":"free",IC.move,p.crop?"Adjust inside the mask":"Straighten / free transform")+ib("pool",IC.trash,"Remove from book")+ib("more",IC.more,"More");
+  m.hidden=false;
+  const w=m.offsetWidth, h=m.offsetHeight;
+  let top=r.top-h-8; if(top<mr.top+4) top=Math.min(r.bottom+8,mr.bottom-h-4);
+  m.style.left=Math.max(mr.left+4,Math.min(r.left+r.width/2-w/2,mr.right-w-4))+"px"; m.style.top=top+"px";
+}
+$("#mini").addEventListener("click",e=>{
+  const b=e.target.closest("[data-act]"); if(!b) return;
+  if(b.dataset.act==="tedit"){startTextEdit(S.selText);return}
+  if(b.dataset.act==="more"){const r=b.getBoundingClientRect();openMenu(S.sel,r.left,r.bottom+4,"book");return}
+  doAction(b.dataset.act,S.sel);
+});
+$("#main").addEventListener("scroll",scheduleMini,{passive:true});
+addEventListener("resize",scheduleMini);
+/* ───── editing text right on the page ───── */
+function inlTA(t,L,text,color){
+  const W=S.cfg.w;
+  return `<textarea class="inl" data-inl="${t}" dir="auto" rows="1" spellcheck="true" aria-label="${t==="@title"?"Cover title":"Cover subtitle"}" style="${inlineStyle(t,L,W,color)};height:${(Math.max(1,L.lines.length)*L.lh/W*100).toFixed(4)}cqw">${esc(text)}</textarea>`;
+}
+$("#book").addEventListener("input",e=>{
+  const ta=e.target.closest("[data-inl]"); if(!ta) return;
+  const t=ta.dataset.inl;
+  if(t==="@title"){S.cfg.titleText=ta.value;$("#cTitleText").value=ta.value;$("#docTitle").value=ta.value;renderTree()}
+  else if(t==="@sub"){S.cfg.subText=ta.value;$("#cSubText").value=ta.value}
+  else {S.photos.get(t).text=ta.value;renderTree();updateTextNote()}
+  ta.style.height=""; if(t[0]==="@") ta.style.height=ta.scrollHeight+"px";
+});
+$("#book").addEventListener("focusin",e=>{const ta=e.target.closest("[data-inl]");if(ta&&!ta.dataset.snapped){snap();ta.dataset.snapped="1"}});
+$("#book").addEventListener("keydown",e=>{
+  const ta=e.target.closest("[data-inl]"); if(!ta) return;
+  if(e.key==="Escape"||(e.key==="Enter"&&ta.dataset.inl[0]==="@"&&!e.shiftKey)){e.preventDefault();e.stopPropagation();ta.blur()}
+});
+$("#book").addEventListener("focusout",e=>{
+  const ta=e.target.closest("[data-inl]"); if(!ta) return;
+  // clicks on the toolbars keep editing; anything else finishes it
+  if(e.relatedTarget&&(e.relatedTarget.closest("#insp")||e.relatedTarget.closest("#mini"))) return;
+  setTimeout(()=>{
+    if(document.activeElement&&(document.activeElement.closest("#insp")||document.activeElement.closest("[data-inl]"))) return;
+    if(S.textEdit===ta.dataset.inl){S.textEdit=null;render()}
+  },0);
+});
+/* while typing on the page, toolbar buttons must not steal the caret */
+for(const sel of ["#insp","#mini"]) $(sel).addEventListener("mousedown",e=>{if(S.textEdit&&e.target.closest("button"))e.preventDefault()});
+let inlSelectAll=false;
+function startTextEdit(t,selectAll=false){
+  if(!t) return;
+  if(t[0]==="@"){S.selText=t;S.sel=null;if(t==="@sub"&&!S.cfg.subText){S.cfg.subText="Subtitle";selectAll=true}}
+  else {S.sel=t;S.selText=null}
+  S.cropEdit=null; S.textEdit=t; inlSelectAll=selectAll;
+  if(S.view==="grid") S.view=S.lastView||"spreads";
+  render(); revealInBook(t[0]==="@"?"cover":t);
+}
+function restoreInlineFocus(){
+  if(!S.textEdit) return;
+  const ta=document.querySelector(`#book [data-inl="${CSS.escape(S.textEdit)}"]`); if(!ta||document.activeElement===ta) return;
+  ta.focus({preventScroll:true});
+  if(inlSelectAll){ta.select();inlSelectAll=false} else ta.setSelectionRange(ta.value.length,ta.value.length);
+}
+function inlineStyle(t,L,pageW,color){
+  const st=L.st, rtl=isRTL(t[0]==="@"?(t==="@title"?S.cfg.titleText:S.cfg.subText):S.photos.get(t).text);
+  const deco=[st.underline&&"underline",st.strike&&"line-through"].filter(Boolean).join(" ")||"none";
+  return `${blockCSS(L,pageW,color)};line-height:${(L.lh/pageW*100).toFixed(4)}cqw;font-family:${stackFor(st.fEn,st.fAr,rtl)};text-align:${st.align==="justify"?"justify":st.align};text-decoration:${deco};text-transform:${st.caps==="upper"?"uppercase":st.caps==="lower"?"lowercase":"none"};caret-color:var(--sel)`;
+}
 function updateTextNote(){
   const n=$("#tNote"), p=S.sel&&S.photos.get(S.sel); if(!n||!p||p.kind!=="text") return;
   const L=locate(p.id), r=L&&!L.pool&&S.pages[L.p].rects.find(x=>x.id===p.id);
@@ -1986,7 +2176,12 @@ function updateTextNote(){
 const book=$("#book");
 let justDragged=false;
 book.addEventListener("click",e=>{
-  if(e.target.closest("input")) return;
+  if(S.textEdit&&!e.target.closest("[data-inl]")){S.textEdit=null;document.activeElement?.blur?.()}   // a click elsewhere finishes typing
+  if(e.target.closest("input,textarea")) return;
+  // our own double-click: the first click re-draws the page, so the browser's dblclick never arrives
+  const key=e.target.closest(".tpg")?null:(e.target.closest("[data-tsel]")?.dataset.tsel||e.target.closest(".ph")?.dataset.id||null), now=performance.now();
+  if(key&&lastTap.key===key&&now-lastTap.t<450){lastTap={key:null,t:0};openForEditing(key);return}
+  lastTap={key,t:now};
   const gc=e.target.closest("[data-gopage]"); if(gc){gotoPage(+gc.dataset.gopage);return}
   if(e.target.closest(".xf")) return;
   const tb=e.target.closest("[data-tsel]");
@@ -2001,7 +2196,14 @@ book.addEventListener("click",e=>{
   if(S.cropEdit&&S.cropEdit!==nid) S.cropEdit=null;
   S.sel=nid; render();
 });
+let lastTap={key:null,t:0};
+function openForEditing(key){
+  if(key[0]==="@"){startTextEdit(key);return}
+  const p=S.photos.get(key); if(!p) return;
+  if(p.kind==="text") startTextEdit(key); else if(p.crop) toggleCropEdit(key,true);
+}
 book.addEventListener("dblclick",e=>{
+  const tb=e.target.closest("[data-tsel]"); if(tb&&!e.target.closest(".tpg")){startTextEdit(tb.dataset.tsel);return}
   const f=e.target.closest(".ph"); if(!f) return; const p=S.photos.get(f.dataset.id);
   if(p.kind==="text") doAction("edit",p.id); else if(p.crop) toggleCropEdit(p.id,true);
 });
@@ -2282,7 +2484,8 @@ function doAction(act,id,arg){
     prev:()=>shift(id,-1), next:()=>shift(id,1), split:()=>splitAfter(id),
     pool:()=>toPool(id), back:()=>putBack(id), delete:()=>deleteText(id),
     cover:()=>{S.cfg.coverImg=id;if(S.cfg.coverTr>=100)S.cfg.coverTr=40;S.cfg.title=true;syncForm();render();revealInBook("cover")},
-    edit:()=>{render();setTimeout(()=>$("#tText")?.focus(),0)},
+    edit:()=>startTextEdit(id),
+    more:()=>{const b=document.querySelector('#insp [data-act="more"]'),r=b?b.getBoundingClientRect():{left:200,bottom:120};openMenu(id,r.left,r.bottom+4,"book")},
     showbook:()=>{render();revealInBook(id)},
     showtree:()=>{const g=p.group;if(S.closed.has(g)){S.closed.delete(g);saveUI()}render();const row=document.querySelector(`#tree [data-pick="${CSS.escape(id)}"]`);row?.scrollIntoView({block:"center"});row?.focus()},
     close:()=>{S.sel=null;S.cropEdit=null;render()},
@@ -2321,7 +2524,8 @@ function tsClick(b){
 insp.addEventListener("click",e=>{
   const b=e.target.closest("button"); if(!b) return;
   if(b.dataset.ts){tsClick(b);return}
-  if(b.dataset.act==="tclose"){S.selText=null;S.spacingOpen=false;render();return}
+  if(b.dataset.act==="tclose"){S.selText=null;S.textEdit=null;S.spacingOpen=false;render();return}
+  if(b.dataset.act==="tedit"){startTextEdit(S.selText);return}
   if(b.dataset.tpos){S.cfg.tPos=b.dataset.tpos+S.cfg.tPos[1];syncForm();renderBook();renderInspector();return}
   if(!S.sel) return; const id=S.sel, p=S.photos.get(id);
   if(b.dataset.w) return doAction("star",id,b.dataset.w);
@@ -2365,7 +2569,8 @@ insp.addEventListener("change",e=>{
 const typing=()=>/INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName);
 document.addEventListener("keydown",e=>{
   if(!$("#cmenu").hidden) return;                              // the menu handles its own keys
-  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="z"&&!typing()){e.preventDefault();undo();return}
+  if((e.ctrlKey||e.metaKey)&&!typing()&&(e.key.toLowerCase()==="z"||e.key.toLowerCase()==="y")){e.preventDefault();(e.key.toLowerCase()==="y"||e.shiftKey)?redo():undo();return}
+  if(e.key==="Escape"&&S.textEdit) return;
   if(e.key==="Escape"){if(S.cropEdit){S.cropEdit=null;render()}else if(S.sel||S.selText){S.sel=null;S.selText=null;S.spacingOpen=false;render()}return}
   if(typing()||!S.sel||e.ctrlKey||e.metaKey||e.altKey) return;
   const id=S.sel, p=S.photos.get(id), inPool=S.pool.includes(id), K={
@@ -2391,12 +2596,49 @@ function openTitleStyle(t){
   S.cur=0; render(); revealInBook("cover");
 }
 
+/* ───── icon rail + panels ───── */
+function setPanel(k){
+  S.panel=k;
+  document.querySelectorAll(".rail .rb").forEach(b=>b.setAttribute("aria-pressed",b.dataset.panel===k));
+  document.querySelectorAll("#flyout .fp").forEach(p=>p.hidden=p.dataset.panel!==k);
+  $("#app").classList.toggle("nopanel",!k);
+  const h=$("#flyToggle"); h.textContent=k?"‹":"›"; h.setAttribute("aria-label",k?"Hide panel":"Show panel"); h.title=k?"Hide panel":"Show panel";
+  saveUI(); requestAnimationFrame(()=>{applyZoom();scheduleMini()});
+}
+let lastPanel="photos";
+document.querySelector(".rail").addEventListener("click",e=>{const b=e.target.closest(".rb");if(!b)return;setPanel(S.panel===b.dataset.panel?null:b.dataset.panel)});
+$("#flyToggle").addEventListener("click",()=>{if(S.panel){lastPanel=S.panel;setPanel(null)}else setPanel(lastPanel||"photos")});
+$("#flyout").addEventListener("click",e=>{
+  if(e.target.closest("[data-closepanel]")){lastPanel=S.panel;setPanel(null);return}
+  const pr=e.target.closest("[data-preset]"); if(pr){addText(null,pr.dataset.preset);return}
+  const ce=e.target.closest("[data-cover-edit]"); if(ce){S.cfg.title=true;syncForm();S.cur=0;startTextEdit(ce.dataset.coverEdit)}
+});
+$("#bAddP").addEventListener("click",()=>$("#fFiles").click());
+$("#bFolderP").addEventListener("click",()=>$("#fFolder").click());
+$("#bRebuildP").addEventListener("click",()=>$("#bRebuild").click());
+/* File menu */
+const fileMenu=$("#fileMenu"), bFile=$("#bFile");
+function toggleFile(open){fileMenu.hidden=!open;bFile.setAttribute("aria-expanded",open);if(open)fileMenu.querySelector(".fi")?.focus()}
+bFile.addEventListener("click",()=>toggleFile(fileMenu.hidden));
+fileMenu.addEventListener("click",e=>{if(e.target.closest(".fi"))toggleFile(false)});
+fileMenu.addEventListener("keydown",e=>{
+  const it=[...fileMenu.querySelectorAll(".fi")], i=it.indexOf(document.activeElement);
+  if(e.key==="Escape"){toggleFile(false);bFile.focus()}
+  if(e.key==="ArrowDown"){e.preventDefault();it[(i+1)%it.length].focus()}
+  if(e.key==="ArrowUp"){e.preventDefault();it[(i-1+it.length)%it.length].focus()}
+});
+document.addEventListener("pointerdown",e=>{if(!fileMenu.hidden&&!e.target.closest(".tmenu"))toggleFile(false)});
+$("#bAddM").addEventListener("click",()=>$("#fFiles").click());
+$("#bFontM").addEventListener("click",()=>$("#fFont").click());
+$("#bExportM").addEventListener("click",()=>exportPDF());
+$("#bHowM").addEventListener("click",()=>$("#how").showModal());
+
 /* ───── remembered layout: open settings sections and collapsed folders (this browser only) ───── */
 const UI_KEY="fotoloco.ui.v1";
 function saveUI(){
   try{
     const secs={}; document.querySelectorAll("details.sec").forEach(d=>secs[d.dataset.sec]=d.open);
-    localStorage.setItem(UI_KEY,JSON.stringify({secs,closed:[...S.closed],view:S.view,lastView:S.lastView,zoom:S.zoom,strip:S.strip}));
+    localStorage.setItem(UI_KEY,JSON.stringify({secs,closed:[...S.closed],view:S.view,lastView:S.lastView,zoom:S.zoom,strip:S.strip,panel:S.panel}));
   }catch(e){}
 }
 function loadUI(){
@@ -2404,14 +2646,14 @@ function loadUI(){
   if(!o) return;
   if(o.secs) document.querySelectorAll("details.sec").forEach(d=>{if(d.dataset.sec in o.secs) d.open=!!o.secs[d.dataset.sec]});
   if(Array.isArray(o.closed)) S.closed=new Set(o.closed);
+  if(o.panel===null||["photos","text","cover","layout","format"].includes(o.panel)) S.panel=o.panel;
   if(["spreads","page","grid"].includes(o.view)) S.view=o.view;
   if(["spreads","page"].includes(o.lastView)) S.lastView=o.lastView;
   if(o.zoom>=25&&o.zoom<=300) S.zoom=o.zoom;
   if(typeof o.strip==="boolean") S.strip=o.strip;
 }
 document.querySelectorAll("details.sec").forEach(d=>d.addEventListener("toggle",saveUI));
-$("#bOpenAll").addEventListener("click",()=>{document.querySelectorAll("details.sec").forEach(d=>d.open=true);saveUI()});
-$("#bCloseAll").addEventListener("click",()=>{document.querySelectorAll("details.sec").forEach(d=>d.open=false);saveUI()});
+
 
 /* ───── settings ───── */
 const bind=[["cW","w"],["cH","h"],["cBleed","bleed"],["cMargin","margin"],["cGap","gap"],["cMin","min"],["cMax","max"],["cTarget","target"],["cCapPt","capPt"]];
@@ -2458,7 +2700,9 @@ $("#cDpi").addEventListener("change",e=>S.cfg.dpi=+e.target.value);
 $("#cEven").addEventListener("change",e=>{S.cfg.even=e.target.checked;renderBook()});
 $("#cGuides").addEventListener("change",e=>{S.cfg.guides=e.target.checked;renderBook()});
 $("#cTitle").addEventListener("change",e=>{S.cfg.title=e.target.checked;renderBook()});
-$("#cTitleText").addEventListener("input",e=>{S.cfg.titleText=e.target.value;renderBook()});
+$("#cTitleText").addEventListener("input",e=>{S.cfg.titleText=e.target.value;renderBook();renderTree()});
+$("#docTitle").addEventListener("input",e=>{S.cfg.titleText=e.target.value;$("#cTitleText").value=e.target.value;renderBook();renderTree()});
+$("#docTitle").addEventListener("keydown",e=>{if(e.key==="Enter"||e.key==="Escape")e.target.blur()});
 $("#cSubText").addEventListener("input",e=>{S.cfg.subText=e.target.value;renderBook()});
 onSeg("#paper",v=>S.cfg.paper=v);
 onSeg("#tPos",v=>S.cfg.tPos=v);
@@ -2474,6 +2718,7 @@ $("#fEn").addEventListener("change",e=>{S.cfg.fEn=e.target.value;syncForm();rend
 $("#fAr").addEventListener("change",e=>{S.cfg.fAr=e.target.value;syncForm();render();ensureFonts().then(render)});
 $("#bRebuild").addEventListener("click",()=>{snap();rebuild();S.sel=null;render()});
 $("#bUndo").addEventListener("click",undo);
+$("#bRedo").addEventListener("click",redo);
 $("#bHow").addEventListener("click",()=>$("#how").showModal());
 $("#bHowClose").addEventListener("click",()=>$("#how").close());
 
@@ -2680,6 +2925,7 @@ loadUI(); makeSamples(); syncForm(); rebuild();
 S.pages[0].caption="Rooftops, early light";
 S.pages[S.pages.length-1].caption="جولة ليلية في المدينة";
 S.pages.forEach(pg=>relayout(pg)); render();
+setPanel(S.panel);
 ensureFonts().then(()=>document.fonts.ready).then(()=>render());
 </script>
 </body>

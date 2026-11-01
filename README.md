@@ -13,6 +13,7 @@ Everything runs in the browser. Photos are never uploaded anywhere.
 - Rotate photos, crop them into shapes (square, circle, oval, arch, hexagon and more), and freely move, scale and straighten them inside the mask.
 - Text boxes, a cover title and a subtitle, each with its own English and Arabic font, size, colour, bold, italic, underline, strikethrough, case, alignment, lists and spacing. Arabic is laid out right to left.
 - Upload your own fonts (TTF, OTF, WOFF, WOFF2). They are used only in your browser.
+- A design-tool layout: icon rail with Photos, Text, Cover, Layout and Format panels; a floating toolbar for whatever you select; quick actions above the selection; edit text right on the page; undo and redo.
 - Folder tree, right-click menu, Spreads / Page / Grid views, page thumbnails, zoom and fullscreen.
 - PDF export at 300, 200 or 150 DPI with bleed, plus warnings for low-resolution photos.
 
