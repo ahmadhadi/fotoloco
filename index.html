@@ -127,6 +127,22 @@ body{display:grid;grid-template-rows:auto minmax(0,1fr);overflow:hidden}
 .pre.s{font:700 16px/1.1 var(--display);letter-spacing:.02em}
 .pre.b{font:400 12px/1.4 var(--mono)}
 .ptree{margin:0 -6px}
+.pcard{border:1px solid var(--line);padding:10px 12px;display:flex;flex-direction:column;gap:3px;background:var(--ink)}
+.pcard b{font:700 18px/1 var(--display);text-transform:uppercase;letter-spacing:.02em}
+.pcard small{color:var(--mute);font-size:10.5px;line-height:1.5}
+.recipes{display:flex;flex-direction:column;gap:6px}
+.rcp{display:flex;gap:10px;align-items:center;border:1px solid var(--line);background:var(--ink);color:var(--chalk);padding:8px;cursor:pointer;text-align:left}
+.rcp:hover{border-color:var(--chalk)}
+.rcp[aria-pressed=true]{border-color:var(--chalk);box-shadow:inset 3px 0 0 var(--chalk)}
+.rcp svg{flex:none;width:58px;height:46px}
+.rcp b{display:block;font-size:12px;font-weight:600;letter-spacing:.02em}
+.rcp small{display:block;color:var(--mute);font-size:10.5px;line-height:1.45;margin-top:2px}
+.pfit{font-size:11px;line-height:1.5;border-left:3px solid var(--line);padding:4px 8px}
+.pfit.ok{border-color:#3fb950}.pfit.bad{border-color:var(--flag)}
+.tips{border:1px solid var(--line);padding:8px 10px;font-size:11px;line-height:1.55}
+.tips summary{cursor:pointer;text-transform:uppercase;letter-spacing:.1em;font-size:10.5px;color:var(--chalk)}
+.tips ol{margin:8px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:6px;color:var(--mute)}
+.tips b{color:var(--chalk);font-weight:600}
 .ptree .thead{display:none}
 
 /* collapsible settings */
@@ -451,7 +467,8 @@ footer a,footer button{color:var(--chalk);background:none;border:0;padding:0;cur
       <hr>
       <button class="fi" role="menuitem" type="button" id="bRebuild"><span>Rebuild layout</span><kbd>re-run solver</kbd></button>
       <hr>
-      <button class="fi" role="menuitem" type="button" id="bExportM"><span>Export PDF</span><kbd>300 DPI</kbd></button>
+      <button class="fi" role="menuitem" type="button" id="bExportM"><span>Export PDF</span><kbd>print service</kbd></button>
+      <button class="fi" role="menuitem" type="button" id="bPrintM"><span>Export print sheets</span><kbd>Epson L18050</kbd></button>
       <button class="fi" role="menuitem" type="button" id="bHowM"><span>How it works</span></button>
     </div>
   </div>
@@ -473,6 +490,7 @@ footer a,footer button{color:var(--chalk);background:none;border:0;padding:0;cur
     <button class="rb" type="button" data-panel="text" aria-pressed="false" title="Text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 6V4h14v2M12 4v16M9 20h6"/></svg><span>Text</span></button>
     <button class="rb" type="button" data-panel="cover" aria-pressed="false" title="Cover"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3h11a3 3 0 0 1 3 3v15H8a3 3 0 0 1-3-3z"/><path d="M5 18a3 3 0 0 1 3-3h11"/><path d="M9 8h6"/></svg><span>Cover</span></button>
     <button class="rb" type="button" data-panel="layout" aria-pressed="false" title="Layout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="8" height="7"/><rect x="13" y="4" width="8" height="11"/><rect x="3" y="13" width="8" height="7"/><rect x="13" y="17" width="8" height="3"/></svg><span>Layout</span></button>
+    <button class="rb" type="button" data-panel="print" aria-pressed="false" title="Print at home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 8V3h10v5"/><rect x="3" y="8" width="18" height="9" rx="1"/><path d="M7 14h10v7H7z"/><path d="M17 11h1"/></svg><span>Print</span></button>
     <button class="rb" type="button" data-panel="format" aria-pressed="false" title="Format"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h9l3 3v15H6z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg><span>Format</span></button>
   </nav>
   <aside class="flyout pane" id="flyout" aria-label="Panel">
@@ -611,8 +629,37 @@ footer a,footer button{color:var(--chalk);background:none;border:0;padding:0;cur
       </div>
     </fieldset>
     </section>
+    <section class="fp" data-panel="print" aria-label="Print at home" hidden>
+      <div class="fph"><h2>Print at home</h2><button class="fpx" type="button" data-closepanel aria-label="Close panel">×</button></div>
+      <div class="pcard"><b>Epson EcoTank L18050</b><small>6-colour photo ink tank · borderless up to A3+ (329 × 483 mm) · 5760 × 1440 dpi</small></div>
+      <h3 class="fh">Presets</h3>
+      <p class="hint">Each preset sets the book's page size, bleed and margins to match the paper. Photos re-flow to the new size.</p>
+      <div class="recipes" id="recipes"></div>
+      <h3 class="fh">Custom</h3>
+      <div class="field"><label class="lbl" for="prPaper">Paper</label><select id="prPaper"></select></div>
+      <span class="lbl">Book pages per sheet</span>
+      <div class="seg" id="prNup" style="--n:2"><button type="button" data-v="1">1 page</button><button type="button" data-v="2">2 pages · spread</button></div>
+      <label class="check"><input type="checkbox" id="prBorderless"> Borderless</label>
+      <label class="check"><input type="checkbox" id="prMarks"> Crop marks + bleed (cut by hand)</label>
+      <div class="pfit" id="prFit" role="status"></div>
+      <button class="btn" type="button" id="bFitBook">Size the book to this paper</button>
+      <button class="btn solid big" type="button" id="bPrintPDF">Export print sheets</button>
+      <details class="tips">
+        <summary>Epson driver settings</summary>
+        <ol>
+          <li>Open the PDF and print at <b>Actual size / 100%</b>. Turn off "Fit to page" and any scaling.</li>
+          <li><b>Paper size:</b> the same paper as the preset. Pick the <b>(Borderless)</b> version of the size when the preset is borderless.</li>
+          <li><b>Paper type:</b> match what's loaded, for example Premium Glossy, Premium Semigloss or Matte Paper-Heavyweight.</li>
+          <li><b>Quality:</b> High (or Best Photo).</li>
+          <li><b>Borderless expansion:</b> Min. Epson enlarges borderless prints slightly so the edges stay covered; FotoLoco's borderless presets keep a wider margin so nothing important is cut.</li>
+          <li><b>Colour:</b> Epson Standard (sRGB) unless you use an ICC profile for your paper.</li>
+          <li>Load photo paper printable side up. Up to 10 sheets of A3/A3+ or 20–30 of A4 and smaller.</li>
+          <li>For 2-sided pages, print the odd sheets, let the ink dry, turn the stack and print the even sheets.</li>
+        </ol>
+      </details>
+    </section>
     <footer>
-      <span>FotoLoco v1.7</span>
+      <span>FotoLoco v1.8</span>
       <button type="button" id="bHow">How it works</button>
       <span>Runs in your browser. Your photos never leave your device.</span>
       <span>Layout ideas from <a href="https://github.com/EddyXorb/fotobuch" target="_blank" rel="noopener">fotobuch</a></span>
@@ -671,6 +718,7 @@ footer a,footer button{color:var(--chalk);background:none;border:0;padding:0;cur
     <li><b>Rotate and crop.</b> Rotate a photo with ⟲ ⟳ or R. Photos are never cropped unless you ask: pick a crop shape (square, rounded, circle, oval, arch, hexagon or a rectangle at a set ratio), then drag the picture inside the mask and scroll to zoom. The shape becomes the frame the layout works with.</li>
     <li><b>Free transform inside a mask.</b> In adjust mode a blue box surrounds the whole picture: drag to move it, pull a corner to scale it (it can be smaller than the mask), and turn the round knob to straighten or tilt. Fit, Fill and Keep filled are in the bar below. Unmasked photos get the same tools through Free transform, which puts them in a rectangle first.</li>
     <li><b>Find your way around.</b> The icons on the left open one panel at a time: Photos (folders and unused photos), Text (add text, presets, book fonts), Cover, Layout and Format. Click the active icon again, or the edge tab, to hide the panel. Whatever you select gets its tools in the bar above the book, plus a small quick-action bar right above it. Undo and redo are in the top bar.</li>
+    <li><b>Print at home.</b> The Print panel has presets for the Epson EcoTank L18050: each sets the page size to match the paper, from A3+ down to 4×6 in. Export print sheets makes a PDF at the paper's real size, with one page or a spread per sheet, borderless or with crop marks for cutting. Print it at 100%.</li>
     <li><b>View the book your way.</b> Spreads, Page or Grid at the bottom of the book, a strip of page thumbnails that scrolls sideways (drop a photo on a thumbnail to move it there), ← → to page through, a zoom slider or Ctrl + scroll, and fullscreen.</li>
     <li><b>Right-click anything.</b> Photos and text boxes in the book, the folder tree and Unused all have a menu with every action and its shortcut.</li>
     <li><b>Use the folder tree.</b> The left pane lists every folder and photo with the page it's on. Click a photo to jump to it, drag a folder onto another to change the chapter order, and use Hide or Show to take a whole folder out of the book or put it back.</li>
@@ -1099,7 +1147,8 @@ const S={
        tStyle:{fEn:null,fAr:null,italic:false,underline:false,strike:false,caps:"none",ls:0,lh:0},
        sStyle:{fEn:null,fAr:"Tajawal",w:400,italic:false,underline:false,strike:false,caps:"none",ls:0.06,lh:1.5,color:null,pt:13.5},
        tPos:"bl",tScale:100,titleAuto:true,titleColor:"#ffffff",
-       coverImg:null,coverFit:"fill",coverColor:"#000000",coverTr:55}
+       coverImg:null,coverFit:"fill",coverColor:"#000000",coverTr:55,
+       print:{paper:"A4",nup:1,borderless:true,marks:false,recipe:null}}
 };
 let uid=0, seedCtr=1;
 const newSeed=()=>(Date.now()+(seedCtr++)*7919)>>>0;
@@ -1739,6 +1788,7 @@ function pageHTML(item){
 let lastSelKey="";
 function render(){
   renderBook();renderSide();renderTree();renderInspector();
+  if(S.panel==="print") renderPrint();
   // the bottom bar can grow when something is selected; keep that thing in view
   const key=(S.sel||"")+"|"+(S.selText||"");
   if(key!==lastSelKey){lastSelKey=key;if(key!=="|")requestAnimationFrame(()=>document.querySelector("#book .ph.sel, #book .tblk.tsel")?.scrollIntoView({block:"nearest"}))}
@@ -2596,6 +2646,157 @@ function openTitleStyle(t){
   S.cur=0; render(); revealInBook("cover");
 }
 
+/* ───── print at home: Epson EcoTank L18050 ───── */
+const PAPERS={  // sizes from Epson's L18050 specifications, in mm (portrait)
+  "A3+":{w:329,h:483,label:"A3+ · 329 × 483"}, "A3":{w:297,h:420,label:"A3 · 297 × 420"}, "B4":{w:257,h:364,label:"B4 · 257 × 364"},
+  "A4":{w:210,h:297,label:"A4 · 210 × 297"}, "B5":{w:182,h:257,label:"B5 · 182 × 257"}, "A5":{w:148,h:210,label:"A5 · 148 × 210"},
+  "A6":{w:105,h:148,label:"A6 · 105 × 148"}, "8x10":{w:203.2,h:254,label:"20 × 25 cm · 8 × 10 in"},
+  "5x8":{w:127,h:203.2,label:"13 × 20 cm · 5 × 8 in"}, "5x7":{w:127,h:177.8,label:"13 × 18 cm · 5 × 7 in"},
+  "4x6":{w:101.6,h:152.4,label:"10 × 15 cm · 4 × 6 in"}, "3.5x5":{w:89,h:127,label:"9 × 13 cm · 3.5 × 5 in"},
+  "16:9":{w:101.6,h:180.6,label:"16:9 wide · 102 × 181"}, "Letter":{w:215.9,h:279.4,label:"Letter · 8.5 × 11 in"},
+  "Legal":{w:215.9,h:355.6,label:"Legal · 8.5 × 14 in"}, "HalfLetter":{w:139.7,h:215.9,label:"Half Letter · 5.5 × 8.5 in"}
+};
+const MIN_MARGIN=3, MARK_GAP=1, MARK_LEN=5;           // printer's own margin when not borderless; crop-mark geometry (mm)
+const markRoom=b=>b+MARK_GAP+MARK_LEN;
+const RECIPES=[
+  {id:"a4l",  title:"A4 landscape book",            sub:"1 page per A4 sheet · borderless",              w:297,h:210,paper:"A4", nup:1,borderless:true, marks:false,margin:8, bleed:3},
+  {id:"a4p",  title:"A4 portrait book, spreads",     sub:"2 pages per A3 sheet · borderless · fold in half",w:210,h:297,paper:"A3", nup:2,borderless:true, marks:false,margin:8, bleed:3},
+  {id:"a5p",  title:"A5 portrait book, spreads",     sub:"2 pages per A4 sheet · borderless · fold in half",w:148,h:210,paper:"A4", nup:2,borderless:true, marks:false,margin:7, bleed:3},
+  {id:"a3l",  title:"A3 landscape book",             sub:"1 page per A3+ sheet · crop marks + 3 mm bleed",  w:420,h:297,paper:"A3+",nup:1,borderless:false,marks:true, margin:12,bleed:3},
+  {id:"sq30", title:"30 × 30 cm square book",        sub:"1 page per A3+ sheet · crop marks + 3 mm bleed",  w:300,h:300,paper:"A3+",nup:1,borderless:false,marks:true, margin:12,bleed:3},
+  {id:"sq21", title:"21 × 21 cm square, spreads",    sub:"2 pages per A3+ sheet · crop marks + bleed",      w:210,h:210,paper:"A3+",nup:2,borderless:false,marks:true, margin:10,bleed:3},
+  {id:"sq19", title:"19 × 19 cm square book",        sub:"1 page per A4 sheet · crop marks + bleed",        w:190,h:190,paper:"A4", nup:1,borderless:false,marks:true, margin:9, bleed:3},
+  {id:"hpb",  title:"Epson Handmade Photo Book",      sub:"A5 24-hole paper · 3 mm white edge · wide margin for the holes",w:142,h:204,paper:"A5",nup:1,borderless:false,marks:false,margin:14,bleed:0},
+  {id:"810",  title:"8 × 10 in album pages",          sub:"1 page per 8 × 10 sheet · borderless",            w:254,h:203.2,paper:"8x10",nup:1,borderless:true,marks:false,margin:8,bleed:3},
+  {id:"57",   title:"5 × 7 in mini book",             sub:"1 page per 5 × 7 sheet · borderless",             w:177.8,h:127,paper:"5x7",nup:1,borderless:true,marks:false,margin:6,bleed:3},
+  {id:"46",   title:"4 × 6 in prints",                sub:"10 × 15 cm photo paper · borderless",             w:152.4,h:101.6,paper:"4x6",nup:1,borderless:true,marks:false,margin:5,bleed:3}
+];
+/* how the book sits on the chosen paper: picks the orientation that fits, actual size */
+function printPlan(pr=S.cfg.print){
+  const c=S.cfg, P=PAPERS[pr.paper]; if(!P) return {ok:false,msg:"Choose a paper size."};
+  const uw=c.w*pr.nup, uh=c.h, b=pr.marks?c.bleed:0, room=pr.borderless?0:pr.marks?markRoom(c.bleed):MIN_MARGIN;
+  const need=[uw+2*room,uh+2*room];
+  const opts=[[P.w,P.h],[P.h,P.w]].map(([sw,sh])=>({sw,sh,fits:need[0]<=sw+0.6&&need[1]<=sh+0.6,exact:Math.abs(uw-sw)<1.2&&Math.abs(uh-sh)<1.2}));
+  const pick=opts.find(o=>pr.borderless?o.exact:o.fits)||opts.find(o=>o.fits)||opts[uw>=uh?1:0];
+  const ok=pr.borderless?pick.exact:pick.fits;
+  const unit=pr.nup===2?`${fmt(uw)} × ${fmt(uh)} mm spread`:`${fmt(uw)} × ${fmt(uh)} mm page`;
+  let msg;
+  if(ok) msg=pr.borderless?`✓ Your ${unit} fills ${pr.paper} ${pick.sw>pick.sh?"landscape":"portrait"} edge to edge.`
+    :`✓ Your ${unit} fits on ${pr.paper} ${pick.sw>pick.sh?"landscape":"portrait"}${pr.marks?" with bleed and crop marks":" with a white border"}.`;
+  else if(pr.borderless&&pick.fits) msg=`⚠ Borderless needs the ${pr.nup===2?"spread":"page"} to match ${pr.paper} exactly (${fmt(Math.max(P.w,P.h))} × ${fmt(Math.min(P.w,P.h))} mm). It will print smaller, with white edges. Use "Size the book to this paper", or turn borderless off.`;
+  else if(pr.borderless) msg=`⚠ Borderless needs the ${pr.nup===2?"spread":"page"} to match ${pr.paper} (${fmt(Math.max(P.w,P.h))} × ${fmt(Math.min(P.w,P.h))} mm); yours is ${fmt(uw)} × ${fmt(uh)} mm. Pick other paper or use "Size the book to this paper".`;
+  else msg=`⚠ Your ${unit} is too big for ${pr.paper}${pr.marks?" with bleed and crop marks":""}. It needs ${fmt(need[0])} × ${fmt(need[1])} mm. Pick bigger paper, 1 page per sheet, or size the book to this paper.`;
+  return {ok,sw:pick.sw,sh:pick.sh,uw,uh,b,msg,fits:pick.fits};
+}
+/* largest page size for this paper + layout, keeping the book's current proportions when it can't match exactly */
+function bookSizeFor(pr){
+  const P=PAPERS[pr.paper], room=pr.borderless?0:pr.marks?markRoom(S.cfg.bleed||3):MIN_MARGIN;
+  const ar=S.cfg.w/S.cfg.h;   // stay as close as possible to the book's current proportions
+  let best=null;
+  for(const [sw,sh] of [[P.w,P.h],[P.h,P.w]]){
+    const w=(sw-2*room)/pr.nup, h=sh-2*room;
+    if(w<=20||h<=20) continue;
+    const score=-Math.abs(Math.log((w/h)/ar))*1e6+w*h;
+    if(!best||score>best.score) best={w:Math.floor(w*10)/10,h:Math.floor(h*10)/10,score};
+  }
+  return best;
+}
+function applyBookSize(w,h,extra={}){
+  const c=S.cfg; c.w=w; c.h=h; Object.assign(c,extra);
+  relayoutAll(); syncForm(); render(); renderPrint();
+}
+function applyRecipe(id){
+  const r=RECIPES.find(x=>x.id===id); if(!r) return;
+  S.cfg.print={paper:r.paper,nup:r.nup,borderless:r.borderless,marks:r.marks,recipe:r.id};
+  applyBookSize(r.w,r.h,{bleed:r.bleed,margin:r.margin});
+}
+function recipeSVG(r){
+  const P=PAPERS[r.paper], land=r.w*r.nup>r.h;
+  const sw=land?Math.max(P.w,P.h):Math.min(P.w,P.h), sh=land?Math.min(P.w,P.h):Math.max(P.w,P.h);
+  const sc=Math.min(54/sw,42/sh), W=sw*sc, H=sh*sc, ox=(58-W)/2, oy=(46-H)/2;
+  const uw=r.w*r.nup*sc, uh=r.h*sc, ux=ox+(W-uw)/2, uy=oy+(H-uh)/2;
+  let g=`<rect x="${ox}" y="${oy}" width="${W}" height="${H}" fill="#efeee9"/>`;
+  for(let i=0;i<r.nup;i++) g+=`<rect x="${ux+i*r.w*sc}" y="${uy}" width="${r.w*sc}" height="${uh}" fill="#6d6b66" stroke="#0d0d0c" stroke-width=".6"/>`;
+  if(r.marks) g+=`<path d="M${ux-3} ${uy}h-3M${ux} ${uy-3}v-3M${ux+uw+3} ${uy}h3M${ux+uw} ${uy-3}v-3M${ux-3} ${uy+uh}h-3M${ux} ${uy+uh+3}v3M${ux+uw+3} ${uy+uh}h3M${ux+uw} ${uy+uh+3}v3" stroke="#0d0d0c" stroke-width=".6"/>`;
+  if(r.nup===2) g+=`<path d="M${ux+uw/2} ${uy}v${uh}" stroke="#efeee9" stroke-width=".6" stroke-dasharray="1.5 1.5"/>`;
+  return `<svg viewBox="0 0 58 46" aria-hidden="true">${g}</svg>`;
+}
+function renderPrint(){
+  const pr=S.cfg.print;
+  $("#recipes").innerHTML=RECIPES.map(r=>`<button type="button" class="rcp" data-recipe="${r.id}" aria-pressed="${pr.recipe===r.id&&Math.abs(S.cfg.w-r.w)<0.2&&Math.abs(S.cfg.h-r.h)<0.2}">${recipeSVG(r)}<span><b>${r.title}</b><small>${r.sub} · ${fmt(r.w)} × ${fmt(r.h)} mm</small></span></button>`).join("");
+  const sel=$("#prPaper");
+  if(!sel.options.length) sel.innerHTML=Object.entries(PAPERS).map(([k,v])=>`<option value="${k}">${v.label}</option>`).join("");
+  sel.value=pr.paper;
+  document.querySelectorAll("#prNup button").forEach(b=>b.setAttribute("aria-pressed",+b.dataset.v===pr.nup));
+  $("#prBorderless").checked=pr.borderless; $("#prMarks").checked=pr.marks; $("#prMarks").disabled=pr.borderless;
+  const plan=printPlan(); const f=$("#prFit"); f.textContent=plan.msg; f.className="pfit "+(plan.ok?"ok":"bad");
+}
+$("#recipes").addEventListener("click",e=>{const b=e.target.closest("[data-recipe]");if(b)applyRecipe(b.dataset.recipe)});
+$("#prPaper").addEventListener("change",e=>{S.cfg.print.paper=e.target.value;S.cfg.print.recipe=null;renderPrint()});
+$("#prNup").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;S.cfg.print.nup=+b.dataset.v;S.cfg.print.recipe=null;renderPrint()});
+$("#prBorderless").addEventListener("change",e=>{const pr=S.cfg.print;pr.borderless=e.target.checked;if(pr.borderless)pr.marks=false;pr.recipe=null;renderPrint()});
+$("#prMarks").addEventListener("change",e=>{S.cfg.print.marks=e.target.checked;S.cfg.print.recipe=null;renderPrint()});
+$("#bFitBook").addEventListener("click",()=>{const s2=bookSizeFor(S.cfg.print);if(s2)applyBookSize(s2.w,s2.h,S.cfg.print.borderless?{margin:Math.max(S.cfg.margin,7)}:{})});
+$("#bPrintPDF").addEventListener("click",()=>exportPrintSheets());
+$("#bPrintM").addEventListener("click",()=>{setPanel("print");exportPrintSheets()});
+
+/* sheets for the home printer: actual size, 1 page or a spread per sheet, borderless or with crop marks */
+async function exportPrintSheets(){
+  if(!window.jspdf){busy("PDF engine missing","Reload the page and try again.",0);setTimeout(()=>busy(null),2500);return}
+  const c=S.cfg, pr=c.print, plan=printPlan();
+  if(!plan.fits){setPanel("print");renderPrint();busy("Doesn't fit the paper",plan.msg.replace(/^⚠ /,""),0);setTimeout(()=>busy(null),4200);return}
+  const k=c.dpi/25.4, b=c.bleed, pw=c.w+2*b, ph=c.h+2*b, PW=Math.round(pw*k), PH=Math.round(ph*k);
+  const SW=Math.round(plan.sw*k), SH=Math.round(plan.sh*k), orient=plan.sw>=plan.sh?"landscape":"portrait";
+  const d=displayPages(), sheets=[];
+  if(pr.nup===2){sheets.push([null,d[0]]); for(let i=1;i<d.length;i+=2) sheets.push([d[i],d[i+1]||null])}
+  else d.forEach(it=>sheets.push([it]));
+  await loadExportFonts();
+  const pdf=new window.jspdf.jsPDF({unit:"mm",format:[plan.sw,plan.sh],orientation:orient,compress:true});
+  pdf.setProperties({title:(c.titleText||"Photobook")+" — print sheets",creator:"FotoLoco",subject:`Epson L18050 · ${pr.paper} · ${pr.nup} per sheet${pr.borderless?" · borderless":pr.marks?" · crop marks":""}`});
+  const pc=document.createElement("canvas"); pc.width=PW; pc.height=PH; const px=pc.getContext("2d"); px.imageSmoothingQuality="high";
+  const sc=document.createElement("canvas"); sc.width=SW; sc.height=SH; const sx=sc.getContext("2d");
+  // where the trim box of the first page sits on the sheet (mm)
+  const ux=(plan.sw-plan.uw)/2, uy=(plan.sh-plan.uh)/2;
+  const bleedOut=pr.marks&&!pr.borderless?b:0;           // bleed printed around the trim when cutting by hand
+  try{
+    for(let s=0;s<sheets.length;s++){
+      busy("Printing sheets",`Sheet ${s+1} of ${sheets.length} · ${pr.paper} ${orient}`,s/sheets.length); await tick();
+      sx.fillStyle="#ffffff"; sx.fillRect(0,0,SW,SH);
+      const row=sheets[s];
+      for(let j=0;j<row.length;j++){
+        const it=row[j];
+        const tx=ux+j*c.w, ty=uy;                          // trim box of this page on the sheet
+        // visible area: trim plus outer bleed (the spine side of a spread is cut at the fold)
+        const left=pr.nup===2&&j===1?0:bleedOut, right=pr.nup===2&&j===0?0:bleedOut;
+        const vx=tx-left, vy=ty-bleedOut, vw=c.w+left+right, vh=c.h+2*bleedOut;
+        if(!it){continue}
+        await drawPage(px,it,PW,PH,k);
+        // source rectangle in the page canvas (which has the full bleed b on every side)
+        const srx=(b-left)*k, sry=(b-bleedOut)*k, srw=vw*k, srh=vh*k;
+        sx.drawImage(pc,srx,sry,srw,srh,Math.round(vx*k),Math.round(vy*k),Math.round(vw*k),Math.round(vh*k));
+      }
+      if(pr.marks&&!pr.borderless){
+        sx.strokeStyle="#000"; sx.lineWidth=Math.max(1,0.25*PT*k);
+        const x0=ux*k, y0=uy*k, x1=(ux+plan.uw)*k, y1=(uy+plan.uh)*k, o=(b+MARK_GAP)*k, L=MARK_LEN*k;
+        const line=(ax,ay,bx,by)=>{sx.beginPath();sx.moveTo(ax,ay);sx.lineTo(bx,by);sx.stroke()};
+        for(const [x,dx] of [[x0,-1],[x1,1]]) for(const [y,dy] of [[y0,-1],[y1,1]]){
+          line(x+dx*o,y,x+dx*(o+L),y); line(x,y+dy*o,x,y+dy*(o+L));
+        }
+        if(pr.nup===2){const fx=(ux+c.w)*k; line(fx,y0-o,fx,y0-o-L); line(fx,y1+o,fx,y1+o+L)}   // fold marks
+        sx.fillStyle="#000"; sx.font=`${Math.max(8,2.2*k)}px ui-monospace,monospace`; sx.textBaseline="top"; sx.textAlign="left";
+        sx.fillText(`${c.titleText||"FotoLoco"} · sheet ${s+1}/${sheets.length} · ${fmt(c.w)}×${fmt(c.h)} mm · print at 100%`,x0,Math.min(SH-3*k,y1+o+L+1*k));
+      }
+      const blob=await new Promise(r=>sc.toBlob(r,"image/jpeg",.92));
+      const buf=new Uint8Array(await blob.arrayBuffer());
+      if(s>0) pdf.addPage([plan.sw,plan.sh],orient);
+      pdf.addImage(buf,"JPEG",0,0,plan.sw,plan.sh,undefined,"NONE");
+    }
+    busy("Binding","Writing PDF",1); await tick();
+    pdf.save(`${fileBase()}-L18050-${pr.paper.replace(/[^\w+]/g,"")}-${pr.nup}up${pr.borderless?"-borderless":pr.marks?"-cropmarks":""}.pdf`);
+  }catch(err){busy("Export failed",String(err&&err.message||err),0);setTimeout(()=>busy(null),4000);return}
+  busy(null);
+}
+
 /* ───── icon rail + panels ───── */
 function setPanel(k){
   S.panel=k;
@@ -2603,6 +2804,7 @@ function setPanel(k){
   document.querySelectorAll("#flyout .fp").forEach(p=>p.hidden=p.dataset.panel!==k);
   $("#app").classList.toggle("nopanel",!k);
   const h=$("#flyToggle"); h.textContent=k?"‹":"›"; h.setAttribute("aria-label",k?"Hide panel":"Show panel"); h.title=k?"Hide panel":"Show panel";
+  if(k==="print") renderPrint();
   saveUI(); requestAnimationFrame(()=>{applyZoom();scheduleMini()});
 }
 let lastPanel="photos";
@@ -2646,7 +2848,7 @@ function loadUI(){
   if(!o) return;
   if(o.secs) document.querySelectorAll("details.sec").forEach(d=>{if(d.dataset.sec in o.secs) d.open=!!o.secs[d.dataset.sec]});
   if(Array.isArray(o.closed)) S.closed=new Set(o.closed);
-  if(o.panel===null||["photos","text","cover","layout","format"].includes(o.panel)) S.panel=o.panel;
+  if(o.panel===null||["photos","text","cover","layout","format","print"].includes(o.panel)) S.panel=o.panel;
   if(["spreads","page","grid"].includes(o.view)) S.view=o.view;
   if(["spreads","page"].includes(o.lastView)) S.lastView=o.lastView;
   if(o.zoom>=25&&o.zoom<=300) S.zoom=o.zoom;
@@ -2851,75 +3053,78 @@ function wrapText(cx,text,max){
 }
 /* baseline offset inside a CSS-style line box of height lh */
 function baseIn(cx,lh){const m=cx.measureText("Hgابج");const a=m.fontBoundingBoxAscent??m.actualBoundingBoxAscent,d=m.fontBoundingBoxDescent??m.actualBoundingBoxDescent;return (lh-(a+d))/2+a}
+/* draw one book page (trim + bleed) onto a canvas cx sized W×H px; k = px per mm */
+const photoSource=async p=>p.canvas||await createImageBitmap(p.file);
+async function drawPage(cx,item,W,H,k){
+  const c=S.cfg, b=c.bleed, ink=inkFor(c.paper);
+  const setDir=t=>{cx.direction=isRTL(t)?"rtl":"ltr"};
+  cx.fillStyle=c.paper; cx.fillRect(0,0,W,H);
+  if(item.type==="photo"){
+    for(const r of item.pg.rects){
+      const p=S.photos.get(r.id), X=(r.x+b)*k, Y=(r.y+b)*k, RW=r.w*k, RH=r.h*k;
+      if(p.kind==="text"){
+        if(!String(p.text||"").trim()) continue;
+        const T=layoutText(p,r.w,r.h), total=T.lines.length*T.lh*k;
+        const y0=Y+(p.valign==="middle"?(RH-total)/2:p.valign==="bottom"?RH-total:0);
+        cx.save(); cx.beginPath(); cx.rect(X,Y,RW,RH); cx.clip();
+        drawLines(cx,T,X,y0,RW,k,T.st.color||ink);
+        cx.restore();
+      } else {
+        const src=await photoSource(p), pl=placeImage(p,r.w,r.h);
+        cx.save(); shapePath(cx,p,X,Y,RW,RH); cx.clip();
+        drawRot(cx,src,p,X+pl.x*k,Y+pl.y*k,pl.w*k,pl.h*k,pl.tilt);
+        cx.restore();
+        if(src.close) src.close();
+      }
+    }
+    const cap=(item.pg.caption||"").trim();
+    if(cap){
+      const fs=c.capPt*PT*k, x0=(b+c.margin)*k, x1=W-(b+c.margin)*k, lh=fs*1.5;
+      cx.fillStyle=ink; cx.font=`400 ${fs}px ${capStack(isRTL(cap))}`; cx.textBaseline="alphabetic"; setDir(cap); cx.textAlign="start";
+      cx.fillText(fitLine(cx,cap,x1-x0),isRTL(cap)?x1:x0,(b+c.h-c.margin)*k-lh+baseIn(cx,lh));
+    }
+  } else if(item.type==="title"){
+    const cp=c.coverImg&&S.photos.get(c.coverImg);
+    if(cp){
+      const src=await photoSource(cp), fill=c.coverFit==="fill";
+      const bx=fill?0:(b+c.margin)*k, by=fill?0:(b+c.margin)*k, bw=fill?W:(c.w-2*c.margin)*k, bh=fill?H:(c.h-2*c.margin)*k;
+      const pl=placeImage(cp,bw,bh,fill?"cover":"contain");
+      cx.save(); cx.beginPath(); cx.rect(bx,by,bw,bh); cx.clip(); drawRot(cx,src,cp,bx+pl.x,by+pl.y,pl.w,pl.h); cx.restore();
+      if(src.close) src.close();
+    }
+    const a=(100-c.coverTr)/100; if(a>0){cx.globalAlpha=a;cx.fillStyle=c.coverColor;cx.fillRect(0,0,W,H);cx.globalAlpha=1}
+    const v=c.tPos[0], pad=(b+c.margin)*k, CL=coverLayout(), blockH=CL.height*k, ink2=coverInk();
+    const top=v==="t"?pad:v==="m"?(H-blockH)/2:H-pad-blockH;
+    drawLines(cx,CL.T,pad,top,CL.avail*k,k,ink2);
+    if(CL.Sb) drawLines(cx,CL.Sb,pad,top+(CL.T.lines.length*CL.T.lh+CL.gap)*k,CL.avail*k,k,CL.Sb.st.color||ink2);
+  }
+}
+async function loadExportFonts(){busy("Loading type","Fonts for the PDF",0);await ensureFonts()}
+const fileBase=()=>(S.cfg.titleText||"photobook").trim().replace(/[\\/:*?"<>|]+/g,"").replace(/\s+/g,"-").toLowerCase()||"photobook";
 async function exportPDF(){
   if(!window.jspdf){busy("PDF engine missing","Reload the page and try again.",0);setTimeout(()=>busy(null),2500);return}
   const c=S.cfg, b=c.bleed, pw=c.w+2*b, ph=c.h+2*b, k=c.dpi/25.4;
   const W=Math.round(pw*k), H=Math.round(ph*k), orient=pw>=ph?"landscape":"portrait";
-  const d=displayPages(), fam=stack(), ink=inkFor(c.paper);
-  busy("Loading type",`${c.fEn} + ${c.fAr}`,0);
-  try{for(const w of [300,400,700]){await document.fonts.load(`${w} 40px ${q(c.fEn)}`,"Aa");await document.fonts.load(`${w} 40px ${q(c.fAr)}`,"ابج")}}catch(e){}
+  const d=displayPages();
+  await loadExportFonts();
   const pdf=new window.jspdf.jsPDF({unit:"mm",format:[pw,ph],orientation:orient,compress:true});
   pdf.setProperties({title:c.titleText||"Photobook",creator:"FotoLoco"});
   const cv=document.createElement("canvas"); cv.width=W; cv.height=H; const cx=cv.getContext("2d");
   cx.imageSmoothingEnabled=true; cx.imageSmoothingQuality="high";
-  const setDir=t=>{cx.direction=isRTL(t)?"rtl":"ltr"};
-  const source=async p=>p.canvas||await createImageBitmap(p.file);
   try{
     for(let i=0;i<d.length;i++){
       busy("Printing",`Page ${i+1} of ${d.length} · ${W}×${H}px`,i/d.length); await tick();
-      cx.fillStyle=c.paper; cx.fillRect(0,0,W,H);
-      const item=d[i];
-      if(item.type==="photo"){
-        for(const r of item.pg.rects){
-          const p=S.photos.get(r.id), X=(r.x+b)*k, Y=(r.y+b)*k, RW=r.w*k, RH=r.h*k;
-          if(p.kind==="text"){
-            if(!String(p.text||"").trim()) continue;
-            const T=layoutText(p,r.w,r.h), total=T.lines.length*T.lh*k;
-            const y0=Y+(p.valign==="middle"?(RH-total)/2:p.valign==="bottom"?RH-total:0);
-            cx.save(); cx.beginPath(); cx.rect(X,Y,RW,RH); cx.clip();
-            drawLines(cx,T,X,y0,RW,k,T.st.color||ink);
-            cx.restore();
-          } else {
-            const src=await source(p), pl=placeImage(p,r.w,r.h);
-            cx.save(); shapePath(cx,p,X,Y,RW,RH); cx.clip();
-            drawRot(cx,src,p,X+pl.x*k,Y+pl.y*k,pl.w*k,pl.h*k,pl.tilt);
-            cx.restore();
-            if(src.close) src.close();
-          }
-        }
-        const cap=(item.pg.caption||"").trim();
-        if(cap){
-          const fs=c.capPt*PT*k, x0=(b+c.margin)*k, x1=W-(b+c.margin)*k, lh=fs*1.5;
-          cx.fillStyle=ink; cx.font=`400 ${fs}px ${capStack(isRTL(cap))}`; cx.textBaseline="alphabetic"; setDir(cap); cx.textAlign="start";
-          cx.fillText(fitLine(cx,cap,x1-x0),isRTL(cap)?x1:x0,(b+c.h-c.margin)*k-lh+baseIn(cx,lh));
-        }
-      } else if(item.type==="title"){
-        const cp=c.coverImg&&S.photos.get(c.coverImg);
-        if(cp){
-          const src=await source(cp), fill=c.coverFit==="fill";
-          const bx=fill?0:(b+c.margin)*k, by=fill?0:(b+c.margin)*k, bw=fill?W:(c.w-2*c.margin)*k, bh=fill?H:(c.h-2*c.margin)*k;
-          const pl=placeImage(cp,bw,bh,fill?"cover":"contain");
-          cx.save(); cx.beginPath(); cx.rect(bx,by,bw,bh); cx.clip(); drawRot(cx,src,cp,bx+pl.x,by+pl.y,pl.w,pl.h); cx.restore();
-          if(src.close) src.close();
-        }
-        const a=(100-c.coverTr)/100; if(a>0){cx.globalAlpha=a;cx.fillStyle=c.coverColor;cx.fillRect(0,0,W,H);cx.globalAlpha=1}
-        const v=c.tPos[0], pad=(b+c.margin)*k, CL=coverLayout(), blockH=CL.height*k, ink2=coverInk();
-        const top=v==="t"?pad:v==="m"?(H-blockH)/2:H-pad-blockH;
-        drawLines(cx,CL.T,pad,top,CL.avail*k,k,ink2);
-        if(CL.Sb) drawLines(cx,CL.Sb,pad,top+(CL.T.lines.length*CL.T.lh+CL.gap)*k,CL.avail*k,k,CL.Sb.st.color||ink2);
-      }
+      await drawPage(cx,d[i],W,H,k);
       const blob=await new Promise(r=>cv.toBlob(r,"image/jpeg",.92));
       const buf=new Uint8Array(await blob.arrayBuffer());
       if(i>0) pdf.addPage([pw,ph],orient);
       pdf.addImage(buf,"JPEG",0,0,pw,ph,undefined,"NONE");
     }
     busy("Binding","Writing PDF",1); await tick();
-    const name=(c.titleText||"photobook").trim().replace(/[\\/:*?"<>|]+/g,"").replace(/\s+/g,"-").toLowerCase()||"photobook";
-    pdf.save(`${name}-${fmt(c.w)}x${fmt(c.h)}mm-${c.dpi}dpi.pdf`);
+    pdf.save(`${fileBase()}-${fmt(c.w)}x${fmt(c.h)}mm-${c.dpi}dpi.pdf`);
   }catch(err){busy("Export failed",String(err&&err.message||err),0);setTimeout(()=>busy(null),4000);return}
   busy(null);
 }
-
 /* ───── boot ───── */
 loadUI(); makeSamples(); syncForm(); rebuild();
 S.pages[0].caption="Rooftops, early light";
