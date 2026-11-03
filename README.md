@@ -16,6 +16,7 @@ Everything runs in the browser. Photos are never uploaded anywhere.
 - A design-tool layout: icon rail with Photos, Text, Cover, Layout and Format panels; a floating toolbar for whatever you select; quick actions above the selection; edit text right on the page; undo and redo.
 - Folder tree, right-click menu, Spreads / Page / Grid views, page thumbnails, zoom and fullscreen.
 - PDF export at 300, 200 or 150 DPI with bleed, plus warnings for low-resolution photos.
+- Templates: Walk photobook (square book, colour chapter pages, one photo per page, running headers, spreads) and Zine photobook (strict black and white with adjustable grain, full-bleed pages, small centred photos, spreads, poem lines over a brush stroke). Any page can switch style: auto grid, full bleed, centred, spread, chapter, poem or blank.
 - Print at home: presets for the Epson EcoTank L18050 (A3+ down to 4×6 in), and print sheets at the real paper size, one page or a spread per sheet, borderless or with crop marks.
 
 ## Fonts

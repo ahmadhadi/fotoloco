@@ -8,6 +8,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,700;1,400&display=swap">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;700&display=swap">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&display=swap">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap">
@@ -127,6 +128,26 @@ body{display:grid;grid-template-rows:auto minmax(0,1fr);overflow:hidden}
 .pre.s{font:700 16px/1.1 var(--display);letter-spacing:.02em}
 .pre.b{font:400 12px/1.4 var(--mono)}
 .ptree{margin:0 -6px}
+.tcards{display:flex;flex-direction:column;gap:8px}
+.tcard{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);background:var(--ink);color:var(--chalk);padding:10px;cursor:pointer;text-align:left}
+.tcard:hover{border-color:var(--chalk)}
+.tcard[aria-pressed=true]{border-color:var(--chalk);box-shadow:inset 3px 0 0 var(--chalk)}
+.tcard svg{flex:none;width:72px;height:42px;background:#2b2b28}
+.tcard b{display:block;font:700 17px/1.05 var(--display);text-transform:uppercase;letter-spacing:.02em}
+.tcard small{display:block;color:var(--mute);font-size:10.5px;line-height:1.5;margin-top:4px}
+.tsub{display:flex;flex-direction:column;gap:10px}
+.palette{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.chap{position:absolute;inset:0}
+.tplb{position:absolute;pointer-events:none}
+.brush{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.titlepage.free{inset:auto;display:block;padding:0}
+.page.psel{outline:2px solid var(--sel);outline-offset:3px}
+.page img.im,.page .cbox img,.page .ghost img{filter:var(--look,none)}
+.grain{position:absolute;inset:0;pointer-events:none;opacity:var(--grain,0);mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%' height='100%' filter='url(%23g)'/></svg>")}
+.ctx .pgin{height:30px;border:1px solid #c9c7c0;background:#fff;color:#111;padding:0 8px;font-size:12px;width:130px}
+.ctx .pgin.wide{width:240px}
+.ctx input[type=color]{width:34px;height:30px;padding:1px;border:1px solid #c9c7c0;background:#fff}
 .pcard{border:1px solid var(--line);padding:10px 12px;display:flex;flex-direction:column;gap:3px;background:var(--ink)}
 .pcard b{font:700 18px/1 var(--display);text-transform:uppercase;letter-spacing:.02em}
 .pcard small{color:var(--mute);font-size:10.5px;line-height:1.5}
@@ -486,6 +507,7 @@ footer a,footer button{color:var(--chalk);background:none;border:0;padding:0;cur
 
 <div class="app" id="app">
   <nav class="rail" aria-label="Tools">
+    <button class="rb" type="button" data-panel="templates" aria-pressed="false" title="Templates"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="8"/><rect x="3" y="13" width="8" height="8"/><path d="M13 17h8M17 13v8"/></svg><span>Templates</span></button>
     <button class="rb" type="button" data-panel="photos" aria-pressed="false" title="Photos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 8"/></svg><span>Photos</span></button>
     <button class="rb" type="button" data-panel="text" aria-pressed="false" title="Text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 6V4h14v2M12 4v16M9 20h6"/></svg><span>Text</span></button>
     <button class="rb" type="button" data-panel="cover" aria-pressed="false" title="Cover"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3h11a3 3 0 0 1 3 3v15H8a3 3 0 0 1-3-3z"/><path d="M5 18a3 3 0 0 1 3-3h11"/><path d="M9 8h6"/></svg><span>Cover</span></button>
@@ -629,6 +651,26 @@ footer a,footer button{color:var(--chalk);background:none;border:0;padding:0;cur
       </div>
     </fieldset>
     </section>
+    <section class="fp" data-panel="templates" aria-label="Templates" hidden>
+      <div class="fph"><h2>Templates</h2><button class="fpx" type="button" data-closepanel aria-label="Close panel">×</button></div>
+      <p class="hint">A template sets the page size, fonts, cover and the rhythm of the pages, then lays out the whole book again. Undo brings back what you had.</p>
+      <div class="tcards" id="tplCards"></div>
+      <div id="walkOpts" class="tsub" hidden>
+        <h3 class="fh">Walk photobook</h3>
+        <span class="lbl">Chapter colours</span>
+        <div class="palette" id="palette"></div>
+        <div class="field"><label class="lbl" for="coverBgIn">Cover colour</label><input id="coverBgIn" type="color"></div>
+        <label class="check"><input type="checkbox" id="cHeader"> Running headers and page numbers</label>
+      </div>
+      <h3 class="fh">Photo look</h3>
+      <div class="seg" id="lookMode" style="--n:2"><button type="button" data-v="colour">Colour</button><button type="button" data-v="bw">Black &amp; white</button></div>
+      <p class="hint" id="lookNote" hidden>The zine is strictly black &amp; white. Contrast and grain are yours to set.</p>
+      <div class="field"><div class="rangehead"><label class="lbl" for="lookCon">Contrast</label><output id="lookConOut"></output></div><input type="range" id="lookCon" min="-30" max="60" step="1"></div>
+      <div class="field"><div class="rangehead"><label class="lbl" for="lookGrain">Grain</label><output id="lookGrainOut"></output></div><input type="range" id="lookGrain" min="0" max="100" step="1"></div>
+      <p class="hint">The look applies to every photo, the cover included, on screen and in the PDF.</p>
+      <h3 class="fh">Page styles</h3>
+      <p class="hint">Click the empty part of any page to change its style: auto grid, full bleed, centred photo, spread across two pages, chapter opener, poem line or blank. You can also insert chapter, poem and blank pages there.</p>
+    </section>
     <section class="fp" data-panel="print" aria-label="Print at home" hidden>
       <div class="fph"><h2>Print at home</h2><button class="fpx" type="button" data-closepanel aria-label="Close panel">×</button></div>
       <div class="pcard"><b>Epson EcoTank L18050</b><small>6-colour photo ink tank · borderless up to A3+ (329 × 483 mm) · 5760 × 1440 dpi</small></div>
@@ -659,7 +701,7 @@ footer a,footer button{color:var(--chalk);background:none;border:0;padding:0;cur
       </details>
     </section>
     <footer>
-      <span>FotoLoco v1.8</span>
+      <span>FotoLoco v1.9</span>
       <button type="button" id="bHow">How it works</button>
       <span>Runs in your browser. Your photos never leave your device.</span>
       <span>Layout ideas from <a href="https://github.com/EddyXorb/fotobuch" target="_blank" rel="noopener">fotobuch</a></span>
@@ -718,6 +760,7 @@ footer a,footer button{color:var(--chalk);background:none;border:0;padding:0;cur
     <li><b>Rotate and crop.</b> Rotate a photo with ⟲ ⟳ or R. Photos are never cropped unless you ask: pick a crop shape (square, rounded, circle, oval, arch, hexagon or a rectangle at a set ratio), then drag the picture inside the mask and scroll to zoom. The shape becomes the frame the layout works with.</li>
     <li><b>Free transform inside a mask.</b> In adjust mode a blue box surrounds the whole picture: drag to move it, pull a corner to scale it (it can be smaller than the mask), and turn the round knob to straighten or tilt. Fit, Fill and Keep filled are in the bar below. Unmasked photos get the same tools through Free transform, which puts them in a rectangle first.</li>
     <li><b>Find your way around.</b> The icons on the left open one panel at a time: Photos (folders and unused photos), Text (add text, presets, book fonts), Cover, Layout and Format. Click the active icon again, or the edge tab, to hide the panel. Whatever you select gets its tools in the bar above the book, plus a small quick-action bar right above it. Undo and redo are in the top bar.</li>
+    <li><b>Start from a template.</b> Walk photobook gives a square book with a colour chapter page per folder, one photo per page and running headers. Zine photobook is strict black &amp; white with grain you set, full-bleed pages, small centred photos, spreads and poem lines over a brush stroke. Click the empty part of any page to change its style.</li>
     <li><b>Print at home.</b> The Print panel has presets for the Epson EcoTank L18050: each sets the page size to match the paper, from A3+ down to 4×6 in. Export print sheets makes a PDF at the paper's real size, with one page or a spread per sheet, borderless or with crop marks for cutting. Print it at 100%.</li>
     <li><b>View the book your way.</b> Spreads, Page or Grid at the bottom of the book, a strip of page thumbnails that scrolls sideways (drop a photo on a thumbnail to move it there), ← → to page through, a zoom slider or Ctrl + scroll, and fullscreen.</li>
     <li><b>Right-click anything.</b> Photos and text boxes in the book, the folder tree and Unused all have a menu with every action and its shortcut.</li>
@@ -1129,7 +1172,7 @@ function(t){t.__bidiEngine__=t.prototype.__bidiEngine__=function(t){var r,n,i,a,
 </script>
 <script>
 "use strict";
-const FONTS={"en": {"Oswald": [300, 400, 700], "Anton": [300, 400, 700], "Bebas Neue": [300, 400, 700], "Playfair Display": [300, 400, 700], "Fraunces": [300, 400, 700], "DM Serif Display": [300, 400, 700], "Libre Baskerville": [300, 400, 700], "Archivo": [300, 400, 700], "Work Sans": [300, 400, 700], "Karla": [300, 400, 700], "IBM Plex Sans": [300, 400, 700], "IBM Plex Mono": [300, 400, 700], "Space Mono": [300, 400, 700], "Caveat": [300, 400, 700], "Permanent Marker": [300, 400, 700]}, "ar": {"Cairo": [300, 400, 700], "Tajawal": [300, 400, 700], "IBM Plex Sans Arabic": [300, 400, 700], "Noto Naskh Arabic": [300, 400, 700], "Noto Kufi Arabic": [300, 400, 700], "Amiri": [300, 400, 700], "El Messiri": [300, 400, 700], "Changa": [300, 400, 700], "Reem Kufi": [300, 400, 700], "Aref Ruqaa": [300, 400, 700], "Lalezar": [300, 400, 700], "Rakkas": [300, 400, 700], "Mirza": [300, 400, 700], "Katibeh": [300, 400, 700], "Lateef": [300, 400, 700], "Marhey": [300, 400, 700]}};
+const FONTS={"en": {"Cormorant Garamond": [300, 400, 700], "Oswald": [300, 400, 700], "Anton": [300, 400, 700], "Bebas Neue": [300, 400, 700], "Playfair Display": [300, 400, 700], "Fraunces": [300, 400, 700], "DM Serif Display": [300, 400, 700], "Libre Baskerville": [300, 400, 700], "Archivo": [300, 400, 700], "Work Sans": [300, 400, 700], "Karla": [300, 400, 700], "IBM Plex Sans": [300, 400, 700], "IBM Plex Mono": [300, 400, 700], "Space Mono": [300, 400, 700], "Caveat": [300, 400, 700], "Permanent Marker": [300, 400, 700]}, "ar": {"Cairo": [300, 400, 700], "Tajawal": [300, 400, 700], "IBM Plex Sans Arabic": [300, 400, 700], "Noto Naskh Arabic": [300, 400, 700], "Noto Kufi Arabic": [300, 400, 700], "Amiri": [300, 400, 700], "El Messiri": [300, 400, 700], "Changa": [300, 400, 700], "Reem Kufi": [300, 400, 700], "Aref Ruqaa": [300, 400, 700], "Lalezar": [300, 400, 700], "Rakkas": [300, 400, 700], "Mirza": [300, 400, 700], "Katibeh": [300, 400, 700], "Lateef": [300, 400, 700], "Marhey": [300, 400, 700]}};
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const WT={1:1,2:2.2,3:4};          // area share by star level
@@ -1141,6 +1184,7 @@ const SHAPES=[["3","Wide 3:1"],["2","Banner 2:1"],["1.5","Landscape 3:2"],["1","
 const S={
   photos:new Map(), pages:[], pool:[], sel:null, sample:true, undo:[], redo:[], textEdit:null, panel:"photos", myFonts:[], groupOrder:[], closed:new Set(), cropEdit:null,
   view:"spreads", lastView:"spreads", zoom:100, cur:0, strip:true, selText:null, spacingOpen:false,
+  selPage:null, chapters:{}, poems:[],
   cfg:{w:297,h:210,bleed:3,margin:10,gap:3,dpi:300,min:1,max:6,target:3.5,paper:"#ffffff",
        even:true,guides:false,title:true,titleText:"Sample Roll",subText:"Test frames · 2026",
        fEn:"Oswald",fAr:"Cairo",fW:700,capPt:9,
@@ -1148,11 +1192,17 @@ const S={
        sStyle:{fEn:null,fAr:"Tajawal",w:400,italic:false,underline:false,strike:false,caps:"none",ls:0.06,lh:1.5,color:null,pt:13.5},
        tPos:"bl",tScale:100,titleAuto:true,titleColor:"#ffffff",
        coverImg:null,coverFit:"fill",coverColor:"#000000",coverTr:55,
-       print:{paper:"A4",nup:1,borderless:true,marks:false,recipe:null}}
+       print:{paper:"A4",nup:1,borderless:true,marks:false,recipe:null},
+       tpl:"classic",coverStyle:"classic",coverBg:"#d6e1de",header:false,
+       palette:["#8d6b4a","#263a2f","#6b4b3a","#3f5e60"],
+       look:{bw:false,contrast:0,grain:0}}
 };
 let uid=0, seedCtr=1;
 const newSeed=()=>(Date.now()+(seedCtr++)*7919)>>>0;
-const newPage=(ids)=>({ids,seed:newSeed(),rects:[],caption:"",pins:{},tree:null});
+const newPage=(ids,extra={})=>({ids,seed:newSeed(),rects:[],caption:"",pins:{},tree:null,style:"auto",...extra});
+/* page styles: auto = the layout solver; the rest are fixed layouts used by the templates */
+const NOPHOTO=new Set(["chapter","poem","blank"]), SINGLE=new Set(["bleed","inset","spread"]);
+const PAGE_STYLES=[["auto","Auto grid"],["bleed","Full bleed"],["inset","Centred photo"],["spread","Spread across two pages"],["chapter","Chapter opener"],["poem","Poem / text line"],["blank","Blank"]];
 const isText=id=>S.photos.get(id)?.kind==="text";
 
 function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
@@ -1292,13 +1342,31 @@ function sequence(){
   for(const id of photos){seq.push(id);for(const t of texts) if(t.after===id){seq.push(t.id);t.group=S.photos.get(id).group}}
   return seq;
 }
-function rebuild(){
+function rebuild(){ if(S.cfg.tpl==="walk"||S.cfg.tpl==="zine") templateSequence(); else rebuildAuto() }
+function rebuildAuto(){
   const caps=S.pages.map(p=>p.caption||"");
   const seq=sequence();
   S.pages=partition(seq).map((g,i)=>{const p=newPage(g);p.caption=caps[i]||"";return p});
   S.pages.forEach(relayout);
 }
+/* fixed layouts; returns false (and falls back to the solver) when the page's contents don't suit its style */
+function styledRects(pg){
+  const st=pg.style||"auto"; if(st==="auto") return false;
+  const c=S.cfg, b=c.bleed;
+  if(NOPHOTO.has(st)){ if(pg.ids.length){pg.style="auto";return false} pg.rects=[];pg.tree=null;return true }
+  if(pg.ids.length!==1||isText(pg.ids[0])){pg.style="auto";return false}
+  const id=pg.ids[0], p=S.photos.get(id);
+  if(st==="bleed") pg.rects=[{id,x:-b,y:-b,w:c.w+2*b,h:c.h+2*b,fit:"cover"}];
+  else if(st==="spread") pg.rects=[{id,x:-b,y:-b,w:2*c.w+2*b,h:c.h+2*b,fit:"cover"}];
+  else {                                             // centred: the whole photo, scaled into the content box
+    const {W,H}=contentBox(capReserve(pg)), sc=Math.max(.25,Math.min(1,pg.inset||.8));
+    let w=W*sc, h=w/p.r; if(h>H*sc){h=H*sc;w=h*p.r}
+    pg.rects=[{id,x:(c.w-w)/2,y:c.margin+(H-h)/2-H*.02,w,h}];
+  }
+  pg.tree=null; return true;
+}
 function relayout(pg,fresh){
+  if(styledRects(pg)) return;
   const pins={}; for(const id of pg.ids) if(pg.pins&&pg.pins[id]) pins[id]=pg.pins[id]; pg.pins=pins;
   const res=solvePage(pg.ids,pg.seed,capReserve(pg),pins,fresh?null:pg.tree);
   pg.rects=res.rects; pg.tree=res.tree;
@@ -1306,17 +1374,20 @@ function relayout(pg,fresh){
 function relayoutAll(){S.pages.forEach(pg=>relayout(pg))}
 
 /* ───── undo ───── */
-function stateNow(){
+function stateNow(withCfg=false){
   return JSON.stringify({
-    pages:S.pages.map(p=>({ids:p.ids,seed:p.seed,caption:p.caption||"",pins:p.pins||{},tree:p.tree})),pool:S.pool,
+    pages:S.pages.map(p=>({ids:p.ids,seed:p.seed,caption:p.caption||"",pins:p.pins||{},tree:p.tree,style:p.style||"auto",inset:p.inset,title:p.title,sub:p.sub,bg:p.bg,text:p.text,chapter:p.chapter})),pool:S.pool,
+    cfg:withCfg?S.cfg:undefined,
     w:[...S.photos.values()].filter(p=>p.kind!=="text").map(p=>[p.id,p.weight,p.rot||0,p.crop?{...p.crop}:null]),
     texts:[...S.photos.values()].filter(p=>p.kind==="text").map(p=>({...p})),groupOrder:S.groupOrder});
 }
-function snap(){S.undo.push(stateNow()); if(S.undo.length>80) S.undo.shift(); S.redo.length=0}
-function undo(){const s=S.undo.pop(); if(!s) return; S.redo.push(stateNow()); restoreState(s)}
-function redo(){const s=S.redo.pop(); if(!s) return; S.undo.push(stateNow()); restoreState(s)}
+function snap(withCfg=false){S.undo.push(stateNow(withCfg)); if(S.undo.length>80) S.undo.shift(); S.redo.length=0}
+const hasCfg=s=>s.includes('"cfg":{');
+function undo(){const s=S.undo.pop(); if(!s) return; S.redo.push(stateNow(hasCfg(s))); restoreState(s)}
+function redo(){const s=S.redo.pop(); if(!s) return; S.undo.push(stateNow(hasCfg(s))); restoreState(s)}
 function restoreState(s){
-  const o=JSON.parse(s); S.textEdit=null;
+  const o=JSON.parse(s); S.textEdit=null; S.selPage=null;
+  if(o.cfg){Object.assign(S.cfg,o.cfg);syncForm()}
   for(const p of [...S.photos.values()]) if(p.kind==="text") S.photos.delete(p.id);
   o.texts.forEach(t=>S.photos.set(t.id,t));
   o.w.forEach(([id,w,rot,crop])=>{const p=S.photos.get(id);if(p){p.weight=w;p.rot=rot||0;p.crop=crop||null;updateRatio(p)}});
@@ -1331,7 +1402,7 @@ function locate(id){
   for(let i=0;i<S.pages.length;i++){const k=S.pages[i].ids.indexOf(id);if(k>=0)return{p:i,k}}
   const k=S.pool.indexOf(id); return k>=0?{pool:true,k}:null;
 }
-function cleanEmpty(){S.pages=S.pages.filter(p=>p.ids.length)}
+function cleanEmpty(){S.pages=S.pages.filter(p=>p.ids.length||NOPHOTO.has(p.style))}
 function swap(a,b){
   if(a===b) return; const A=locate(a),B=locate(b); if(!A||!B) return; snap();
   const put=(L,v)=>L.pool?S.pool[L.k]=v:S.pages[L.p].ids[L.k]=v;
@@ -1371,6 +1442,9 @@ function resetSizes(pi){snap();S.pages[pi].pins={};relayout(S.pages[pi],true);re
 function resetSize(id){const L=locate(id);if(!L||L.pool)return;snap();delete S.pages[L.p].pins[id];relayout(S.pages[L.p]);render()}
 function scaleSel(f){
   const L=S.sel&&locate(S.sel); if(!L||L.pool) return;
+  const spg=S.pages[L.p];
+  if(spg.style==="inset"){snap();spg.inset=Math.max(.25,Math.min(1,(spg.inset||.8)*Math.sqrt(f)));relayout(spg);render();return}
+  if(spg.style&&spg.style!=="auto") return;
   const pg=S.pages[L.p], r=pg.rects.find(x=>x.id===S.sel); if(!r) return; snap();
   const {W,H}=contentBox(capReserve(pg)), ar=r.w/r.h, maxW=Math.min(W,H*ar);
   const w=Math.max(10,Math.min(maxW,r.w*Math.sqrt(f)));
@@ -1398,6 +1472,7 @@ function addText(pi,preset="box"){
 /* re-fit the page an item sits on after its frame shape changed; extra items flow to a new page */
 function refitFor(id){
   const L=locate(id); if(!L||L.pool) return;
+  if(S.pages[L.p].style&&S.pages[L.p].style!=="auto"){relayout(S.pages[L.p]);return}
   const pg=S.pages[L.p], pins={...pg.pins};
   commitPlan(L.p,pins,planPage({...pg,tree:null},pins,false));
 }
@@ -1475,8 +1550,12 @@ function deleteText(id){const L=locate(id);if(!L)return;snap();if(L.pool)S.pool.
 /* ───── display sequence ───── */
 function displayPages(){
   const d=[]; if(S.cfg.title) d.push({type:"title"});
-  S.pages.forEach((pg,i)=>d.push({type:"photo",pg,i}));
+  S.pages.forEach((pg,i)=>{
+    if(pg.style==="spread"){d.push({type:"photo",pg,i,half:"L"});d.push({type:"photo",pg,i,half:"R"})}
+    else d.push({type:"photo",pg,i});
+  });
   if(S.cfg.even&&d.length%2) d.push({type:"blank"});
+  d.forEach((it,n)=>{it.n=n+1;it.side=n%2?"L":"R"});   // the cover is a right page, so odd indexes are left pages
   return d;
 }
 /* ───── rotation + shape masks ─────
@@ -1558,9 +1637,43 @@ function drawRot(cx,src,p,x,y,w,h,tilt=0){
   if(isSide(p)) cx.drawImage(src,-h/2,-w/2,h,w); else cx.drawImage(src,-w/2,-h/2,w,h);
   cx.restore();
 }
+/* the photo placement for a frame; full-bleed frames crop to fill unless the photo has its own crop */
+const plOf=(p,r)=>placeImage(p,r.w,r.h,r.fit==="cover"&&!p.crop?"cover":"frame");
+const lookOn=()=>{const L=S.cfg.look;return L.bw||L.contrast||L.grain>0};
+function lookFilter(){const L=S.cfg.look;return [L.bw?"grayscale(1)":"",L.contrast?`contrast(${(1+L.contrast/100).toFixed(2)})`:""].filter(Boolean).join(" ")||"none"}
+function applyLookCSS(){
+  const r=document.documentElement.style; r.setProperty("--look",lookFilter()); r.setProperty("--grain",(S.cfg.look.grain/100*.55).toFixed(3));
+}
+const grainHTML=()=>S.cfg.look.grain>0?`<i class="grain" aria-hidden="true"></i>`:"";
+/* PDF: draw the photo into its own canvas, apply the look pixel by pixel, then place it */
+function processLook(ocx,w,h,seed,k){
+  const L=S.cfg.look, f=1+L.contrast/100, amp=L.grain/100*70, gs=Math.max(1,Math.round(k*.09));
+  const im=ocx.getImageData(0,0,w,h), a=im.data, rnd=mulberry32(seed>>>0);
+  const gw=Math.ceil(w/gs), gh=Math.ceil(h/gs), noise=new Float32Array(amp?gw*gh:0);
+  for(let i=0;i<noise.length;i++) noise[i]=(rnd()+rnd()+rnd()-1.5)*amp;
+  for(let y=0;y<h;y++){const ny=((y/gs)|0)*gw;for(let x=0;x<w;x++){
+    const i=(y*w+x)*4; let r=a[i],g=a[i+1],b=a[i+2];
+    if(L.bw){r=g=b=.2126*r+.7152*g+.0722*b}
+    if(f!==1){r=(r-128)*f+128;g=(g-128)*f+128;b=(b-128)*f+128}
+    if(amp){const n=noise[ny+((x/gs)|0)];r+=n;g+=n;b+=n}
+    a[i]=r;a[i+1]=g;a[i+2]=b;
+  }}
+  ocx.putImageData(im,0,0);
+}
+function drawPhoto(cx,src,p,X,Y,RW,RH,pl,k,clipFn,seed){
+  cx.save(); clipFn(); cx.clip();
+  if(!lookOn()){drawRot(cx,src,p,X+pl.x*k,Y+pl.y*k,pl.w*k,pl.h*k,pl.tilt);cx.restore();return}
+  // only the part of the frame that lands on this canvas
+  const x0=Math.max(0,Math.floor(X)), y0=Math.max(0,Math.floor(Y)), x1=Math.min(cx.canvas.width,Math.ceil(X+RW)), y1=Math.min(cx.canvas.height,Math.ceil(Y+RH));
+  const w=x1-x0, h=y1-y0; if(w<=0||h<=0){cx.restore();return}
+  const oc=document.createElement("canvas"); oc.width=w; oc.height=h; const ocx=oc.getContext("2d"); ocx.imageSmoothingQuality="high";
+  drawRot(ocx,src,p,X-x0+pl.x*k,Y-y0+pl.y*k,pl.w*k,pl.h*k,pl.tilt);
+  processLook(ocx,w,h,seed,k);
+  cx.drawImage(oc,x0,y0); cx.restore();
+}
 function effDpi(p,r){
   if(!p.file) return Infinity;
-  const pl=placeImage(p,r.w,r.h), pw=isSide(p)?p.h:p.w, ph=isSide(p)?p.w:p.h;
+  const pl=plOf(p,r), pw=isSide(p)?p.h:p.w, ph=isSide(p)?p.w:p.h;
   return Math.min(pw/(pl.w/25.4),ph/(pl.h/25.4));
 }
 function inkFor(paper){return isDark(paper)?"#efeee9":"#111111"}
@@ -1653,8 +1766,8 @@ function layoutText(p,wMm,hMm){
   const pt=Math.floor(best.pt*4)/4; return {...tryPt(pt),shrunk:true,clipped:false};
 }
 /* the cover's title + subtitle, laid out across the margin box */
-function coverLayout(){
-  const c=S.cfg, avail=c.w-2*c.margin, title=c.titleText||"Untitled";
+function coverLayout(availW){
+  const c=S.cfg, avail=availW||c.w-2*c.margin, title=c.titleText||"Untitled";
   const ts=tstyle("@title"), tfs=titlePt()*PT, tlh=tfs*lhOf(ts,isRTL(title));
   const T={st:ts,fs:tfs,lh:tlh,lines:blockLines(title,ts,tfs,avail)};
   let Sb=null;
@@ -1743,13 +1856,14 @@ function figHTML(r,pi,pins,live){
   } else {
     const dpi=effDpi(p,r);
     const clip=clipCSS(p,r.w,r.h);
-    h+=`<div class="clip" role="img" aria-label="${esc(p.name)}"${clip!=="none"?` style="clip-path:${clip}"`:""}>${imgTag(p,placeImage(p,r.w,r.h),r.w,r.h)}</div>`+
+    h+=`<div class="clip" role="img" aria-label="${esc(p.name)}"${clip!=="none"?` style="clip-path:${clip}"`:""}>${imgTag(p,plOf(p,r),r.w,r.h)}${grainHTML()}</div>`+
       (dpi<LOWRES?`<span class="badge">${Math.round(dpi)} dpi</span>`:"")+
       (p.weight>1?`<span class="wt">${"★".repeat(p.weight)}</span>`:"")+
       (p.crop&&!sel?`<span class="crop">${CROP_SHAPES.find(s=>s[0]===p.crop.shape)[1]}</span>`:"");
   }
   if(pinned&&!sel) h+=`<span class="pin">Sized</span>`;
-  if(sel&&!editing) h+=`<i class="hd" data-h="nw"></i><i class="hd" data-h="ne"></i><i class="hd" data-h="sw"></i><i class="hd" data-h="se"></i>`;
+  const styled=S.pages[pi]&&S.pages[pi].style&&S.pages[pi].style!=="auto";
+  if(sel&&!editing&&!styled) h+=`<i class="hd" data-h="nw"></i><i class="hd" data-h="ne"></i><i class="hd" data-h="sw"></i><i class="hd" data-h="se"></i>`;
   if(sel&&live) h+=`<span class="sizetag">${fmt(r.w)} × ${fmt(r.h)} mm</span>`;
   return h+`</figure>`;
 }
@@ -1761,14 +1875,19 @@ function coverImgHTML(){
   const c=S.cfg, p=c.coverImg&&S.photos.get(c.coverImg); if(!p) return "";
   const fill=c.coverFit==="fill", x=fill?-c.bleed:c.margin, y=fill?-c.bleed:c.margin;
   const bw=fill?c.w+2*c.bleed:c.w-2*c.margin, bh=fill?c.h+2*c.bleed:c.h-2*c.margin;
-  return `<div class="cbox" style="left:${pct(x,c.w)};top:${pct(y,c.h)};width:${pct(bw,c.w)};height:${pct(bh,c.h)}">${imgTag(p,placeImage(p,bw,bh,fill?"cover":"contain"),bw,bh,"")}</div>`;
+  return `<div class="cbox" style="left:${pct(x,c.w)};top:${pct(y,c.h)};width:${pct(bw,c.w)};height:${pct(bh,c.h)}">${imgTag(p,placeImage(p,bw,bh,fill?"cover":"contain"),bw,bh,"")}${grainHTML()}</div>`;
 }
 function pageContent(item,live){
   const c=S.cfg; let h="";
   if(c.guides) h+=`<div class="guide" style="left:${pct(c.margin,c.w)};top:${pct(c.margin,c.h)};right:${pct(c.margin,c.w)};bottom:${pct(c.margin,c.h)}"></div>`;
   if(item.type==="photo"){
-    for(const r of item.pg.rects) h+=figHTML(r,item.i,item.pg.pins,live);
-    h+=`<div class="pcap" dir="auto" style="${capStyle()};font-family:${capStack(isRTL(item.pg.caption))}">${esc(item.pg.caption||"")}</div>`;
+    const pg=item.pg, sx=item.half==="R"?c.w:0;
+    h+=specialPageHTML(item);
+    for(const r of pg.rects) h+=figHTML(sx?{...r,x:r.x-sx}:r,item.i,pg.pins,live);
+    if(item.half!=="L") h+=`<div class="pcap" dir="auto" style="${capStyle()};font-family:${capStack(isRTL(pg.caption))}">${esc(pg.caption||"")}</div>`;
+    h+=chromeHTML(item);
+  } else if(item.type==="title"&&coverGeom()){
+    h+=styledCoverHTML();
   } else if(item.type==="title"){
     const [v,hz]=c.tPos, title=c.titleText||"Untitled";
     h+=coverImgHTML()+`<div class="cov" style="background:${c.coverColor};opacity:${((100-c.coverTr)/100).toFixed(2)}"></div>`;
@@ -1779,16 +1898,92 @@ function pageContent(item,live){
   }
   return h;
 }
+/* ───── template pages: shared blocks for the preview (HTML) and the PDF (canvas) ───── */
+const blk=(text,st,pt,wMm)=>{const s2={fEn:null,fAr:null,w:400,italic:false,underline:false,strike:false,caps:"none",align:"start",list:"none",ls:0,lh:0,kind:"box",...st};
+  const fs=pt*PT; return {st:s2,fs,lh:fs*lhOf(s2,isRTL(text)),lines:blockLines(text,s2,fs,wMm)}};
+const blkH=L=>L.lines.length*L.lh;
+const blockDiv=(L,x,y,w,color,extra="")=>`<div class="tplb" style="left:${pct(x,S.cfg.w)};top:${pct(y,S.cfg.h)};width:${pct(w,S.cfg.w)};${blockCSS(L,S.cfg.w,color)};${extra}">${linesHTML(L,S.cfg.w)}</div>`;
+const chapterLabel=g=>String(g||"").replace(/^[\d\s._\-–—]+/,"").trim()||String(g||"");
+function chapterParts(pg){
+  const c=S.cfg, m=c.margin, ink="#f4f1ea", wT=c.w-2*m;
+  const T=blk(pg.title||"Chapter",{fEn:"Cormorant Garamond",w:300,lh:1.05},Math.min(46,c.w*.21),wT);
+  const Sb=pg.sub?blk(pg.sub,{fEn:"Cormorant Garamond",italic:true,lh:1.45},8.5,wT*.62):null;
+  return {T,Sb,ink,bg:pg.bg||c.palette[0],x:m,yT:m*.95,ySb:Sb?c.h-m-blkH(Sb):0};
+}
+function poemParts(pg){
+  const c=S.cfg, m=c.margin, W=c.w-2*m, wT=W*.62, x=m+(W-wT)/2, txt=pg.text||"";
+  const L=blk(txt||"Write a line of your poem",{lh:1.4},8,wT);
+  // the brush stroke sits under the text and runs a little past its longest line
+  let maxw=0; for(const l of L.lines){MC.font=fontStr(L.st,L.fs*MS,l.rtl);maxw=Math.max(maxw,MC.measureText(l.t).width/MS)}
+  const y=c.h*.43, by=y+blkH(L)+.4, bh=Math.max(2.2,c.h*.013), bw=Math.min(W,maxw*1.08+3);
+  const rtl=isRTL(txt), bx=rtl?x+wT-bw+1.5:x-1.5;
+  return {L,x,y,wT,empty:!txt.trim(),brush:brushPath(bx,by,bw,bh,pg.seed)};
+}
+/* a dry-brush mark: ragged top and bottom edges, tapered ends, a few loose bristle streaks */
+function brushPath(x,y,w,h,seed){
+  const rnd=mulberry32((seed||7)>>>0), f=v=>v.toFixed(2), n=Math.max(10,Math.round(w/1.4));
+  let top=[],bot=[];
+  for(let i=0;i<=n;i++){const t=i/n, xx=x+w*t, taper=Math.min(1,t*6,(1-t)*5);
+    top.push([xx,y+h*(.08+.22*rnd())+(1-taper)*h*.35]); bot.push([xx,y+h*(.92-.2*rnd())-(1-taper)*h*.3])}
+  let d=`M${f(x-.4)} ${f(y+h*.5)}`+top.map(p=>`L${f(p[0])} ${f(p[1])}`).join("")+`L${f(x+w+.6)} ${f(y+h*.55)}`+bot.reverse().map(p=>`L${f(p[0])} ${f(p[1])}`).join("")+"Z";
+  for(let s=0;s<3;s++){const sy=y+h*(.25+.5*rnd()), sx=x+w*(.55+.3*rnd()), sw=w*(.25+.25*rnd()), sh=h*.07;
+    d+=`M${f(sx)} ${f(sy)}L${f(sx+sw)} ${f(sy+sh*.3)}L${f(sx+sw)} ${f(sy+sh)}L${f(sx)} ${f(sy+sh*.8)}Z`}
+  return d;
+}
+function specialPageHTML(item){
+  const pg=item.pg, c=S.cfg;
+  if(pg.style==="chapter"){
+    const P=chapterParts(pg);
+    return `<div class="chap" style="background:${P.bg}"></div>`+blockDiv(P.T,P.x,P.yT,c.w-2*c.margin,P.ink)+(P.Sb?blockDiv(P.Sb,P.x,P.ySb,(c.w-2*c.margin)*.62,P.ink,"opacity:.85"):"");
+  }
+  if(pg.style==="poem"){
+    const P=poemParts(pg), ink=inkFor(c.paper);
+    return `<svg class="brush" viewBox="0 0 ${c.w} ${c.h}" preserveAspectRatio="none" aria-hidden="true"${P.empty?' style="opacity:.25"':""}><path d="${P.brush}" fill="${ink}"/></svg>`+blockDiv(P.L,P.x,P.y,P.wT,ink,P.empty?"opacity:.35":"");
+  }
+  return "";
+}
+/* running headers and folios (Walk photobook) */
+function chromeParts(item){
+  const c=S.cfg, pg=item.pg; if(!c.header||item.type!=="photo"||!["auto","inset"].includes(pg.style||"auto")) return null;
+  const m=c.margin, y=m*.42, sans={fEn:"Archivo",w:700,caps:"upper",ls:.14};
+  if(item.side==="L") return [{L:blk(pg.chapter||"",sans,5.5,c.w/2),x:m,y,w:c.w/2}];
+  const num=blk(String(item.n),{fEn:"Cormorant Garamond",w:400,align:"end"},15,30);
+  const ttl=blk(c.titleText||"",{...sans,align:"end"},5.5,c.w/2);
+  return [{L:num,x:c.w-m-30,y:y-num.fs*.32,w:30},{L:ttl,x:c.w-m-30-4-c.w/2,y,w:c.w/2}];
+}
+function chromeHTML(item){
+  const P=chromeParts(item); if(!P) return ""; const ink=inkFor(S.cfg.paper);
+  return P.map(p=>p.L.lines[0]&&p.L.lines[0].t?blockDiv(p.L,p.x,p.y,p.w,ink,"opacity:.8"):"").join("");
+}
+/* cover styles from the templates */
+function coverGeom(){
+  const c=S.cfg, m=c.margin, b=c.bleed;
+  if(c.coverStyle==="walk") return {bg:c.coverBg,photo:{x:c.w*.36,y:c.h*.44,w:c.w*.64+b,h:c.h*.56+b},text:{x:m,y:m,w:c.w-2*m}};
+  if(c.coverStyle==="zine"){const px=c.w*.46;return {bg:c.paper,photo:{x:-b,y:-b,w:px+b,h:c.h+2*b},text:{x:px+m*.8,y:m*1.2,w:c.w-px-m*1.8}}}
+  return null;
+}
+function styledCoverHTML(){
+  const c=S.cfg, G=coverGeom(), p=c.coverImg&&S.photos.get(c.coverImg), sel=S.selText;
+  let h=`<div class="chap" style="background:${G.bg}"></div>`;
+  if(p){const P=G.photo;h+=`<div class="cbox" style="left:${pct(P.x,c.w)};top:${pct(P.y,c.h)};width:${pct(P.w,c.w)};height:${pct(P.h,c.h)}">${imgTag(p,placeImage(p,P.w,P.h,"cover"),P.w,P.h,"")}${grainHTML()}</div>`}
+  const CL=coverLayout(G.text.w), ink=c.titleAuto?inkFor(G.bg):c.titleColor;
+  return h+`<div class="titlepage free" style="left:${pct(G.text.x,c.w)};top:${pct(G.text.y,c.h)};width:${pct(G.text.w,c.w)}">`+
+    `<div class="tblk${sel==="@title"?" tsel":""}" data-tsel="@title" title="Click to style, double-click to type" style="${blockCSS(CL.T,c.w,ink)}">${S.textEdit==="@title"?inlTA("@title",CL.T,c.titleText,ink):linesHTML(CL.T,c.w)}</div>`+
+    (CL.Sb?`<div class="tblk${sel==="@sub"?" tsel":""}" data-tsel="@sub" title="Click to style, double-click to type" style="margin-top:${(CL.gap/c.w*100).toFixed(4)}cqw;${blockCSS(CL.Sb,c.w,CL.Sb.st.color||ink)}">${S.textEdit==="@sub"?inlTA("@sub",CL.Sb,c.subText,CL.Sb.st.color||ink):linesHTML(CL.Sb,c.w)}</div>`:"")+`</div>`;
+}
 function pageHTML(item){
   const c=S.cfg;
   const ed=item.type==="photo"&&S.cropEdit&&item.pg.ids.includes(S.cropEdit);
-  return `<div class="page${ed?" editpage":""}" style="aspect-ratio:${c.w}/${c.h};background:${c.paper}" ${item.type==="photo"?`data-p="${item.i}"`:item.type==="title"?`id="coverPage"`:""}>${pageContent(item)}</div>`;
+  const ps=item.type==="photo"&&S.selPage===item.i&&!S.sel;
+  return `<div class="page${ed?" editpage":""}${ps?" psel":""}" style="aspect-ratio:${c.w}/${c.h};background:${c.paper}" ${item.type==="photo"?`data-p="${item.i}"`:item.type==="title"?`id="coverPage"`:""}>${pageContent(item)}</div>`;
 }
 
 let lastSelKey="";
 function render(){
+  applyLookCSS();
   renderBook();renderSide();renderTree();renderInspector();
   if(S.panel==="print") renderPrint();
+  if(S.panel==="templates") renderTemplates();
   // the bottom bar can grow when something is selected; keep that thing in view
   const key=(S.sel||"")+"|"+(S.selText||"");
   if(key!==lastSelKey){lastSelKey=key;if(key!=="|")requestAnimationFrame(()=>document.querySelector("#book .ph.sel, #book .tblk.tsel")?.scrollIntoView({block:"nearest"}))}
@@ -1919,7 +2114,7 @@ document.addEventListener("keydown",e=>{
 /* ───── project tree ───── */
 function pageNumbers(){
   const m=new Map(), d=displayPages();
-  d.forEach((it,i)=>{if(it.type==="photo")it.pg.ids.forEach(id=>m.set(id,i+1))});
+  d.forEach((it,i)=>{if(it.type==="photo")it.pg.ids.forEach(id=>{if(!m.has(id))m.set(id,i+1)})});
   return m;
 }
 function renderTree(){
@@ -2104,6 +2299,7 @@ function renderInspector(){
     return;
   }
   const id=S.sel; const p=id&&S.photos.get(id);
+  if(!p&&S.selPage!=null&&S.pages[S.selPage]){el.innerHTML=pageToolbarHTML(S.selPage);return}
   if(!p){el.classList.add("idle");el.innerHTML=S.photos.size?`Click a photo or text to edit it · double-click text to type · right-click for everything`:`Add photos to start your book`;return}
   const L=locate(id), onPage=L&&!L.pool, pg=onPage&&S.pages[L.p], r=pg&&pg.rects.find(x=>x.id===id), pinned=pg&&pg.pins[id];
   const size=r?`<span class="vbar"></span>${ib("shrink","−","Smaller (−)")}${ib("grow","+","Bigger (+)")}${pinned?ib("unpin","Auto","Back to automatic size"):""}`:"";
@@ -2244,6 +2440,8 @@ book.addEventListener("click",e=>{
   const f=e.target.closest(".ph"); const nid=f?f.dataset.id:null;
   if(nid===S.sel&&f) return;
   if(S.cropEdit&&S.cropEdit!==nid) S.cropEdit=null;
+  const pe=!f&&!e.target.closest(".tpg")&&e.target.closest(".page[data-p]");
+  S.selPage=pe?+pe.dataset.p:null;
   S.sel=nid; render();
 });
 let lastTap={key:null,t:0};
@@ -2621,7 +2819,7 @@ document.addEventListener("keydown",e=>{
   if(!$("#cmenu").hidden) return;                              // the menu handles its own keys
   if((e.ctrlKey||e.metaKey)&&!typing()&&(e.key.toLowerCase()==="z"||e.key.toLowerCase()==="y")){e.preventDefault();(e.key.toLowerCase()==="y"||e.shiftKey)?redo():undo();return}
   if(e.key==="Escape"&&S.textEdit) return;
-  if(e.key==="Escape"){if(S.cropEdit){S.cropEdit=null;render()}else if(S.sel||S.selText){S.sel=null;S.selText=null;S.spacingOpen=false;render()}return}
+  if(e.key==="Escape"){if(S.cropEdit){S.cropEdit=null;render()}else if(S.sel||S.selText||S.selPage!=null){S.sel=null;S.selText=null;S.selPage=null;S.spacingOpen=false;render()}return}
   if(typing()||!S.sel||e.ctrlKey||e.metaKey||e.altKey) return;
   const id=S.sel, p=S.photos.get(id), inPool=S.pool.includes(id), K={
     "Delete":inPool?null:"pool","Backspace":inPool?null:"pool","+":"grow","=":"grow","-":"shrink","_":"shrink",
@@ -2645,6 +2843,179 @@ function openTitleStyle(t){
   if(S.view==="grid") S.view=S.lastView||"spreads";
   S.cur=0; render(); revealInBook("cover");
 }
+
+/* ───── templates ─────
+   Walk photobook — after "Pune" by Sharvil Survase: square book, white pages, one photo per page,
+     colour chapter openers per folder, running headers and big folios, the odd photo across a spread.
+   Zine photobook — after "Plovdiv" by Daniel Kotomanov: strict black & white with grain, a rhythm of
+     full-bleed pages, small centred photos and spreads, poem lines over a black brush stroke. */
+const TEMPLATES={
+  classic:{name:"Classic grid",desc:"FotoLoco's own: the solver packs several photos per page with even gaps.",
+    cfg:{coverStyle:"classic",header:false,look:{bw:false,contrast:0,grain:0}}},
+  walk:{name:"Walk photobook",desc:"Square book, a colour chapter page for every folder, one photo per page with wide white margins, running headers, the odd photo across a spread.",
+    cfg:{w:210,h:210,margin:16,gap:5,bleed:3,paper:"#ffffff",fEn:"Cormorant Garamond",capPt:8,even:true,header:true,
+      coverStyle:"walk",coverBg:"#d6e1de",titleAuto:true,tScale:100,fW:300,tPos:"tl",title:true,
+      tStyle:{fEn:"Cormorant Garamond",fAr:null,italic:false,underline:false,strike:false,caps:"none",ls:0,lh:0},
+      sStyle:{fEn:"Archivo",fAr:null,w:400,italic:false,underline:false,strike:false,caps:"upper",ls:.16,lh:1.6,color:null,pt:6.5},
+      look:{bw:false,contrast:0,grain:0}}},
+  zine:{name:"Zine photobook",desc:"Strict black & white with adjustable grain. Full-bleed pages, small centred photos, spreads across the gutter and poem lines over a brush stroke.",
+    cfg:{w:190,h:210,margin:13,gap:4,bleed:3,paper:"#ffffff",fEn:"Cormorant Garamond",capPt:8,even:true,header:false,
+      coverStyle:"zine",titleAuto:true,tScale:42,fW:700,tPos:"tl",title:true,
+      tStyle:{fEn:"Archivo",fAr:null,italic:false,underline:false,strike:false,caps:"none",ls:-.01,lh:0},
+      sStyle:{fEn:"Cormorant Garamond",fAr:null,w:400,italic:false,underline:false,strike:false,caps:"none",ls:0,lh:1.4,color:null,pt:9},
+      look:{bw:true,contrast:22,grain:30}}}
+};
+/* photos in book order with the text boxes that follow each one */
+function units(){
+  const out=[]; let lead=[];
+  for(const id of sequence()){const p=S.photos.get(id);
+    if(p.kind==="text"){if(out.length) out[out.length-1].texts.push(id); else lead.push(id)}
+    else out.push({id,p,texts:[]})}
+  if(out.length&&lead.length) out[0].texts.unshift(...lead);
+  return out;
+}
+function templateSequence(){
+  const caps={}; S.pages.forEach(p=>{if(p.caption) caps[p.ids[0]]=p.caption});
+  const pages=[], start=S.cfg.title?1:0; let dc=start;
+  const push=(pg,span=1)=>{pages.push(pg);dc+=span};
+  const isLeft=()=>dc%2===1;
+  const single=(st,u,extra={})=>u.texts.length?newPage([u.id,...u.texts]):newPage([u.id],{style:st,...extra});
+  const U=units();
+  if(S.cfg.tpl==="walk"){
+    const groups=[]; for(const u of U){const g=u.p.group; let G=groups.find(x=>x.g===g); if(!G){G={g,u:[]};groups.push(G)} G.u.push(u)}
+    groups.forEach((G,gi)=>{
+      const label=chapterLabel(G.g), memo=S.chapters[G.g]||{};
+      if(!isLeft()) push(newPage([],{style:"blank"}));
+      push(newPage([],{style:"chapter",title:memo.title??label,sub:memo.sub??`A set of photographs from ${label}.`,bg:memo.bg||S.cfg.palette[gi%S.cfg.palette.length],chapter:G.g}));
+      const q=[...G.u]; push(single("bleed",q.shift(),{chapter:label}));
+      let spreads=0;
+      while(q.length){
+        const u=q[0], nx=q[1];
+        // a starred landscape photo, or one landscape per chapter, runs across a spread
+        if(u.p.r>=1.2&&isLeft()&&!u.texts.length&&(u.p.weight>=2||(spreads===0&&q.length>=2))){spreads++;push(single("spread",q.shift(),{chapter:label}),2);continue}
+        if(u.p.r<.95&&nx&&nx.p.r<.95&&!u.texts.length&&!nx.texts.length){q.shift();q.shift();push(newPage([u.id,nx.id],{chapter:label}));continue}
+        push(single("inset",q.shift(),{inset:.9,chapter:label}));
+      }
+    });
+  } else {
+    const rnd=mulberry32(11), q=[...U]; let spreadNo=0, poemNo=0;
+    const poem=()=>newPage([],{style:"poem",text:S.poems[poemNo++]||""});
+    while(q.length){
+      if(!isLeft()){push(single("inset",q.shift(),{inset:.62}));continue}
+      const a=q[0], b=q[1];
+      if(a.texts.length){push(single("auto",q.shift()));continue}
+      if(spreadNo%4===0){push(poem());push(single("bleed",q.shift()));spreadNo++;continue}
+      if(a.p.r>=1.2&&(spreadNo%3===2||a.p.weight>=2||rnd()<.25)){push(single("spread",q.shift()),2);spreadNo++;continue}
+      if(!b){push(single("bleed",q.shift()));continue}
+      const pick=Math.floor(rnd()*3);
+      if(pick===0){push(single("bleed",q.shift()));push(single("inset",q.shift(),{inset:.62}))}
+      else if(pick===1){push(single("inset",q.shift(),{inset:.62}));push(single("inset",q.shift(),{inset:.62}))}
+      else {push(single("inset",q.shift(),{inset:.55}));push(single("bleed",q.shift()))}
+      spreadNo++;
+    }
+  }
+  pages.forEach(p=>{if(p.ids[0]&&caps[p.ids[0]]) p.caption=caps[p.ids[0]]; relayout(p)});
+  S.pages=pages;
+}
+function applyTemplate(id){
+  const T=TEMPLATES[id]; if(!T) return;
+  snap(true);
+  const c=S.cfg, keepAr=c.fAr;
+  Object.assign(c,JSON.parse(JSON.stringify(T.cfg)),{tpl:id}); c.fAr=keepAr;
+  if(id==="classic"){S.pages.forEach(p=>p.style="auto");rebuildAuto()} else templateSequence();
+  S.sel=null;S.selPage=null;S.cropEdit=null;S.cur=0;
+  syncForm(); render(); ensureFonts().then(render);
+}
+function tplSVG(id){
+  const pg=(x,inner)=>`<rect x="${x}" y="4" width="28" height="28" fill="#efeee9"/>${inner}`;
+  if(id==="walk") return `<svg viewBox="0 0 62 36" aria-hidden="true">${pg(2,`<rect x="2" y="4" width="28" height="28" fill="#8d6b4a"/><text x="5" y="13" font-size="6" font-family="Georgia,serif" fill="#f4f1ea">Mandai</text>`)}${pg(32,`<rect x="36" y="11" width="20" height="14" fill="#6d6b66"/><text x="55" y="9" font-size="4" font-family="Georgia,serif" fill="#111" text-anchor="end">7</text>`)}</svg>`;
+  if(id==="zine") return `<svg viewBox="0 0 62 36" aria-hidden="true">${pg(2,`<path d="M9 19h14l1 1.4H8.5z" fill="#111"/><rect x="9" y="16.6" width="12" height=".8" fill="#777"/>`)}${pg(32,`<rect x="32" y="4" width="28" height="28" fill="#1d1d1b"/><rect x="32" y="20" width="28" height="12" fill="#3a3a38"/>`)}</svg>`;
+  return `<svg viewBox="0 0 62 36" aria-hidden="true">${pg(2,`<rect x="5" y="7" width="12" height="9" fill="#6d6b66"/><rect x="18" y="7" width="9" height="9" fill="#6d6b66"/><rect x="5" y="17" width="22" height="12" fill="#6d6b66"/>`)}${pg(32,`<rect x="35" y="7" width="10" height="22" fill="#6d6b66"/><rect x="46" y="7" width="11" height="10" fill="#6d6b66"/><rect x="46" y="18" width="11" height="11" fill="#6d6b66"/>`)}</svg>`;
+}
+function renderTemplates(){
+  const c=S.cfg;
+  $("#tplCards").innerHTML=Object.entries(TEMPLATES).map(([k,T])=>`<button type="button" class="tcard" data-tpl="${k}" aria-pressed="${c.tpl===k}">${tplSVG(k)}<span><b>${T.name}</b><small>${T.desc}</small></span></button>`).join("");
+  const zine=c.tpl==="zine", L=c.look;
+  document.querySelectorAll("#lookMode button").forEach(b=>{b.setAttribute("aria-pressed",String(b.dataset.v==="bw")===String(L.bw));b.disabled=zine&&b.dataset.v==="colour"});
+  $("#lookCon").value=L.contrast; $("#lookConOut").textContent=(L.contrast>0?"+":"")+L.contrast;
+  $("#lookGrain").value=L.grain; $("#lookGrainOut").textContent=L.grain;
+  $("#lookNote").hidden=!zine;
+  $("#walkOpts").hidden=c.tpl!=="walk";
+  $("#cHeader").checked=c.header;
+  $("#palette").innerHTML=c.palette.map((col,i)=>`<input type="color" value="${col}" data-pal="${i}" aria-label="Chapter colour ${i+1}">`).join("");
+  $("#coverBgIn").value=c.coverBg;
+}
+$("#tplCards").addEventListener("click",e=>{const b=e.target.closest("[data-tpl]");if(b)applyTemplate(b.dataset.tpl)});
+$("#lookMode").addEventListener("click",e=>{const b=e.target.closest("button");if(!b||b.disabled)return;snap();S.cfg.look.bw=b.dataset.v==="bw";renderTemplates();render()});
+let lookSnap=false;
+for(const [id,key] of [["#lookCon","contrast"],["#lookGrain","grain"]]){
+  $(id).addEventListener("input",e=>{if(!lookSnap){snap();lookSnap=true}S.cfg.look[key]=+e.target.value;renderTemplates();applyLookCSS();renderBook()});
+  $(id).addEventListener("change",()=>{lookSnap=false;render()});
+}
+$("#cHeader").addEventListener("change",e=>{S.cfg.header=e.target.checked;renderBook()});
+$("#palette").addEventListener("change",e=>{const i=e.target.dataset.pal;if(i==null)return;snap();const old=S.cfg.palette[i];S.cfg.palette[i]=e.target.value;
+  S.pages.forEach(p=>{if(p.style==="chapter"&&p.bg===old){p.bg=e.target.value;if(p.chapter)(S.chapters[p.chapter]=S.chapters[p.chapter]||{}).bg=p.bg}});render()});
+$("#coverBgIn").addEventListener("input",e=>{S.cfg.coverBg=e.target.value;renderBook()});
+
+/* page styles: click empty space on a page */
+function setPageStyle(pi,style){
+  const pg=S.pages[pi]; if(!pg||pg.style===style) return; snap();
+  const photos=pg.ids, extra=[];
+  if(NOPHOTO.has(style)){ if(photos.length) extra.push(...photos); pg.ids=[] }
+  else if(SINGLE.has(style)){
+    const first=photos.findIndex(id=>!isText(id)); if(first<0) return;
+    pg.ids=[photos[first]]; extra.push(...photos.filter((_,i)=>i!==first));
+  }
+  pg.style=style;
+  if(style==="chapter"){const g=photos[0]&&S.photos.get(photos[0])?.group;pg.title=pg.title||chapterLabel(g)||"Chapter";pg.chapter=pg.chapter||g;pg.bg=pg.bg||S.cfg.palette[0]}
+  if(style==="inset") pg.inset=pg.inset||.8;
+  if(extra.length) S.pages.splice(pi+1,0,newPage(extra,{chapter:pg.chapter}));
+  S.pages.forEach(p=>relayout(p)); render();
+}
+function insertPage(pi,style){
+  snap(); const g=S.pages[pi]&&S.pages[pi].chapter;
+  const np=newPage([],{style,chapter:g,title:style==="chapter"?"New chapter":undefined,bg:style==="chapter"?S.cfg.palette[0]:undefined,text:""});
+  S.pages.splice(pi+1,0,np); relayout(np); S.selPage=pi+1; render();
+}
+function deletePage(pi){const pg=S.pages[pi];if(!pg||pg.ids.length)return;snap();S.pages.splice(pi,1);S.selPage=null;render()}
+function pageToolbarHTML(pi){
+  const pg=S.pages[pi], st=pg.style||"auto", nPhotos=pg.ids.filter(id=>!isText(id)).length, n=displayPages().find(d=>d.i===pi)?.n||"";
+  const opts=PAGE_STYLES.map(([v,l])=>`<option value="${v}"${v===st?" selected":""}${SINGLE.has(v)&&!nPhotos?" disabled":""}>${l}</option>`).join("");
+  let h=`<span class="chipname">Page ${n}<small>${nPhotos} photo${nPhotos===1?"":"s"}</small></span><span class="vbar"></span>
+    <span class="lbl">Style</span><select id="pgStyle" aria-label="Page style">${opts}</select>`;
+  if(st==="chapter") h+=`<span class="vbar"></span><input id="pgTitle" class="pgin" type="text" dir="auto" maxlength="40" value="${esc(pg.title||"")}" placeholder="Chapter title" aria-label="Chapter title">
+    <input id="pgSub" class="pgin wide" type="text" dir="auto" maxlength="160" value="${esc(pg.sub||"")}" placeholder="A line about this chapter" aria-label="Chapter line">
+    <input id="pgBg" type="color" value="${pg.bg||S.cfg.palette[0]}" aria-label="Chapter colour" title="Chapter colour">`;
+  if(st==="poem") h+=`<span class="vbar"></span><input id="pgText" class="pgin wide" type="text" dir="auto" maxlength="200" value="${esc(pg.text||"")}" placeholder="A line of your poem" aria-label="Poem line">`;
+  if(st==="inset") h+=`<span class="vbar"></span><span class="lbl">Size</span><input id="pgInset" type="range" min="30" max="100" value="${Math.round((pg.inset||.8)*100)}" aria-label="Photo size on the page">`;
+  h+=`<span class="vbar"></span><select id="pgInsert" aria-label="Insert a page after this one"><option value="">Insert after…</option><option value="chapter">Chapter page</option><option value="poem">Poem page</option><option value="blank">Blank page</option></select>`;
+  if(!pg.ids.length) h+=`<button class="ib" type="button" data-pact="delpage" title="Delete this page">${IC.trash}</button>`;
+  return h+`<button class="ib" type="button" data-pact="close" title="Done (Esc)" aria-label="Done">${IC.close}</button>`;
+}
+const insp2=$("#insp");
+insp2.addEventListener("change",e=>{
+  if(S.selPage==null||S.sel) return; const pi=S.selPage, pg=S.pages[pi]; if(!pg) return;
+  if(e.target.id==="pgStyle"){setPageStyle(pi,e.target.value);return}
+  if(e.target.id==="pgInsert"&&e.target.value){insertPage(pi,e.target.value);return}
+  if(e.target.id==="pgInset"){render();return}
+  if(["pgTitle","pgSub","pgText","pgBg"].includes(e.target.id)) render();
+});
+let pgSnap=null;
+insp2.addEventListener("input",e=>{
+  if(S.selPage==null||S.sel) return; const pg=S.pages[S.selPage]; if(!pg) return;
+  const key={pgTitle:"title",pgSub:"sub",pgText:"text",pgBg:"bg"}[e.target.id];
+  if(key||e.target.id==="pgInset"){if(pgSnap!==e.target.id){snap();pgSnap=e.target.id}}
+  if(key){pg[key]=e.target.value;
+    if(pg.style==="chapter"&&pg.chapter) (S.chapters[pg.chapter]=S.chapters[pg.chapter]||{})[key]=e.target.value;
+    if(pg.style==="poem"){const k=S.pages.filter(p=>p.style==="poem").indexOf(pg);if(k>=0)S.poems[k]=e.target.value}
+    renderBook();scheduleStrip()}
+  if(e.target.id==="pgInset"){pg.inset=+e.target.value/100;relayout(pg);renderBook()}
+});
+insp2.addEventListener("focusout",()=>{pgSnap=null});
+insp2.addEventListener("click",e=>{
+  const b=e.target.closest("[data-pact]"); if(!b||S.selPage==null) return;
+  if(b.dataset.pact==="delpage") deletePage(S.selPage); else {S.selPage=null;render()}
+});
 
 /* ───── print at home: Epson EcoTank L18050 ───── */
 const PAPERS={  // sizes from Epson's L18050 specifications, in mm (portrait)
@@ -2805,6 +3176,7 @@ function setPanel(k){
   $("#app").classList.toggle("nopanel",!k);
   const h=$("#flyToggle"); h.textContent=k?"‹":"›"; h.setAttribute("aria-label",k?"Hide panel":"Show panel"); h.title=k?"Hide panel":"Show panel";
   if(k==="print") renderPrint();
+  if(k==="templates") renderTemplates();
   saveUI(); requestAnimationFrame(()=>{applyZoom();scheduleMini()});
 }
 let lastPanel="photos";
@@ -2848,7 +3220,7 @@ function loadUI(){
   if(!o) return;
   if(o.secs) document.querySelectorAll("details.sec").forEach(d=>{if(d.dataset.sec in o.secs) d.open=!!o.secs[d.dataset.sec]});
   if(Array.isArray(o.closed)) S.closed=new Set(o.closed);
-  if(o.panel===null||["photos","text","cover","layout","format","print"].includes(o.panel)) S.panel=o.panel;
+  if(o.panel===null||["templates","photos","text","cover","layout","format","print"].includes(o.panel)) S.panel=o.panel;
   if(["spreads","page","grid"].includes(o.view)) S.view=o.view;
   if(["spreads","page"].includes(o.lastView)) S.lastView=o.lastView;
   if(o.zoom>=25&&o.zoom<=300) S.zoom=o.zoom;
@@ -3059,8 +3431,19 @@ async function drawPage(cx,item,W,H,k){
   const c=S.cfg, b=c.bleed, ink=inkFor(c.paper);
   const setDir=t=>{cx.direction=isRTL(t)?"rtl":"ltr"};
   cx.fillStyle=c.paper; cx.fillRect(0,0,W,H);
+  const mm=(x,y,w)=>[(x+b)*k,(y+b)*k,w*k];
   if(item.type==="photo"){
-    for(const r of item.pg.rects){
+    const pg=item.pg, sx=item.half==="R"?c.w:0;
+    if(pg.style==="chapter"){
+      const P=chapterParts(pg); cx.fillStyle=P.bg; cx.fillRect(0,0,W,H);
+      drawLines(cx,P.T,...mm(P.x,P.yT,c.w-2*c.margin),k,P.ink);
+      if(P.Sb){cx.globalAlpha=.85;drawLines(cx,P.Sb,...mm(P.x,P.ySb,(c.w-2*c.margin)*.62),k,P.ink);cx.globalAlpha=1}
+    } else if(pg.style==="poem"&&(pg.text||"").trim()){
+      const P=poemParts(pg); cx.save(); cx.translate(b*k,b*k); cx.scale(k,k); cx.fillStyle=ink; cx.fill(new Path2D(P.brush)); cx.restore();
+      drawLines(cx,P.L,...mm(P.x,P.y,P.wT),k,ink);
+    }
+    for(const r0 of pg.rects){
+      const r=sx?{...r0,x:r0.x-sx}:r0;
       const p=S.photos.get(r.id), X=(r.x+b)*k, Y=(r.y+b)*k, RW=r.w*k, RH=r.h*k;
       if(p.kind==="text"){
         if(!String(p.text||"").trim()) continue;
@@ -3070,26 +3453,36 @@ async function drawPage(cx,item,W,H,k){
         drawLines(cx,T,X,y0,RW,k,T.st.color||ink);
         cx.restore();
       } else {
-        const src=await photoSource(p), pl=placeImage(p,r.w,r.h);
-        cx.save(); shapePath(cx,p,X,Y,RW,RH); cx.clip();
-        drawRot(cx,src,p,X+pl.x*k,Y+pl.y*k,pl.w*k,pl.h*k,pl.tilt);
-        cx.restore();
+        const src=await photoSource(p), pl=plOf(p,r);
+        drawPhoto(cx,src,p,X,Y,RW,RH,pl,k,()=>shapePath(cx,p,X,Y,RW,RH),(pg.seed||1)+item.n);
         if(src.close) src.close();
       }
     }
-    const cap=(item.pg.caption||"").trim();
+    const chr=chromeParts(item); if(chr){cx.globalAlpha=.8;for(const q of chr) drawLines(cx,q.L,...mm(q.x,q.y,q.w),k,ink);cx.globalAlpha=1}
+    const cap=item.half==="L"?"":(item.pg.caption||"").trim();
     if(cap){
       const fs=c.capPt*PT*k, x0=(b+c.margin)*k, x1=W-(b+c.margin)*k, lh=fs*1.5;
       cx.fillStyle=ink; cx.font=`400 ${fs}px ${capStack(isRTL(cap))}`; cx.textBaseline="alphabetic"; setDir(cap); cx.textAlign="start";
       cx.fillText(fitLine(cx,cap,x1-x0),isRTL(cap)?x1:x0,(b+c.h-c.margin)*k-lh+baseIn(cx,lh));
     }
+  } else if(item.type==="title"&&coverGeom()){
+    const G=coverGeom(), cp=c.coverImg&&S.photos.get(c.coverImg);
+    cx.fillStyle=G.bg; cx.fillRect(0,0,W,H);
+    if(cp){
+      const src=await photoSource(cp), P=G.photo, [X,Y,RW]=mm(P.x,P.y,P.w), RH=P.h*k, pl=placeImage(cp,P.w,P.h,"cover");
+      drawPhoto(cx,src,cp,X,Y,RW,RH,pl,k,()=>{cx.beginPath();cx.rect(X,Y,RW,RH)},3);
+      if(src.close) src.close();
+    }
+    const CL=coverLayout(G.text.w), ink2=c.titleAuto?inkFor(G.bg):c.titleColor, [tx,ty,tw]=mm(G.text.x,G.text.y,G.text.w);
+    drawLines(cx,CL.T,tx,ty,tw,k,ink2);
+    if(CL.Sb) drawLines(cx,CL.Sb,tx,ty+(CL.T.lines.length*CL.T.lh+CL.gap)*k,tw,k,CL.Sb.st.color||ink2);
   } else if(item.type==="title"){
     const cp=c.coverImg&&S.photos.get(c.coverImg);
     if(cp){
       const src=await photoSource(cp), fill=c.coverFit==="fill";
       const bx=fill?0:(b+c.margin)*k, by=fill?0:(b+c.margin)*k, bw=fill?W:(c.w-2*c.margin)*k, bh=fill?H:(c.h-2*c.margin)*k;
       const pl=placeImage(cp,bw,bh,fill?"cover":"contain");
-      cx.save(); cx.beginPath(); cx.rect(bx,by,bw,bh); cx.clip(); drawRot(cx,src,cp,bx+pl.x,by+pl.y,pl.w,pl.h); cx.restore();
+      drawPhoto(cx,src,cp,bx,by,bw,bh,{...pl,x:pl.x/k,y:pl.y/k,w:pl.w/k,h:pl.h/k},k,()=>{cx.beginPath();cx.rect(bx,by,bw,bh)},3);
       if(src.close) src.close();
     }
     const a=(100-c.coverTr)/100; if(a>0){cx.globalAlpha=a;cx.fillStyle=c.coverColor;cx.fillRect(0,0,W,H);cx.globalAlpha=1}
