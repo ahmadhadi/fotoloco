@@ -12,6 +12,8 @@ Everything runs in the browser. Photos are never uploaded anywhere.
 - Resize any photo by dragging a corner; the rest of the page refits and overflow moves to a new page.
 - Rotate photos, crop them into shapes (square, circle, oval, arch, hexagon and more), and freely move, scale and straighten them inside the mask.
 - Text boxes, a cover title and a subtitle, each with its own English and Arabic font, size, colour, bold, italic, underline, strikethrough, case, alignment, lists and spacing. Arabic is laid out right to left.
+- Shapes: 15 original generative patterns (dots, halftone, rings, waves, flow lines, arc tiles, iso cubes and more) that can sit in the photo grid, behind a text box, behind a page's photos or across the whole cover. Each has its own shape colour, background colour and opacity for both. You can also upload your own SVG shapes, which are cleaned and recoloured and stay in your browser.
+- A cover with or without a title.
 - Upload your own fonts (TTF, OTF, WOFF, WOFF2). They are used only in your browser.
 - A design-tool layout: icon rail with Photos, Text, Cover, Layout and Format panels; a floating toolbar for whatever you select; quick actions above the selection; edit text right on the page; undo and redo.
 - Folder tree, right-click menu, Spreads / Page / Grid views, page thumbnails, zoom and fullscreen.

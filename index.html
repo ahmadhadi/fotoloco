@@ -140,6 +140,30 @@ body{display:grid;grid-template-rows:auto minmax(0,1fr);overflow:hidden}
 .chap{position:absolute;inset:0}
 .tplb{position:absolute;pointer-events:none}
 .brush{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.shbox{position:absolute;pointer-events:none;overflow:hidden}
+.shp{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none;overflow:hidden}
+.ph.sh{outline:1px dashed rgba(128,128,128,.4);outline-offset:-1px}
+.ph.sh.sel{outline:2px solid var(--sel);outline-offset:0}
+.tpg .ph.sh{outline:none}
+.shgal{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:0 0 10px}
+.shtile{position:relative;display:flex;flex-direction:column;gap:4px;padding:4px;border:1px solid var(--line);background:var(--ink-3);color:var(--chalk);cursor:pointer;font:inherit;font-size:11px;text-align:start;line-height:1.25}
+.shtile .shp{position:static;width:100%;height:auto;aspect-ratio:1;background:#f4f2ec}
+.shtile:hover{border-color:var(--mute)}
+.shtile[aria-pressed=true]{outline:2px solid var(--sel);outline-offset:-1px}
+.shtile span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.shtile .udel{position:absolute;right:3px;top:3px;width:18px;height:18px;border:0;background:rgba(0,0,0,.65);color:#fff;font-size:13px;line-height:18px;padding:0;cursor:pointer}
+.shput{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:0 0 10px}
+.shput .btn{font-size:11.5px;padding:7px 8px}
+.shc{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+.shc .shl{display:inline-flex;align-items:center;gap:5px;font-size:12px;white-space:nowrap}
+.shc input[type=range]{width:84px}
+.shc output{min-width:2.8em;font-size:11px;opacity:.75}
+.shc input[type=color]{width:30px;height:24px;padding:0;border:1px solid #999;background:none}
+.shc input:disabled{opacity:.35}
+.fp .shc{gap:8px 12px;margin:0 0 10px}
+.fp .shc select{max-width:100%}
+.shedit{border:1px solid var(--line);padding:10px;margin:0 0 12px}
+.shedit h4{margin:0 0 8px;font-size:12px;font-weight:600}
 .titlepage.free{inset:auto;display:block;padding:0}
 .page.psel{outline:2px solid var(--sel);outline-offset:3px}
 .page img.im,.page .cbox img,.page .ghost img{filter:var(--look,none)}
@@ -510,6 +534,7 @@ footer a,footer button{color:var(--chalk);background:none;border:0;padding:0;cur
     <button class="rb" type="button" data-panel="templates" aria-pressed="false" title="Templates"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="8"/><rect x="3" y="13" width="8" height="8"/><path d="M13 17h8M17 13v8"/></svg><span>Templates</span></button>
     <button class="rb" type="button" data-panel="photos" aria-pressed="false" title="Photos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 8"/></svg><span>Photos</span></button>
     <button class="rb" type="button" data-panel="text" aria-pressed="false" title="Text"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 6V4h14v2M12 4v16M9 20h6"/></svg><span>Text</span></button>
+    <button class="rb" type="button" data-panel="shapes" aria-pressed="false" title="Shapes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="8" r="4.5"/><path d="M16.5 3.5l4.5 8h-9z"/><rect x="11" y="13.5" width="8" height="7"/><path d="M3 20l5-5"/></svg><span>Shapes</span></button>
     <button class="rb" type="button" data-panel="cover" aria-pressed="false" title="Cover"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3h11a3 3 0 0 1 3 3v15H8a3 3 0 0 1-3-3z"/><path d="M5 18a3 3 0 0 1 3-3h11"/><path d="M9 8h6"/></svg><span>Cover</span></button>
     <button class="rb" type="button" data-panel="layout" aria-pressed="false" title="Layout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="8" height="7"/><rect x="13" y="4" width="8" height="11"/><rect x="3" y="13" width="8" height="7"/><rect x="13" y="17" width="8" height="3"/></svg><span>Layout</span></button>
     <button class="rb" type="button" data-panel="print" aria-pressed="false" title="Print at home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 8V3h10v5"/><rect x="3" y="8" width="18" height="9" rx="1"/><path d="M7 14h10v7H7z"/><path d="M17 11h1"/></svg><span>Print</span></button>
@@ -554,10 +579,16 @@ footer a,footer button{color:var(--chalk);background:none;border:0;padding:0;cur
       <p class="hint">TTF, OTF, WOFF or WOFF2. Uploaded fonts appear in every font list. These are the defaults: captions use them, and so does any text box, title or subtitle left on Book default. Each text box and the cover title and subtitle can pick their own fonts instead.</p>
     </fieldset>
     </section>
+    <section class="fp" data-panel="shapes" aria-label="Shapes" hidden>
+      <div class="fph"><h2>Shapes</h2><button class="fpx" type="button" data-closepanel aria-label="Close panel">×</button></div>
+      <div id="shBody"></div>
+      <input type="file" id="fShape" accept=".svg,image/svg+xml" multiple hidden>
+    </section>
     <section class="fp" data-panel="cover" aria-label="Cover page" hidden>
       <div class="fph"><h2>Cover page</h2><button class="fpx" type="button" data-closepanel aria-label="Close panel">×</button></div>
 <fieldset>
       <label class="check"><input type="checkbox" id="cTitle"> Include cover page</label>
+      <label class="check"><input type="checkbox" id="cShowTitle" class="showTitleChk"> Show the title and subtitle</label>
       <div class="field"><label class="lbl" for="cTitleText">Title</label><input id="cTitleText" type="text" maxlength="60" dir="auto"></div>
       <div class="field"><label class="lbl" for="cSubText">Line under title</label><input id="cSubText" type="text" maxlength="80" dir="auto"></div>
       <div class="row two">
@@ -701,7 +732,7 @@ footer a,footer button{color:var(--chalk);background:none;border:0;padding:0;cur
       </details>
     </section>
     <footer>
-      <span>FotoLoco v1.10</span>
+      <span>FotoLoco v1.11</span>
       <button type="button" id="bHow">How it works</button>
       <span>Runs in your browser. Your photos never leave your device.</span>
       <span>Layout ideas from <a href="https://github.com/EddyXorb/fotobuch" target="_blank" rel="noopener">fotobuch</a></span>
@@ -1184,7 +1215,7 @@ const SHAPES=[["3","Wide 3:1"],["2","Banner 2:1"],["1.5","Landscape 3:2"],["1","
 const S={
   photos:new Map(), pages:[], pool:[], sel:null, sample:true, undo:[], redo:[], textEdit:null, panel:"photos", myFonts:[], groupOrder:[], closed:new Set(), cropEdit:null,
   view:"spreads", lastView:"spreads", zoom:100, cur:0, strip:true, selText:null, spacingOpen:false,
-  selPage:null, chapters:{}, poems:[],
+  selPage:null, chapters:{}, poems:[], userShapes:{}, shapePick:"dots", shapeTgt:null, shapeOpen:false, shapeMsg:"",
   cfg:{w:297,h:210,bleed:3,margin:10,gap:3,dpi:300,min:1,max:6,target:3.5,paper:"#ffffff",
        even:true,guides:false,title:true,titleText:"Sample Roll",subText:"Test frames · 2026",
        fEn:"Oswald",fAr:"Cairo",fW:700,capPt:9,
@@ -1195,7 +1226,8 @@ const S={
        print:{paper:"A4",nup:1,borderless:true,marks:false,recipe:null},
        tpl:"classic",coverStyle:"classic",coverBg:"#d6e1de",header:false,
        palette:["#8d6b4a","#263a2f","#6b4b3a","#3f5e60"],
-       look:{bw:false,contrast:0,grain:0}}
+       look:{bw:false,contrast:0,grain:0},
+       showTitle:true,coverShape:null}
 };
 let uid=0, seedCtr=1;
 const newSeed=()=>(Date.now()+(seedCtr++)*7919)>>>0;
@@ -1204,6 +1236,7 @@ const newPage=(ids,extra={})=>({ids,seed:newSeed(),rects:[],caption:"",pins:{},t
 const NOPHOTO=new Set(["chapter","poem","blank"]), SINGLE=new Set(["bleed","inset","spread"]);
 const PAGE_STYLES=[["auto","Auto grid"],["bleed","Full bleed"],["inset","Centred photo"],["spread","Spread across two pages"],["chapter","Chapter opener"],["poem","Poem / text line"],["blank","Blank"]];
 const isText=id=>S.photos.get(id)?.kind==="text";
+const isItem=id=>!!S.photos.get(id)?.kind;          // text boxes and shapes: anything that isn't a photo
 
 function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 function isRTL(t){for(const ch of t||""){if(RTL_RE.test(ch))return true;if(LTR_RE.test(ch))return false}return false}
@@ -1325,19 +1358,19 @@ function partition(ids){
 }
 /* folder order: anything you dragged comes first in that order, the rest sorts by name */
 function groupList(){
-  const all=[...new Set([...S.photos.values()].filter(p=>p.kind!=="text").map(p=>p.group))].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
+  const all=[...new Set([...S.photos.values()].filter(p=>!p.kind).map(p=>p.group))].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
   return [...S.groupOrder.filter(g=>all.includes(g)),...all.filter(g=>!S.groupOrder.includes(g))];
 }
 function bookOrder(){
   const rank=new Map(groupList().map((g,i)=>[g,i]));
-  return [...S.photos.values()].filter(p=>p.kind!=="text").sort((a,b)=>rank.get(a.group)-rank.get(b.group)||a.name.localeCompare(b.name,undefined,{numeric:true})).map(p=>p.id);
+  return [...S.photos.values()].filter(p=>!p.kind).sort((a,b)=>rank.get(a.group)-rank.get(b.group)||a.name.localeCompare(b.name,undefined,{numeric:true})).map(p=>p.id);
 }
 /* text boxes ride along after the photo they currently follow */
 function sequence(){
   let prev=null;
-  for(const id of S.pages.flatMap(p=>p.ids)){const it=S.photos.get(id);if(it.kind==="text")it.after=prev;else prev=id}
+  for(const id of S.pages.flatMap(p=>p.ids)){const it=S.photos.get(id);if(it.kind)it.after=prev;else prev=id}
   const pooled=new Set(S.pool), photos=bookOrder().filter(id=>!pooled.has(id));
-  const texts=[...S.photos.values()].filter(t=>t.kind==="text"&&!pooled.has(t.id));
+  const texts=[...S.photos.values()].filter(t=>t.kind&&!pooled.has(t.id));
   const has=new Set(photos), seq=texts.filter(t=>!t.after||!has.has(t.after)).map(t=>t.id);
   for(const id of photos){seq.push(id);for(const t of texts) if(t.after===id){seq.push(t.id);t.group=S.photos.get(id).group}}
   return seq;
@@ -1354,7 +1387,7 @@ function styledRects(pg){
   const st=pg.style||"auto"; if(st==="auto") return false;
   const c=S.cfg, b=c.bleed;
   if(NOPHOTO.has(st)){ if(pg.ids.length){pg.style="auto";return false} pg.rects=[];pg.tree=null;return true }
-  if(pg.ids.length!==1||isText(pg.ids[0])){pg.style="auto";return false}
+  if(pg.ids.length!==1||isItem(pg.ids[0])){pg.style="auto";return false}
   const id=pg.ids[0], p=S.photos.get(id);
   if(st==="bleed") pg.rects=[{id,x:-b,y:-b,w:c.w+2*b,h:c.h+2*b,fit:"cover"}];
   else if(st==="spread") pg.rects=[{id,x:-b,y:-b,w:2*c.w+2*b,h:c.h+2*b,fit:"cover"}];
@@ -1376,10 +1409,10 @@ function relayoutAll(){S.pages.forEach(pg=>relayout(pg))}
 /* ───── undo ───── */
 function stateNow(withCfg=false){
   return JSON.stringify({
-    pages:S.pages.map(p=>({ids:p.ids,seed:p.seed,caption:p.caption||"",pins:p.pins||{},tree:p.tree,style:p.style||"auto",inset:p.inset,title:p.title,sub:p.sub,bg:p.bg,text:p.text,chapter:p.chapter})),pool:S.pool,
+    pages:S.pages.map(p=>({ids:p.ids,seed:p.seed,caption:p.caption||"",pins:p.pins||{},tree:p.tree,style:p.style||"auto",inset:p.inset,bgShape:p.bgShape||null,title:p.title,sub:p.sub,bg:p.bg,text:p.text,chapter:p.chapter})),pool:S.pool,
     cfg:withCfg?S.cfg:undefined,
-    w:[...S.photos.values()].filter(p=>p.kind!=="text").map(p=>[p.id,p.weight,p.rot||0,p.crop?{...p.crop}:null]),
-    texts:[...S.photos.values()].filter(p=>p.kind==="text").map(p=>({...p})),groupOrder:S.groupOrder});
+    w:[...S.photos.values()].filter(p=>!p.kind).map(p=>[p.id,p.weight,p.rot||0,p.crop?{...p.crop}:null]),
+    texts:[...S.photos.values()].filter(p=>p.kind).map(p=>JSON.parse(JSON.stringify(p))),groupOrder:S.groupOrder});
 }
 function snap(withCfg=false){S.undo.push(stateNow(withCfg)); if(S.undo.length>80) S.undo.shift(); S.redo.length=0}
 const hasCfg=s=>s.includes('"cfg":{');
@@ -1388,7 +1421,7 @@ function redo(){const s=S.redo.pop(); if(!s) return; S.undo.push(stateNow(hasCfg
 function restoreState(s){
   const o=JSON.parse(s); S.textEdit=null; S.selPage=null;
   if(o.cfg){Object.assign(S.cfg,o.cfg);syncForm()}
-  for(const p of [...S.photos.values()]) if(p.kind==="text") S.photos.delete(p.id);
+  for(const p of [...S.photos.values()]) if(p.kind) S.photos.delete(p.id);
   o.texts.forEach(t=>S.photos.set(t.id,t));
   o.w.forEach(([id,w,rot,crop])=>{const p=S.photos.get(id);if(p){p.weight=w;p.rot=rot||0;p.crop=crop||null;updateRatio(p)}});
   S.cropEdit=null;
@@ -1478,7 +1511,7 @@ function refitFor(id){
 }
 function rectOf(id){const L=locate(id);return L&&!L.pool?S.pages[L.p].rects.find(r=>r.id===id):null}
 function rotate(id,deg){
-  const p=S.photos.get(id); if(!p||p.kind==="text") return; snap();
+  const p=S.photos.get(id); if(!p||p.kind) return; snap();
   p.rot=(((p.rot||0)+deg)%360+360)%360;
   if(p.crop){p.crop.ox=0;p.crop.oy=0}
   const before=p.r; updateRatio(p);
@@ -1487,7 +1520,7 @@ function rotate(id,deg){
   render();
 }
 function setCrop(id,shape){
-  const p=S.photos.get(id); if(!p||p.kind==="text") return;
+  const p=S.photos.get(id); if(!p||p.kind) return;
   if((p.crop&&p.crop.shape)===shape||(!p.crop&&!shape)) return;
   snap();
   if(!shape){p.crop=null; if(S.cropEdit===id) S.cropEdit=null}
@@ -1524,7 +1557,7 @@ function xfPreset(id,kind){
   render();
 }
 function freeTransform(id){
-  const p=S.photos.get(id); if(!p||p.kind==="text") return;
+  const p=S.photos.get(id); if(!p||p.kind) return;
   if(!p.crop) setCrop(id,"rect"); else toggleCropEdit(id,true);
 }
 /* update the bar's sliders while dragging without rebuilding it */
@@ -1571,12 +1604,12 @@ const CROP_RATIOS=[["orig","Original"],["1","1:1"],["1.5","3:2"],["0.6667","2:3"
 const isSide=p=>((p.rot||0)%180)!==0;
 const rotAR=p=>isSide(p)?p.h/p.w:p.w/p.h;
 function frameRatio(p){
-  if(p.kind==="text") return p.r;
+  if(p.kind) return p.r;
   if(!p.crop) return rotAR(p);
   if(FIXED_RATIO[p.crop.shape]) return FIXED_RATIO[p.crop.shape];
   return p.crop.ratio==="orig"?rotAR(p):+p.crop.ratio;
 }
-function updateRatio(p){if(p.kind!=="text") p.r=frameRatio(p)}
+function updateRatio(p){if(!p.kind) p.r=frameRatio(p)}
 /* where the (rotated) picture sits relative to a box of fw × fh mm */
 function placeImage(p,fw,fh,mode="frame"){
   const ar=rotAR(p);
@@ -1846,8 +1879,11 @@ function figHTML(r,pi,pins,live){
     h+=`<div class="xf" data-xf="${r.id}" style="${box}" title="Drag to move · corners to scale · knob to rotate (Shift snaps 15°)">`+
        ["nw","ne","sw","se"].map(k=>`<i class="xh" data-xh="${k}"></i>`).join("")+`<i class="xstem"></i><i class="xh xrot" data-xh="rot"></i></div>`;
   }
-  h+=`<figure class="ph${p.kind==="text"?" tx":""}${sel?" sel":""}${editing?" editing":""}" draggable="${editing?"false":"true"}" data-id="${r.id}" data-p="${pi}" style="left:${pct(r.x,c.w)};top:${pct(r.y,c.h)};width:${pct(r.w,c.w)};height:${pct(r.h,c.h)}">`;
-  if(p.kind==="text"){
+  h+=`<figure class="ph${p.kind==="text"?" tx":p.kind==="shape"?" sh":""}${sel?" sel":""}${editing?" editing":""}" draggable="${editing?"false":"true"}" data-id="${r.id}" data-p="${pi}" style="left:${pct(r.x,c.w)};top:${pct(r.y,c.h)};width:${pct(r.w,c.w)};height:${pct(r.h,c.h)}">`;
+  if(p.kind==="shape"){
+    h+=shapeSVG(p.shape,r.w,r.h);
+  } else if(p.kind==="text"){
+    if(p.bgShape) h+=shapeSVG(p.bgShape,r.w,r.h);
     const L=layoutText(p,r.w,r.h), st=L.st;
     const body=String(p.text||"").trim()?linesHTML(L,c.w)
       :`<div class="tl empty" style="height:${(L.lh/c.w*100).toFixed(4)}cqw;line-height:${(L.lh/c.w*100).toFixed(4)}cqw;text-align:${st.align==="justify"?"start":st.align}">Text box</div>`;
@@ -1881,8 +1917,9 @@ function pageContent(item,live){
   const c=S.cfg; let h="";
   if(c.guides) h+=`<div class="guide" style="left:${pct(c.margin,c.w)};top:${pct(c.margin,c.h)};right:${pct(c.margin,c.w)};bottom:${pct(c.margin,c.h)}"></div>`;
   if(item.type==="photo"){
-    const pg=item.pg, sx=item.half==="R"?c.w:0;
-    h+=specialPageHTML(item);
+    const pg=item.pg, sx=item.half==="R"?c.w:0, psh=pg.bgShape?pageShapeHTML(pg.bgShape,item):"";
+    if(pg.style!=="chapter") h+=psh;
+    h+=specialPageHTML(item,psh);
     for(const r of pg.rects) h+=figHTML(sx?{...r,x:r.x-sx}:r,item.i,pg.pins,live);
     if(item.half!=="L") h+=`<div class="pcap" dir="auto" style="${capStyle()};font-family:${capStack(isRTL(pg.caption))}">${esc(pg.caption||"")}</div>`;
     h+=chromeHTML(item);
@@ -1890,7 +1927,8 @@ function pageContent(item,live){
     h+=styledCoverHTML();
   } else if(item.type==="title"){
     const [v,hz]=c.tPos, title=c.titleText||"Untitled";
-    h+=coverImgHTML()+`<div class="cov" style="background:${c.coverColor};opacity:${((100-c.coverTr)/100).toFixed(2)}"></div>`;
+    h+=coverImgHTML()+`<div class="cov" style="background:${c.coverColor};opacity:${((100-c.coverTr)/100).toFixed(2)}"></div>`+coverShapeHTML();
+    if(c.showTitle===false) return h;
     const CL=coverLayout(), ink=coverInk(), sel=S.selText;
     h+=`<div class="titlepage" style="padding:${pct(c.margin,c.w)};justify-content:${{t:"flex-start",m:"center",b:"flex-end"}[v]}">`+
        `<div class="tblk${sel==="@title"?" tsel":""}" data-tsel="@title" title="Click to style, double-click to type" style="${blockCSS(CL.T,c.w,ink)}">${S.textEdit==="@title"?inlTA("@title",CL.T,c.titleText,ink):linesHTML(CL.T,c.w)}</div>`+
@@ -1930,11 +1968,11 @@ function brushPath(x,y,w,h,seed){
     d+=`M${f(sx)} ${f(sy)}L${f(sx+sw)} ${f(sy+sh*.3)}L${f(sx+sw)} ${f(sy+sh)}L${f(sx)} ${f(sy+sh*.8)}Z`}
   return d;
 }
-function specialPageHTML(item){
+function specialPageHTML(item,psh=""){
   const pg=item.pg, c=S.cfg;
   if(pg.style==="chapter"){
     const P=chapterParts(pg);
-    return `<div class="chap" style="background:${P.bg}"></div>`+blockDiv(P.T,P.x,P.yT,c.w-2*c.margin,P.ink)+(P.Sb?blockDiv(P.Sb,P.x,P.ySb,(c.w-2*c.margin)*.62,P.ink,"opacity:.85"):"");
+    return `<div class="chap" style="background:${P.bg}"></div>`+psh+blockDiv(P.T,P.x,P.yT,c.w-2*c.margin,P.ink)+(P.Sb?blockDiv(P.Sb,P.x,P.ySb,(c.w-2*c.margin)*.62,P.ink,"opacity:.85"):"");
   }
   if(pg.style==="poem"){
     const P=poemParts(pg), ink=inkFor(c.paper);
@@ -1966,6 +2004,7 @@ function styledCoverHTML(){
   const c=S.cfg, G=coverGeom(), p=c.coverImg&&S.photos.get(c.coverImg), sel=S.selText;
   let h=`<div class="chap" style="background:${G.bg}"></div>`;
   if(p){const P=G.photo;h+=`<div class="cbox" style="left:${pct(P.x,c.w)};top:${pct(P.y,c.h)};width:${pct(P.w,c.w)};height:${pct(P.h,c.h)}">${imgTag(p,placeImage(p,P.w,P.h,"cover"),P.w,P.h,"")}${grainHTML()}</div>`}
+  h+=coverShapeHTML(); if(c.showTitle===false) return h;
   const CL=coverLayout(G.text.w), ink=c.titleAuto?inkFor(G.bg):c.titleColor;
   return h+`<div class="titlepage free" style="left:${pct(G.text.x,c.w)};top:${pct(G.text.y,c.h)};width:${pct(G.text.w,c.w)}">`+
     `<div class="tblk${sel==="@title"?" tsel":""}" data-tsel="@title" title="Click to style, double-click to type" style="${blockCSS(CL.T,c.w,ink)}">${S.textEdit==="@title"?inlTA("@title",CL.T,c.titleText,ink):linesHTML(CL.T,c.w)}</div>`+
@@ -1984,6 +2023,7 @@ function render(){
   renderBook();renderSide();renderTree();renderInspector();
   if(S.panel==="print") renderPrint();
   if(S.panel==="templates") renderTemplates();
+  if(S.panel==="shapes") renderShapes();
   // the bottom bar can grow when something is selected; keep that thing in view
   const key=(S.sel||"")+"|"+(S.selText||"");
   if(key!==lastSelKey){lastSelKey=key;if(key!=="|")requestAnimationFrame(()=>document.querySelector("#book .ph.sel, #book .tblk.tsel")?.scrollIntoView({block:"nearest"}))}
@@ -2121,24 +2161,24 @@ function renderTree(){
   const el=$("#tree"), pn=pageNumbers(), groups=groupList(), pooled=new Set(S.pool);
   const items=[...S.photos.values()];
   const byGroup=g=>{
-    const ph=items.filter(p=>p.kind!=="text"&&p.group===g).sort((a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true}));
-    const tx=items.filter(p=>p.kind==="text"&&p.group===g);
+    const ph=items.filter(p=>!p.kind&&p.group===g).sort((a,b)=>a.name.localeCompare(b.name,undefined,{numeric:true}));
+    const tx=items.filter(p=>p.kind&&p.group===g);
     return [...ph,...tx].sort((a,b)=>(pn.get(a.id)||1e9)-(pn.get(b.id)||1e9));
   };
-  const inBook=items.filter(p=>p.kind!=="text"&&pn.has(p.id)).length, total=items.filter(p=>p.kind!=="text").length;
+  const inBook=items.filter(p=>!p.kind&&pn.has(p.id)).length, total=items.filter(p=>!p.kind).length;
   let h=`<div class="thead"><span class="lbl">Project</span><b>${esc(S.cfg.titleText||"Untitled")}</b><span class="lbl">${inBook} of ${total} photos · ${displayPages().length} pages</span></div>`;
   if(S.cfg.title) h+=`<button class="trow" type="button" data-goto="cover"><span class="caret">◆</span><span class="nm">Cover</span><span class="pg">P.01</span></button>`;
   h+=`<div class="tsec lbl">Folders · drag to reorder</div>`;
   for(const g of groups){
-    const list=byGroup(g), used=list.filter(p=>p.kind!=="text"&&pn.has(p.id)).length, all=list.filter(p=>p.kind!=="text").length, open=!S.closed.has(g);
+    const list=byGroup(g), used=list.filter(p=>!p.kind&&pn.has(p.id)).length, all=list.filter(p=>!p.kind).length, open=!S.closed.has(g);
     h+=`<div class="tfold" data-open="${open}" data-gdrag="${esc(g)}" draggable="true">
       <button class="trow" type="button" data-fold="${esc(g)}" aria-expanded="${open}"><span class="caret">▸</span><span class="nm" title="${esc(g)}">${esc(g)}</span><span class="cnt">${used}/${all}</span></button>
       <button class="tgl" type="button" data-excl="${esc(g)}" title="${used?"Take this folder out of the book":"Put this folder back in the book"}">${used?"Hide":"Show"}</button></div>`;
     if(open){
       h+=`<ul class="titems">`+list.map(p=>{
         const no=pn.get(p.id), cur=S.sel===p.id;
-        const icon=p.kind==="text"?`<span class="aa">Aa</span>`:`<img src="${p.thumb}" alt="" loading="lazy"${p.rot?` style="transform:rotate(${p.rot}deg)"`:""}>`;
-        const name=p.kind==="text"?(String(p.text||"").trim().split("\n")[0].slice(0,40)||"Empty text box"):p.name;
+        const icon=p.kind==="shape"?`<span class="aa">◇</span>`:p.kind==="text"?`<span class="aa">Aa</span>`:`<img src="${p.thumb}" alt="" loading="lazy"${p.rot?` style="transform:rotate(${p.rot}deg)"`:""}>`;
+        const name=p.kind==="shape"?`Shape · ${patName(p.shape.pat)}`:p.kind==="text"?(String(p.text||"").trim().split("\n")[0].slice(0,40)||"Empty text box"):p.name;
         return `<li class="titem${no?"":" out"}" aria-current="${cur}"><button class="trow" type="button" data-id="${p.id}" data-pick="${p.id}" draggable="true">${icon}<span class="nm" dir="auto" title="${esc(name)}">${esc(name)}</span><span class="pg">${no?"P."+String(no).padStart(2,"0"):pooled.has(p.id)?"unused":"—"}</span></button></li>`;
       }).join("")+`</ul>`;
     }
@@ -2206,8 +2246,8 @@ function renderBook(){
   }
   book.innerHTML=h;
   applyZoom(); scheduleStrip(); updatePager();
-  let low=0; S.pages.forEach(pg=>pg.rects.forEach(r=>{const p=S.photos.get(r.id);if(p.kind!=="text"&&effDpi(p,r)<LOWRES)low++}));
-  const c=S.cfg, inBook=S.pages.reduce((s,p)=>s+p.ids.filter(id=>!isText(id)).length,0);
+  let low=0; S.pages.forEach(pg=>pg.rects.forEach(r=>{const p=S.photos.get(r.id);if(!p.kind&&effDpi(p,r)<LOWRES)low++}));
+  const c=S.cfg, inBook=S.pages.reduce((s,p)=>s+p.ids.filter(id=>!isItem(id)).length,0);
   $("#stats").innerHTML=`<span><b>${inBook}</b> photos in book</span><span><b>${d.length}</b> pages</span><span><b>${fmt(c.w)}×${fmt(c.h)}</b> mm + ${fmt(c.bleed)} bleed</span>`+
     (low?`<span class="warn"><b>${low}</b> below ${LOWRES} dpi</span>`:"")+(S.pool.length?`<span><b>${S.pool.length}</b> unused</span>`:"");
   $("#notice").hidden=!S.sample;
@@ -2218,10 +2258,10 @@ function renderBook(){
 }
 function renderSide(){
   $("#pool").innerHTML=S.pool.length?S.pool.map(id=>{const p=S.photos.get(id);
-    return p.kind==="text"?`<div class="ptx" draggable="true" data-id="${id}" title="${esc(p.text||"Text box")}">Aa</div>`:`<img src="${p.thumb}" alt="${esc(p.name)}" draggable="true" data-id="${id}" title="${esc(p.name)}"${p.rot?` style="transform:rotate(${p.rot}deg)"`:""}>`}).join(""):`<span class="empty">Nothing here</span>`;
+    return p.kind==="shape"?`<div class="ptx" draggable="true" data-id="${id}" title="Shape">◇</div>`:p.kind==="text"?`<div class="ptx" draggable="true" data-id="${id}" title="${esc(p.text||"Text box")}">Aa</div>`:`<img src="${p.thumb}" alt="${esc(p.name)}" draggable="true" data-id="${id}" title="${esc(p.name)}"${p.rot?` style="transform:rotate(${p.rot}deg)"`:""}>`}).join(""):`<span class="empty">Nothing here</span>`;
   const cp=S.cfg.coverImg&&S.photos.get(S.cfg.coverImg), th=$("#covThumb");
   th.style.backgroundImage=cp?`url("${cp.thumb}")`:"none"; th.textContent=cp?"":"None";
-  const selPhoto=S.sel&&S.photos.get(S.sel)&&!isText(S.sel);
+  const selPhoto=S.sel&&S.photos.get(S.sel)&&!isItem(S.sel);
   $("#bCoverUse").disabled=!selPhoto; $("#bCoverUse").textContent=selPhoto?"Use selected photo":"Select a photo first";
   $("#bCoverClear").disabled=!cp;
 }
@@ -2285,6 +2325,7 @@ const IC={
   move:SVG('<path d="M12 3v18M3 12h18M12 3l-3 3M12 3l3 3M12 21l-3-3M12 21l3-3M3 12l3-3M3 12l3 3M21 12l-3-3M21 12l-3 3"/>'),
   cover:SVG('<path d="M5 3h11a3 3 0 0 1 3 3v15H8a3 3 0 0 1-3-3z"/><path d="M5 18a3 3 0 0 1 3-3h11"/>'),
   prev:SVG('<path d="M15 5l-7 7 7 7"/>'), next:SVG('<path d="M9 5l7 7-7 7"/>'),
+  shape:SVG('<circle cx="8" cy="8" r="4.5"/><path d="M16.5 3.5l4.5 8h-9z"/><rect x="11" y="13.5" width="8" height="7"/>'),
   vtop:SVG('<path d="M5 4h14M12 8v12M8 12l4-4 4 4"/>'), vmid:SVG('<path d="M5 12h14M12 3v5M12 16v5M9 6l3 3 3-3M9 18l3-3 3 3"/>'), vbot:SVG('<path d="M5 20h14M12 4v12M8 12l4 4 4-4"/>')
 };
 const ib=(act,icon,label,extra="")=>`<button class="ib" type="button" data-act="${act}" title="${label}" aria-label="${label}" ${extra}>${icon}</button>`;
@@ -2295,7 +2336,10 @@ function renderInspector(){
     el.innerHTML=`<span class="chipname">${isT?"Cover title":"Cover subtitle"}<small>Double-click to type</small></span>
       ${ib("tedit",IC.edit+"<span>Edit</span>",isT?"Edit the title text":"Edit the subtitle text")}<span class="vbar"></span>
       ${[["t","vtop","Top"],["m","vmid","Middle"],["b","vbot","Bottom"]].map(([v,i,l])=>`<button class="ib" type="button" data-tpos="${v}" aria-pressed="${c.tPos[0]===v}" title="Place at the ${l.toLowerCase()} of the cover" aria-label="${l}">${IC[i]}</button>`).join("")}
-      <span class="vbar"></span>${textToolbar(S.selText)}${ib("tclose",IC.close,"Done (Esc)")}`;
+      <span class="vbar"></span>${textToolbar(S.selText)}<span class="vbar"></span>
+      <button class="ib" type="button" data-shui="cov" aria-pressed="${S.shapeOpen}" title="A shape across the whole cover">${IC.shape}<span>Cover shape</span></button>
+      <button class="ib" type="button" data-shui="hidetitle" title="Cover without a title">Hide title</button>
+      ${ib("tclose",IC.close,"Done (Esc)")}${S.shapeOpen?`<div class="row2">${shapeRowHTML("cover")}</div>`:""}`;
     return;
   }
   const id=S.sel; const p=id&&S.photos.get(id);
@@ -2311,9 +2355,17 @@ function renderInspector(){
       ${ib("edit",IC.edit,"Edit text on the page (Enter)")}
       <button class="ib" type="button" data-tset="valign" data-v="${nextV}" title="Vertical position: ${p.valign} (click to change)" aria-label="Vertical position, ${p.valign}">${IC[vi]}</button>
       <select id="tShape" title="Box shape" aria-label="Box shape">${SHAPES.map(([v,l])=>`<option value="${v}"${Math.abs(+v-p.r)<0.01?" selected":""}>${l}</option>`).join("")}</select>
+      <button class="ib" type="button" data-shui="tbg" aria-pressed="${S.shapeOpen}" title="A shape behind this text">${IC.shape}<span>Background</span></button>
       ${size}${pager}${tail}
+      ${S.shapeOpen?`<div class="row2">${shapeRowHTML("textbg:"+p.id)}</div>`:""}
       <div class="row2"><span class="note" id="tNote"></span></div>`;
     updateTextNote(); return;
+  }
+  if(p.kind==="shape"){
+    el.innerHTML=`<span class="chipname">Shape<small>${esc(patName(p.shape.pat))}</small></span>
+      ${ib("shapeedit",IC.shape+"<span>All shapes</span>","Open the Shapes panel")}${size}${pager}${tail}
+      <div class="row2">${shapeControlsHTML("item:"+p.id)}</div>`;
+    return;
   }
   let dpiTxt="sample frame";
   if(r){const d=effDpi(p,r);dpiTxt=`${fmt(r.w)}×${fmt(r.h)} mm`+(d===Infinity?" · sample":` · ${Math.round(d)} dpi`+(d<LOWRES?" ⚠":""))}
@@ -2344,6 +2396,7 @@ function positionMini(){
   const p=S.sel&&S.photos.get(S.sel);
   m.innerHTML=S.selText?ib("tedit",IC.edit,"Edit text")
     :p.kind==="text"?ib("edit",IC.edit,"Edit text")+ib("delete",IC.trash,"Delete text box")+ib("more",IC.more,"More")
+    :p.kind==="shape"?ib("shapeedit",IC.shape,"Shape settings")+ib("delete",IC.trash,"Delete shape")+ib("more",IC.more,"More")
     :ib("rotr",IC.rotr,"Rotate right")+ib(p.crop?"adjust":"free",IC.move,p.crop?"Adjust inside the mask":"Straighten / free transform")+ib("pool",IC.trash,"Remove from book")+ib("more",IC.more,"More");
   m.hidden=false;
   const w=m.offsetWidth, h=m.offsetHeight;
@@ -2448,12 +2501,12 @@ let lastTap={key:null,t:0};
 function openForEditing(key){
   if(key[0]==="@"){startTextEdit(key);return}
   const p=S.photos.get(key); if(!p) return;
-  if(p.kind==="text") startTextEdit(key); else if(p.crop) toggleCropEdit(key,true);
+  if(p.kind==="text") startTextEdit(key); else if(p.kind==="shape") doAction("shapeedit",key); else if(!p.kind&&p.crop) toggleCropEdit(key,true);
 }
 book.addEventListener("dblclick",e=>{
   const tb=e.target.closest("[data-tsel]"); if(tb&&!e.target.closest(".tpg")){startTextEdit(tb.dataset.tsel);return}
   const f=e.target.closest(".ph"); if(!f) return; const p=S.photos.get(f.dataset.id);
-  if(p.kind==="text") doAction("edit",p.id); else if(p.crop) toggleCropEdit(p.id,true);
+  if(p.kind==="text") doAction("edit",p.id); else if(!p.kind&&p.crop) toggleCropEdit(p.id,true);
 });
 /* free transform inside a mask: drag = move, corner = scale, knob = rotate */
 let PS=null;
@@ -2525,18 +2578,20 @@ document.addEventListener("keydown",e=>{
 const cmenu=$("#cmenu");
 let menuReturn=null;
 function menuHTML(id,from){
-  const p=S.photos.get(id), L=locate(id), onPage=L&&!L.pool, inPool=L&&L.pool, text=p.kind==="text";
+  const p=S.photos.get(id), L=locate(id), onPage=L&&!L.pool, inPool=L&&L.pool, text=p.kind==="text", item=!!p.kind;
   const pg=onPage&&S.pages[L.p], pinned=pg&&pg.pins[id], cr=p.crop;
   const mi=(act,label,key,arg,dis)=>`<button class="mi" role="menuitem" data-act="${act}"${arg!==undefined?` data-arg="${esc(arg)}"`:""}${dis?" disabled":""}><span>${label}</span>${key?`<kbd>${key}</kbd>`:""}</button>`;
-  const name=text?(String(p.text||"").trim().split("\n")[0].slice(0,36)||"Text box"):p.name;
+  const name=p.kind==="shape"?`Shape · ${patName(p.shape.pat)}`:text?(String(p.text||"").trim().split("\n")[0].slice(0,36)||"Text box"):p.name;
   let h=`<div class="mh" title="${esc(name)}">${esc(name)}${onPage?` · P.${String(pageNumbers().get(id)).padStart(2,"0")}`:inPool?" · unused":""}</div>`;
-  if(!text){
+  if(!item){
     h+=`<div class="crow"><span class="lbl">Rating</span><div class="chips" style="padding:0">${[1,2,3].map(w=>`<button class="chip" role="menuitemradio" aria-checked="${p.weight===w}" aria-pressed="${p.weight===w}" data-act="star" data-arg="${w}" title="Press ${w}">${"★".repeat(w)}</button>`).join("")}</div></div><hr>`;
   }
   if(onPage){
     h+=mi("grow","Bigger","+")+mi("shrink","Smaller","−")+(pinned?mi("unpin","Auto size"):"");
   }
-  if(!text){
+  if(p.kind==="shape"){
+    h+=`<hr>`+mi("shapeedit","Shape settings…");
+  } else if(!text){
     h+=`<hr>`+mi("rotl","Rotate left","Shift R")+mi("rotr","Rotate right","R");
     h+=`<hr><div class="mh">Crop shape</div><div class="chips">`+
        `<button class="chip" data-act="crop" data-arg="" aria-pressed="${!cr}">None</button>`+
@@ -2550,12 +2605,12 @@ function menuHTML(id,from){
   }
   if(onPage) h+=`<hr>`+mi("prev","Move to previous page","[")+mi("next","Move to next page","]")+mi("split","Start new page after this",null,undefined,L.k===pg.ids.length-1);
   h+=`<hr>`;
-  if(!text) h+=mi("cover","Set as cover");
+  if(!item) h+=mi("cover","Set as cover");
   if(from==="tree"&&onPage) h+=mi("showbook","Show in book");
   if(from!=="tree") h+=mi("showtree","Show in folder tree");
   if(onPage) h+=mi("pool","Remove from book","Del");
   if(inPool) h+=mi("back","Put back in book");
-  if(text) h+=mi("delete","Delete text box");
+  if(item) h+=mi("delete",text?"Delete text box":"Delete shape");
   return h;
 }
 function openMenu(id,x,y,from){
@@ -2733,6 +2788,7 @@ function doAction(act,id,arg){
     pool:()=>toPool(id), back:()=>putBack(id), delete:()=>deleteText(id),
     cover:()=>{S.cfg.coverImg=id;if(S.cfg.coverTr>=100)S.cfg.coverTr=40;S.cfg.title=true;syncForm();render();revealInBook("cover")},
     edit:()=>startTextEdit(id),
+    shapeedit:()=>{S.shapeTgt="item:"+id;setPanel("shapes");render()},
     more:()=>{const b=document.querySelector('#insp [data-act="more"]'),r=b?b.getBoundingClientRect():{left:200,bottom:120};openMenu(id,r.left,r.bottom+4,"book")},
     showbook:()=>{render();revealInBook(id)},
     showtree:()=>{const g=p.group;if(S.closed.has(g)){S.closed.delete(g);saveUI()}render();const row=document.querySelector(`#tree [data-pick="${CSS.escape(id)}"]`);row?.scrollIntoView({block:"center"});row?.focus()},
@@ -2810,7 +2866,7 @@ insp.addEventListener("change",e=>{
   if(e.target.id==="cShape"){setCrop(p.id,e.target.value||null);return}
   if(e.target.id==="cRatio"){setCropRatio(p.id,e.target.value);return}
   if(["cZoom","cTilt","cTiltNum"].includes(e.target.id)){zoomSnapFor=null;render();return}
-  if(p.kind!=="text") return;
+  if(!p.kind) return;
   if(e.target.id==="tShape"){snap();p.r=+e.target.value;const L=locate(p.id);if(L&&!L.pool){const pg=S.pages[L.p];
     const pins={...pg.pins};commitPlan(L.p,pins,planPage(pg,pins,false))}render()}
 });
@@ -2824,9 +2880,9 @@ document.addEventListener("keydown",e=>{
   const id=S.sel, p=S.photos.get(id), inPool=S.pool.includes(id), K={
     "Delete":inPool?null:"pool","Backspace":inPool?null:"pool","+":"grow","=":"grow","-":"shrink","_":"shrink",
     "r":"rotr","R":"rotl","[":"prev","]":"next","1":"star","2":"star","3":"star",
-    "Enter":p.kind==="text"?"edit":p.crop?"adjust":null};
+    "Enter":p.kind==="text"?"edit":!p.kind&&p.crop?"adjust":null};
   const act=K[e.key]; if(!act) return;
-  if((act==="rotr"||act==="rotl"||act==="star")&&p.kind==="text") return;
+  if((act==="rotr"||act==="rotl"||act==="star"||act==="adjust")&&p.kind) return;
   e.preventDefault(); doAction(act,id,act==="star"?e.key:undefined);
 });
 
@@ -2843,6 +2899,327 @@ function openTitleStyle(t){
   if(S.view==="grid") S.view=S.lastView||"spreads";
   S.cur=0; render(); revealInBook("cover");
 }
+
+/* ───── shapes ─────
+   FotoLoco's own generative patterns, drawn as vector paths in millimetres so the preview (SVG) and
+   the PDF (canvas Path2D) are the same drawing. People can also bring their own SVG shapes, for example
+   patterns they downloaded from bookofshapes.com for their own book: those stay in this browser only.
+   spec: {pat, scale (mm), weight (mm), rot (deg), seed, fg, fgA, bgOn, bg, bgA, area, fit, recolor} */
+const f2=v=>(Math.round(v*100)/100).toString();
+const circ=(x,y,r)=>`M${f2(x-r)} ${f2(y)}a${f2(r)} ${f2(r)} 0 1 0 ${f2(2*r)} 0a${f2(r)} ${f2(r)} 0 1 0 ${f2(-2*r)} 0`;
+const poly=pts=>pts.length>1?`M${f2(pts[0][0])} ${f2(pts[0][1])}`+pts.slice(1).map(p=>`L${f2(p[0])} ${f2(p[1])}`).join(""):"";
+function vnoise(seed){
+  const r=mulberry32(seed>>>0), T=new Float32Array(1024); for(let i=0;i<1024;i++) T[i]=r();
+  const h=(x,y)=>T[((x*374761393+y*668265263)>>>0)%1024], sm=t=>t*t*(3-2*t);
+  return (x,y)=>{const xi=Math.floor(x),yi=Math.floor(y),xf=sm(x-xi),yf=sm(y-yi),a=h(xi,yi),b=h(xi+1,yi),c=h(xi,yi+1),d=h(xi+1,yi+1);return a+(b-a)*xf+(c-a)*yf+(a-b-c+d)*xf*yf};
+}
+const PATTERNS=[
+  {id:"dots",name:"Dot grid",def:{scale:6,weight:.4},gen(W,H,g,w){let d="";const r=Math.max(.15,w*1.2);for(let y=g/2;y<H;y+=g)for(let x=g/2;x<W;x+=g)d+=circ(x,y,r);return [{d,fill:1}]}},
+  {id:"halftone",name:"Halftone",def:{scale:5,weight:.4},gen(W,H,g){let d="";for(let y=g/2;y<H;y+=g)for(let x=g/2;x<W;x+=g){const r=g*.5*((x/W+y/H)/2);if(r>.08)d+=circ(x,y,r)}return [{d,fill:1}]}},
+  {id:"rings",name:"Rings",def:{scale:6,weight:.35},gen(W,H,g){let d="";const R=Math.hypot(W,H)/2;for(let r=g;r<R;r+=g)d+=circ(W/2,H/2,r);return [{d}]}},
+  {id:"ripples",name:"Corner ripples",def:{scale:5,weight:.35},gen(W,H,g,w,rnd,seed){let d="";const cx=seed%2?0:W,cy=(seed>>1)%2?0:H,R=Math.hypot(W,H);for(let r=g;r<R;r+=g)d+=circ(cx,cy,r);return [{d}]}},
+  {id:"rays",name:"Rays",def:{scale:5,weight:.35},gen(W,H,g){let d="";const R=Math.hypot(W,H)/2+1,n=Math.max(12,Math.round(2*Math.PI*R/g));for(let i=0;i<n;i++){const a=i/n*2*Math.PI,c=Math.cos(a),s=Math.sin(a);d+=`M${f2(W/2+c*g*.8)} ${f2(H/2+s*g*.8)}L${f2(W/2+c*R)} ${f2(H/2+s*R)}`}return [{d}]}},
+  {id:"waves",name:"Waves",def:{scale:5,weight:.35},gen(W,H,g,w,rnd){let d="";for(let y=g/2;y<H+g;y+=g){const ph=rnd()*6.283,pts=[];for(let x=0;x<=W+.8;x+=.8)pts.push([x,y+g*.35*Math.sin(x/(g*1.6)+ph)]);d+=poly(pts)}return [{d}]}},
+  {id:"flow",name:"Flow lines",def:{scale:6,weight:.3},gen(W,H,g,w,rnd,seed){const N=vnoise(seed),sc=g*7,st=.9;let d="";
+    for(let y=0;y<H;y+=g*1.4)for(let x=0;x<W;x+=g*1.4){const sx=x+rnd()*g,sy=y+rnd()*g,pts=[];
+      for(const dir of [-1,1]){let px=sx,py=sy;const line=[];for(let i=0;i<28;i++){const a=N(px/sc,py/sc)*Math.PI*3;px+=Math.cos(a)*st*dir;py+=Math.sin(a)*st*dir;if(px<-2||py<-2||px>W+2||py>H+2)break;line.push([px,py])}
+        if(dir<0) pts.push(...line.reverse(),[sx,sy]); else pts.push(...line)}
+      d+=poly(pts)}return [{d}]}},
+  {id:"arcs",name:"Arc tiles",def:{scale:10,weight:.5},gen(W,H,g,w,rnd){let d="";const r=g/2;for(let y=0;y<H;y+=g)for(let x=0;x<W;x+=g){
+      if(rnd()<.5) d+=`M${f2(x+r)} ${f2(y)}A${f2(r)} ${f2(r)} 0 0 1 ${f2(x)} ${f2(y+r)}M${f2(x+g-r)} ${f2(y+g)}A${f2(r)} ${f2(r)} 0 0 1 ${f2(x+g)} ${f2(y+g-r)}`;
+      else d+=`M${f2(x+g-r)} ${f2(y)}A${f2(r)} ${f2(r)} 0 0 0 ${f2(x+g)} ${f2(y+r)}M${f2(x+r)} ${f2(y+g)}A${f2(r)} ${f2(r)} 0 0 0 ${f2(x)} ${f2(y+g-r)}`}return [{d}]}},
+  {id:"iso",name:"Iso cubes",def:{scale:9,weight:.35},gen(W,H,a){let d="";const dx=a*Math.sqrt(3),dy=a*1.5;
+    for(let row=0,y=0;y<H+a;y+=dy,row++)for(let x=(row%2?dx/2:0);x<W+a;x+=dx){const v=[...Array(6)].map((_,i)=>[x+a*Math.cos((30+60*i)*Math.PI/180),y+a*Math.sin((30+60*i)*Math.PI/180)]);
+      d+=poly([...v,v[0]]);for(const i of [1,3,5])d+=`M${f2(x)} ${f2(y)}L${f2(v[i][0])} ${f2(v[i][1])}`}return [{d}]}},
+  {id:"hatch",name:"Hatch",def:{scale:4,weight:.3},gen(W,H,g){let d="";const st=g*Math.SQRT2;for(let c=-H;c<W;c+=st)d+=`M${f2(c)} 0L${f2(c+H)} ${f2(H)}`;return [{d}]}},
+  {id:"crosses",name:"Crosses",def:{scale:8,weight:.4},gen(W,H,g){let d="";const a=g*.18;for(let y=g/2;y<H;y+=g)for(let x=g/2;x<W;x+=g)d+=`M${f2(x-a)} ${f2(y)}h${f2(2*a)}M${f2(x)} ${f2(y-a)}v${f2(2*a)}`;return [{d}]}},
+  {id:"spiral",name:"Spiral",def:{scale:4,weight:.35},gen(W,H,g){const R=Math.hypot(W,H)/2,b=g/(2*Math.PI),pts=[];let t=0;while(b*t<R){pts.push([W/2+b*t*Math.cos(t),H/2+b*t*Math.sin(t)]);t+=1/Math.max(b*t,1)}return [{d:poly(pts)}]}},
+  {id:"sunflower",name:"Seed head",def:{scale:4,weight:.4},gen(W,H,g,w){let d="";const R=Math.hypot(W,H)/2,c=g*.6,ga=137.508*Math.PI/180;for(let i=1;;i++){const r=c*Math.sqrt(i);if(r>R)break;const a=i*ga;d+=circ(W/2+r*Math.cos(a),H/2+r*Math.sin(a),Math.max(.15,w*1.2+g*.12*(r/R)))}return [{d,fill:1}]}},
+  {id:"moire",name:"Moiré",def:{scale:3,weight:.25},gen(W,H,g){let d="";const R=Math.hypot(W,H);for(const ox of [-g*1.2,g*1.2])for(let r=g;r<R;r+=g)d+=circ(W/2+ox,H/2,r);return [{d}]}},
+  {id:"blocks",name:"Blocks",def:{scale:14,weight:.5},gen(W,H,g,w,rnd){let d="";const split=(x,y,ww,hh,dep)=>{
+      if((ww<g*2&&hh<g*2)||dep>6||(dep>2&&rnd()<.25)){d+=`M${f2(x)} ${f2(y)}h${f2(ww)}v${f2(hh)}h${f2(-ww)}Z`;return}
+      const t=.3+rnd()*.4; if(ww>=hh){split(x,y,ww*t,hh,dep+1);split(x+ww*t,y,ww*(1-t),hh,dep+1)} else {split(x,y,ww,hh*t,dep+1);split(x,y+hh*t,ww,hh*(1-t),dep+1)}};
+    split(0,0,W,H,0);return [{d}]}}
+];
+const PAT=Object.fromEntries(PATTERNS.map(p=>[p.id,p]));
+const isUserPat=id=>String(id||"").startsWith("u:");
+const patName=id=>isUserPat(id)?(S.userShapes[id]?.name||"Your shape"):(PAT[id]?.name||"Shape");
+function newShapeSpec(pat,base={}){
+  const d=PAT[pat]?.def||{scale:8,weight:.4};
+  return {fg:"#111111",fgA:1,bgOn:false,bg:"#f1efe8",bgA:1,area:"bleed",fit:"cover",recolor:true,rot:0,seed:1,...base,pat,scale:d.scale,weight:d.weight};
+}
+const genCache=new Map();
+function genShape(spec,W,H){
+  const rot=+spec.rot||0, D=rot?Math.hypot(W,H)+2:0, GW=rot?D:W, GH=rot?D:H;
+  const key=[spec.pat,spec.scale,spec.weight,spec.seed,f2(GW),f2(GH)].join("|");
+  let parts=genCache.get(key);
+  if(!parts){const P=PAT[spec.pat]||PAT.dots;parts=P.gen(GW,GH,Math.max(1.5,+spec.scale||6),Math.max(.05,+spec.weight||.3),mulberry32((spec.seed||1)*7919),spec.seed||1);
+    genCache.set(key,parts); if(genCache.size>160) genCache.delete(genCache.keys().next().value)}
+  return {parts,rot,D,tx:rot?(W-D)/2:0,ty:rot?(H-D)/2:0};
+}
+/* ---- your own SVG shapes ---- */
+function sanitizeSVG(text){
+  let doc; try{doc=new DOMParser().parseFromString(text,"image/svg+xml")}catch(e){return null}
+  const svg=doc.documentElement; if(!svg||svg.nodeName.toLowerCase()!=="svg"||doc.getElementsByTagName("parsererror").length) return null;
+  for(const n of [...svg.querySelectorAll("script,foreignObject,iframe,object,embed,audio,video")]) n.remove();
+  for(const el of [svg,...svg.querySelectorAll("*")]) for(const a of [...el.attributes]){
+    const nm=a.name.toLowerCase(), v=a.value.trim();
+    if(nm.startsWith("on")) el.removeAttribute(a.name);
+    else if((nm==="href"||nm==="xlink:href")&&!/^#|^data:image\/(png|jpe?g|gif|webp);/i.test(v)) el.removeAttribute(a.name);
+  }
+  let vb=(svg.getAttribute("viewBox")||"").split(/[\s,]+/).map(Number);
+  if(vb.length!==4||vb.some(v=>!isFinite(v))||vb[2]<=0||vb[3]<=0){const w=parseFloat(svg.getAttribute("width"))||100,h=parseFloat(svg.getAttribute("height"))||100;vb=[0,0,w,h];svg.setAttribute("viewBox",vb.join(" "))}
+  return {xml:new XMLSerializer().serializeToString(svg),vb};
+}
+const urlCache=new Map();
+function userShapeURL(spec,pxW,pxH){
+  const u=S.userShapes[spec.pat]; if(!u) return "";
+  const key=[spec.pat,spec.fg,spec.recolor,pxW||"",pxH||""].join("|"); if(urlCache.has(key)) return urlCache.get(key);
+  const doc=new DOMParser().parseFromString(u.xml,"image/svg+xml"), svg=doc.documentElement;
+  if(spec.recolor!==false){
+    const fg=spec.fg, keep=v=>/^(none|transparent)$/i.test(v)||/^url\(/i.test(v);
+    for(const el of [svg,...svg.querySelectorAll("*")]){
+      for(const prop of ["fill","stroke","stop-color","color"]){const v=el.getAttribute(prop);if(v&&!keep(v))el.setAttribute(prop,fg)}
+      const st=el.getAttribute("style"); if(st) el.setAttribute("style",st.replace(/(fill|stroke|stop-color|color)\s*:\s*([^;]+)/gi,(m,p,v)=>keep(v.trim())?m:`${p}:${fg}`));
+      if(el.nodeName.toLowerCase()==="style") el.textContent=el.textContent.replace(/#[0-9a-f]{3,8}\b|rgba?\([^)]*\)/gi,fg);
+    }
+    if(!svg.getAttribute("fill")) svg.setAttribute("fill",fg);
+    svg.setAttribute("color",fg);
+  }
+  if(pxW){svg.setAttribute("width",Math.round(pxW));svg.setAttribute("height",Math.round(pxH));svg.setAttribute("preserveAspectRatio","none")}
+  const url="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(new XMLSerializer().serializeToString(svg));
+  urlCache.set(key,url); if(urlCache.size>120) urlCache.delete(urlCache.keys().next().value);
+  return url;
+}
+/* placement of a user shape (vb aspect) inside a W×H box */
+function userFit(spec,W,H){
+  const u=S.userShapes[spec.pat], ar=u?u.vb[2]/u.vb[3]:1, rot=+spec.rot||0, D=rot?Math.hypot(W,H):0, BW=rot?D:W, BH=rot?D:H;
+  const cover=spec.fit!=="contain", s=cover?Math.max(BW/ar,BH)/BH:Math.min(BW/ar,BH)/BH;
+  const h=BH*s, w=h*ar; return {x:(W-w)/2,y:(H-h)/2,w,h,rot};
+}
+/* ---- drawing: SVG markup for the page preview ---- */
+function shapeSVG(spec,W,H){
+  if(!spec) return "";
+  const bg=spec.bgOn?`<rect width="${f2(W)}" height="${f2(H)}" fill="${spec.bg}" fill-opacity="${spec.bgA}"/>`:"";
+  let body="";
+  if(isUserPat(spec.pat)){
+    const F=userFit(spec,W,H), url=userShapeURL(spec);
+    if(url) body=`<image href="${url}" x="${f2(F.x)}" y="${f2(F.y)}" width="${f2(F.w)}" height="${f2(F.h)}" preserveAspectRatio="none" opacity="${spec.fgA}"${F.rot?` transform="rotate(${F.rot} ${f2(W/2)} ${f2(H/2)})"`:""}/>`;
+  } else {
+    const G=genShape(spec,W,H), tf=G.rot?` transform="translate(${f2(G.tx)} ${f2(G.ty)}) rotate(${G.rot} ${f2(G.D/2)} ${f2(G.D/2)})"`:"";
+    body=`<g${tf} fill="none" stroke="${spec.fg}" stroke-opacity="${spec.fgA}" stroke-width="${f2(spec.weight)}" stroke-linecap="round" stroke-linejoin="round">`+
+      G.parts.map(p=>p.fill?`<path d="${p.d}" fill="${spec.fg}" fill-opacity="${spec.fgA}" stroke="none"/>`:`<path d="${p.d}"/>`).join("")+`</g>`;
+  }
+  return `<svg class="shp" viewBox="0 0 ${f2(W)} ${f2(H)}" preserveAspectRatio="none" aria-hidden="true">${bg}${body}</svg>`;
+}
+/* a shape laid on the page at x,y (mm, page coordinates) */
+const shapeBoxHTML=(spec,x,y,w,h,cls="")=>spec?`<div class="shbox ${cls}" style="left:${pct(x,S.cfg.w)};top:${pct(y,S.cfg.h)};width:${pct(w,S.cfg.w)};height:${pct(h,S.cfg.h)}">${shapeSVG(spec,w,h)}</div>`:"";
+/* a page background spans both halves of a spread; "margins" keeps it inside the type area */
+const pageShapeRect=(spec,two)=>{const c=S.cfg,b=c.bleed,m=c.margin,PW=two?2*c.w:c.w;return spec.area==="margins"?{x:m,y:m,w:PW-2*m,h:c.h-2*m}:{x:-b,y:-b,w:PW+2*b,h:c.h+2*b}};
+const pageShapeHTML=(spec,item)=>{const R=pageShapeRect(spec,!!item.half),sx=item.half==="R"?S.cfg.w:0;return shapeBoxHTML(spec,R.x-sx,R.y,R.w,R.h,"pgsh")};
+const coverShapeHTML=()=>{const sp=S.cfg.coverShape;if(!sp)return "";const R=pageShapeRect(sp,false);return shapeBoxHTML(sp,R.x,R.y,R.w,R.h,"covsh")};
+/* ---- drawing: canvas for the PDF. X,Y in px; W,H in mm; k = px per mm ---- */
+const imgCache=new Map();
+function loadImg(url){if(imgCache.has(url))return imgCache.get(url);const pr=new Promise((ok,no)=>{const im=new Image();im.onload=()=>ok(im);im.onerror=no;im.src=url});imgCache.set(url,pr);return pr}
+async function drawShape(cx,spec,X,Y,W,H,k){
+  if(!spec) return;
+  cx.save(); cx.beginPath(); cx.rect(X,Y,W*k,H*k); cx.clip();
+  if(spec.bgOn){cx.globalAlpha=+spec.bgA;cx.fillStyle=spec.bg;cx.fillRect(X,Y,W*k,H*k);cx.globalAlpha=1}
+  if(isUserPat(spec.pat)){
+    const F=userFit(spec,W,H), url=userShapeURL(spec,F.w*k,F.h*k);
+    if(url){try{const im=await loadImg(url);cx.globalAlpha=+spec.fgA;
+      if(F.rot){cx.translate(X+W*k/2,Y+H*k/2);cx.rotate(F.rot*Math.PI/180);cx.translate(-(X+W*k/2),-(Y+H*k/2))}
+      cx.drawImage(im,X+F.x*k,Y+F.y*k,F.w*k,F.h*k)}catch(e){}}
+  } else {
+    const G=genShape(spec,W,H);
+    cx.translate(X,Y); cx.scale(k,k);
+    if(G.rot){cx.translate(G.tx,G.ty);cx.translate(G.D/2,G.D/2);cx.rotate(G.rot*Math.PI/180);cx.translate(-G.D/2,-G.D/2)}
+    cx.globalAlpha=+spec.fgA; cx.fillStyle=spec.fg; cx.strokeStyle=spec.fg; cx.lineWidth=+spec.weight; cx.lineCap="round"; cx.lineJoin="round";
+    for(const p of G.parts){const P=new Path2D(p.d); p.fill?cx.fill(P):cx.stroke(P)}
+  }
+  cx.restore();
+}
+
+/* ---- where shapes live: item:<id> (in the grid), textbg:<id>, page:<index>, cover ---- */
+function getSpec(tgt){
+  if(!tgt) return null; const [k,v]=tgt.split(/:(.*)/s);
+  if(k==="item") return S.photos.get(v)?.shape||null;
+  if(k==="textbg") return S.photos.get(v)?.bgShape||null;
+  if(k==="page") return S.pages[+v]?.bgShape||null;
+  if(k==="cover") return S.cfg.coverShape||null;
+  return null;
+}
+function setSpec(tgt,spec){
+  const [k,v]=tgt.split(/:(.*)/s);
+  if(k==="textbg"){const p=S.photos.get(v);if(p)p.bgShape=spec}
+  else if(k==="page"){const pg=S.pages[+v];if(pg)pg.bgShape=spec}
+  else if(k==="cover") S.cfg.coverShape=spec;
+}
+const tgtLabel=tgt=>{const k=tgt.split(":")[0];if(k==="item")return "Shape in the grid";if(k==="textbg")return "Behind the text box";if(k==="cover")return "Across the cover";
+  const pi=+tgt.split(":")[1],n=displayPages().find(d=>d.i===pi)?.n;return `Behind page ${n||pi+1}`};
+const snapFor=tgt=>tgt==="cover"?snap(true):snap();
+const DEF_FOR={item:{fgA:1},textbg:{fgA:.22,bgOn:true,bg:"#f1efe8",bgA:.6},page:{fgA:.3},cover:{fgA:.55}};
+function makeSpec(tgt,pat){
+  const kind=tgt.split(":")[0], base={...DEF_FOR[kind]};
+  if(kind==="cover"&&!S.cfg.coverImg){base.fg=inkFor(S.cfg.coverColor)}
+  return newShapeSpec(pat,base);
+}
+function changePat(sp,pat){const d=PAT[pat]?.def;sp.pat=pat;if(d){sp.scale=d.scale;sp.weight=d.weight}}
+function curPageIdx(){
+  if(S.selPage!=null&&S.pages[S.selPage]) return S.selPage;
+  const L=S.sel&&locate(S.sel); if(L&&!L.pool) return L.p;
+  const it=displayPages()[S.cur]; return it&&it.type==="photo"?it.i:S.pages.length?0:-1;
+}
+function curShapeTgt(){
+  if(S.sel&&S.photos.get(S.sel)?.kind==="shape") return "item:"+S.sel;
+  if(S.shapeTgt&&getSpec(S.shapeTgt)) return S.shapeTgt;
+  if(S.sel&&isText(S.sel)&&S.photos.get(S.sel).bgShape) return "textbg:"+S.sel;
+  if(S.selPage!=null&&S.pages[S.selPage]?.bgShape) return "page:"+S.selPage;
+  return null;
+}
+function addShape(pi,pat){
+  if(pi==null||!S.pages[pi]) pi=curPageIdx();
+  if(pi<0) return;
+  snap(); const pg=S.pages[pi], id="s"+(++uid);
+  let k=pg.ids.length; const L=S.sel&&locate(S.sel); if(L&&L.p===pi) k=L.k+1;
+  const prev=k>0?S.photos.get(pg.ids[k-1]):S.photos.get(pg.ids[0]);
+  S.photos.set(id,{id,kind:"shape",name:"Shape",group:prev?prev.group:"",r:1,weight:1,shape:makeSpec("item",pat||S.shapePick)});
+  if(pg.style&&pg.style!=="auto"&&!NOPHOTO.has(pg.style)) pg.style="auto";
+  pg.ids.splice(k,0,id); relayout(pg); S.sel=id; S.selText=null; S.selPage=null; S.shapeTgt="item:"+id;
+  render(); revealInBook(id);
+}
+function putShape(where){
+  const pat=S.shapePick||"dots";
+  if(where==="item") return addShape(null,pat);
+  if(where==="cover"){snap(true);S.cfg.title=true;S.cfg.coverShape=makeSpec("cover",pat);S.shapeTgt="cover";syncForm();render();revealInBook("cover");return}
+  if(where==="page"){const pi=curPageIdx();if(pi<0)return;snap();S.pages[pi].bgShape=makeSpec("page",pat);S.shapeTgt="page:"+pi;render();return}
+  if(where==="textbg"){const id=S.sel&&isText(S.sel)?S.sel:null;if(!id){S.shapeMsg="Select a text box first, then put the shape behind it.";renderShapes();return}
+    snap();S.photos.get(id).bgShape=makeSpec("textbg",pat);S.shapeTgt="textbg:"+id;render()}
+}
+function setItemRatio(id,r){const p=S.photos.get(id);if(!p)return;p.r=r;const L=locate(id);if(L&&!L.pool){const pg=S.pages[L.p],pins={...pg.pins};commitPlan(L.p,pins,planPage(pg,pins,false))}}
+function patOptions(cur){
+  const mine=Object.entries(S.userShapes);
+  return `<optgroup label="FotoLoco patterns">${PATTERNS.map(P=>`<option value="${P.id}"${P.id===cur?" selected":""}>${P.name}</option>`).join("")}</optgroup>`+
+    (mine.length?`<optgroup label="Your shapes">${mine.map(([id,u])=>`<option value="${id}"${id===cur?" selected":""}>${esc(u.name)}</option>`).join("")}</optgroup>`:"");
+}
+const RATIOS=[["1","Square"],["1.5","Landscape 3:2"],["0.6667","Portrait 2:3"],["2","Wide 2:1"],["0.5","Tall 1:2"],["3","Strip 3:1"]];
+function shapeControlsHTML(tgt){
+  const sp=getSpec(tgt); if(!sp) return "";
+  const kind=tgt.split(":")[0], user=isUserPat(sp.pat), P=v=>Math.round(v*100), dis=sp.bgOn?"":" disabled";
+  const rng=(k,lbl,min,max,step,val,out,title)=>`<label class="shl" title="${title}">${lbl} <input type="range" data-sh="${k}" min="${min}" max="${max}" step="${step}" value="${val}" aria-label="${title}"${k==="bgA"?dis:""}><output>${out}</output></label>`;
+  let h=`<span class="shc" data-tgt="${esc(tgt)}">
+    <select data-sh="pat" aria-label="Pattern" title="Pattern">${patOptions(sp.pat)}</select>
+    <label class="shl" title="Shape colour">Shape <input type="color" data-sh="fg" value="${sp.fg}" aria-label="Shape colour"></label>
+    ${rng("fgA","",0,100,1,P(sp.fgA),P(sp.fgA)+"%","Shape opacity")}
+    <label class="shl" title="Fill the background behind the shape"><input type="checkbox" data-sh="bgOn"${sp.bgOn?" checked":""}> Background</label>
+    <input type="color" data-sh="bg" value="${sp.bg}" aria-label="Background colour" title="Background colour"${dis}>
+    ${rng("bgA","",0,100,1,P(sp.bgA),P(sp.bgA)+"%","Background opacity")}`;
+  if(!user) h+=rng("scale","Size",1.5,40,.5,sp.scale,fmt(sp.scale)+" mm","Pattern size")+rng("weight","Line",.05,3,.05,sp.weight,(+sp.weight).toFixed(2),"Line weight");
+  h+=rng("rot","Turn",-90,90,1,sp.rot||0,(sp.rot||0)+"°","Rotate the pattern");
+  if(!user) h+=`<button class="btn small" type="button" data-shbtn="seed" title="A new variation of this pattern">Shuffle</button>`;
+  if(user) h+=`<select data-sh="fit" aria-label="Fit"><option value="cover"${sp.fit!=="contain"?" selected":""}>Fill the area</option><option value="contain"${sp.fit==="contain"?" selected":""}>Fit inside</option></select>
+    <label class="shl"><input type="checkbox" data-sh="recolor"${sp.recolor!==false?" checked":""}> Use shape colour</label>`;
+  if(kind==="page"||kind==="cover") h+=`<select data-sh="area" aria-label="Area"><option value="bleed"${sp.area!=="margins"?" selected":""}>Whole page to bleed</option><option value="margins"${sp.area==="margins"?" selected":""}>Inside the margins</option></select>`;
+  if(kind==="item"){const p=S.photos.get(tgt.slice(5));h+=`<select data-sh="r" aria-label="Frame shape" title="Frame shape">${RATIOS.map(([v,l])=>`<option value="${v}"${Math.abs(+v-p.r)<0.01?" selected":""}>${l}</option>`).join("")}</select>`}
+  return h+`<button class="btn small" type="button" data-shbtn="remove">${kind==="item"?"Delete shape":"Remove"}</button></span>`;
+}
+/* in a toolbar: the controls, or a picker to add one */
+const shapeRowHTML=tgt=>getSpec(tgt)?shapeControlsHTML(tgt):`<span class="shc" data-tgt="${esc(tgt)}"><select data-shadd="1" aria-label="Add a shape"><option value="">Add a shape…</option>${patOptions("")}</select></span>`;
+function renderShapes(){
+  const el=$("#shBody"); if(!el) return;
+  const tgt=curShapeTgt(), cur=tgt?getSpec(tgt).pat:S.shapePick;
+  const tile=(id,name,spec,del)=>`<button type="button" class="shtile" data-pick="${esc(id)}" aria-pressed="${cur===id}" title="${esc(name)}">${shapeSVG(spec,30,30)}<span>${esc(name)}</span>${del?`<i class="udel" data-udel="${esc(id)}" role="button" aria-label="Remove ${esc(name)}" title="Remove from this browser">×</i>`:""}</button>`;
+  const mine=Object.entries(S.userShapes);
+  const tl=S.sel&&isText(S.sel);
+  el.innerHTML=`
+    ${tgt?`<div class="shedit"><h4>${tgtLabel(tgt)}</h4>${shapeControlsHTML(tgt)}</div>`:""}
+    <h3 class="fh">Put ${esc(patName(S.shapePick))}</h3>
+    <div class="shput">
+      <button class="btn solid" type="button" data-shput="item" title="A shape that sits in the photo grid like a text box">Add to page</button>
+      <button class="btn" type="button" data-shput="page" title="Behind every photo on the page you're viewing">Behind this page</button>
+      <button class="btn" type="button" data-shput="cover" title="Across the whole cover">On the cover</button>
+      <button class="btn" type="button" data-shput="textbg"${tl?"":" disabled"} title="${tl?"Behind the selected text box":"Select a text box first"}">Behind text box</button>
+    </div>
+    ${S.shapeMsg?`<p class="hint" role="status">${esc(S.shapeMsg)}</p>`:""}
+    <h3 class="fh">FotoLoco patterns</h3>
+    <div class="shgal">${PATTERNS.map(P=>tile(P.id,P.name,newShapeSpec(P.id,{scale:P.def.scale*.6,weight:P.def.weight*.9}))).join("")}</div>
+    <h3 class="fh">Your shapes</h3>
+    ${mine.length?`<div class="shgal">${mine.map(([id,u])=>tile(id,u.name,{...newShapeSpec(id),pat:id},true)).join("")}</div>`:""}
+    <button class="btn" type="button" id="bShapeUp">Upload SVG shapes</button>
+    <p class="hint" style="margin-top:8px">Bring your own SVG patterns, for example ones you downloaded from Book of Shapes for your own book. They stay in this browser and take on the shape colour you pick (turn off <i>Use shape colour</i> to keep their own). Use them under their own licence. You can also drop .svg files anywhere on the window.</p>
+    <h3 class="fh">Cover</h3>
+    <label class="check"><input type="checkbox" class="showTitleChk"${S.cfg.showTitle!==false?" checked":""}> Show the title and subtitle</label>
+    <p class="hint">Click a pattern, then put it somewhere. With something selected, clicking a pattern changes it.</p>`;
+}
+const SHAPES_KEY="fotoloco.shapes.v1";
+function saveUserShapes(){try{localStorage.setItem(SHAPES_KEY,JSON.stringify(S.userShapes))}catch(e){S.shapeMsg="Your shapes work now but are too big to remember in this browser."}}
+function loadUserShapes(){try{const o=JSON.parse(localStorage.getItem(SHAPES_KEY)||"null");if(o&&typeof o==="object")for(const [id,u] of Object.entries(o))if(isUserPat(id)&&u&&u.xml&&Array.isArray(u.vb)){const c=sanitizeSVG(u.xml);if(c)S.userShapes[id]={name:String(u.name||"Shape").slice(0,60),...c}}}catch(e){}}
+async function addUserShapes(files){
+  let ok=0,bad=0,last=null;
+  for(const f of files){
+    if(f.size>3e6){bad++;continue}
+    const c=sanitizeSVG(await f.text()); if(!c){bad++;continue}
+    const id="u:"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+    S.userShapes[id]={name:f.name.replace(/\.svg$/i,"").replace(/[_-]+/g," ").slice(0,60)||"Shape",...c}; ok++; last=id;
+  }
+  S.shapeMsg=(ok?`Added ${ok} shape${ok===1?"":"s"}.`:"")+(bad?` ${bad} file${bad===1?" wasn't":"s weren't"} a usable SVG (3 MB at most).`:"");
+  if(last) S.shapePick=last;
+  saveUserShapes(); if(S.panel!=="shapes") setPanel("shapes"); render();
+}
+function removeUserShape(id){
+  const used=[...S.photos.values()].some(p=>p.shape?.pat===id||p.bgShape?.pat===id)||S.pages.some(pg=>pg.bgShape?.pat===id)||S.cfg.coverShape?.pat===id;
+  if(used){S.shapeMsg="That shape is still used in the book. Remove it from the book first.";renderShapes();return}
+  delete S.userShapes[id]; if(S.shapePick===id) S.shapePick="dots"; S.shapeMsg=""; saveUserShapes(); render();
+}
+/* one handler for every shape control: toolbars and the panel */
+let shSnapKey=null;
+function applySh(el,final){
+  const host=el.closest("[data-tgt]"); if(!host) return; const tgt=host.dataset.tgt;
+  if(el.dataset.shadd!==undefined){if(!final||!el.value)return;snapFor(tgt);
+    if(tgt.startsWith("textbg:")) S.photos.get(tgt.slice(7)).bgShape=makeSpec(tgt,el.value); else setSpec(tgt,makeSpec(tgt,el.value));
+    S.shapeTgt=tgt; S.shapePick=el.value; if(tgt==="cover"){S.cfg.title=true;syncForm()} render(); return}
+  const sp=getSpec(tgt); if(!sp) return; const k=el.dataset.sh;
+  if((k==="pat"||k==="r"||k==="area"||k==="fit")&&!final) return;
+  if(shSnapKey!==tgt+k){snapFor(tgt);shSnapKey=tgt+k}
+  const v=el.type==="checkbox"?el.checked:el.value;
+  if(k==="pat"){changePat(sp,v);S.shapePick=v}
+  else if(k==="r") setItemRatio(tgt.slice(5),+v);
+  else if(k==="fgA"||k==="bgA") sp[k]=+v/100;
+  else if(k==="scale"||k==="weight"||k==="rot") sp[k]=+v;
+  else sp[k]=v;
+  const o=el.nextElementSibling;
+  if(o&&o.tagName==="OUTPUT") o.textContent=k==="scale"?fmt(+v)+" mm":k==="weight"?(+v).toFixed(2):k==="rot"?v+"°":v+"%";
+  if(final){shSnapKey=null;render()} else {renderBook();scheduleStrip()}
+}
+document.addEventListener("input",e=>{const el=e.target.closest?.("[data-sh],[data-shadd]");if(el)applySh(el,false)});
+document.addEventListener("change",e=>{
+  const el=e.target.closest?.("[data-sh],[data-shadd]"); if(el){applySh(el,true);return}
+  if(e.target.classList?.contains("showTitleChk")){snap(true);S.cfg.showTitle=e.target.checked;if(!S.cfg.showTitle){S.selText=null;S.textEdit=null}syncForm();render()}
+});
+document.addEventListener("click",e=>{
+  const b=e.target.closest?.("[data-shbtn],[data-shui],[data-pick],[data-shput],[data-udel],#bShapeUp"); if(!b) return;
+  if(b.dataset.udel){e.stopPropagation();removeUserShape(b.dataset.udel);return}
+  if(b.id==="bShapeUp"){$("#fShape").click();return}
+  if(b.dataset.shput){S.shapeMsg="";putShape(b.dataset.shput);return}
+  if(b.dataset.pick){
+    const id=b.dataset.pick, tgt=curShapeTgt(); S.shapePick=id; S.shapeMsg="";
+    if(tgt){const sp=getSpec(tgt);if(sp.pat!==id){snapFor(tgt);changePat(sp,id)}}
+    render(); return;
+  }
+  if(b.dataset.shui){
+    const u=b.dataset.shui;
+    if(u==="hidetitle"){snap(true);S.cfg.showTitle=false;S.selText=null;S.textEdit=null;syncForm();render();return}
+    S.shapeOpen=!S.shapeOpen; renderInspector(); return;
+  }
+  const tgt=b.closest("[data-tgt]")?.dataset.tgt; if(!tgt) return;
+  if(b.dataset.shbtn==="seed"){const sp=getSpec(tgt);if(!sp)return;snapFor(tgt);sp.seed=((sp.seed||1)%997)+1+Math.floor(Math.random()*50);render();return}
+  if(b.dataset.shbtn==="remove"){
+    if(tgt.startsWith("item:")){deleteText(tgt.slice(5));return}
+    snapFor(tgt); setSpec(tgt,null); if(S.shapeTgt===tgt) S.shapeTgt=null; render();
+  }
+});
+$("#fShape").addEventListener("change",e=>{const f=[...e.target.files];e.target.value="";if(f.length)addUserShapes(f)});
+loadUserShapes();
 
 /* ───── templates ─────
    Walk photobook — after "Pune" by Sharvil Survase: square book, white pages, one photo per page,
@@ -2869,7 +3246,7 @@ const TEMPLATES={
 function units(){
   const out=[]; let lead=[];
   for(const id of sequence()){const p=S.photos.get(id);
-    if(p.kind==="text"){if(out.length) out[out.length-1].texts.push(id); else lead.push(id)}
+    if(p.kind){if(out.length) out[out.length-1].texts.push(id); else lead.push(id)}
     else out.push({id,p,texts:[]})}
   if(out.length&&lead.length) out[0].texts.unshift(...lead);
   return out;
@@ -2963,7 +3340,7 @@ function setPageStyle(pi,style){
   const photos=pg.ids, extra=[];
   if(NOPHOTO.has(style)){ if(photos.length) extra.push(...photos); pg.ids=[] }
   else if(SINGLE.has(style)){
-    const first=photos.findIndex(id=>!isText(id)); if(first<0) return;
+    const first=photos.findIndex(id=>!isItem(id)); if(first<0) return;
     pg.ids=[photos[first]]; extra.push(...photos.filter((_,i)=>i!==first));
   }
   pg.style=style;
@@ -2979,7 +3356,7 @@ function insertPage(pi,style){
 }
 function deletePage(pi){const pg=S.pages[pi];if(!pg||pg.ids.length)return;snap();S.pages.splice(pi,1);S.selPage=null;render()}
 function pageToolbarHTML(pi){
-  const pg=S.pages[pi], st=pg.style||"auto", nPhotos=pg.ids.filter(id=>!isText(id)).length, n=displayPages().find(d=>d.i===pi)?.n||"";
+  const pg=S.pages[pi], st=pg.style||"auto", nPhotos=pg.ids.filter(id=>!isItem(id)).length, n=displayPages().find(d=>d.i===pi)?.n||"";
   const opts=PAGE_STYLES.map(([v,l])=>`<option value="${v}"${v===st?" selected":""}${SINGLE.has(v)&&!nPhotos?" disabled":""}>${l}</option>`).join("");
   let h=`<span class="chipname">Page ${n}<small>${nPhotos} photo${nPhotos===1?"":"s"}</small></span><span class="vbar"></span>
     <span class="lbl">Style</span><select id="pgStyle" aria-label="Page style">${opts}</select>`;
@@ -2989,8 +3366,9 @@ function pageToolbarHTML(pi){
   if(st==="poem") h+=`<span class="vbar"></span><input id="pgText" class="pgin wide" type="text" dir="auto" maxlength="200" value="${esc(pg.text||"")}" placeholder="A line of your poem" aria-label="Poem line">`;
   if(st==="inset") h+=`<span class="vbar"></span><span class="lbl">Size</span><input id="pgInset" type="range" min="30" max="100" value="${Math.round((pg.inset||.8)*100)}" aria-label="Photo size on the page">`;
   h+=`<span class="vbar"></span><select id="pgInsert" aria-label="Insert a page after this one"><option value="">Insert after…</option><option value="chapter">Chapter page</option><option value="poem">Poem page</option><option value="blank">Blank page</option></select>`;
+  h+=`<span class="vbar"></span><button class="ib" type="button" data-shui="pg" aria-pressed="${S.shapeOpen}" title="A shape behind this page's photos">${IC.shape}<span>Background</span></button>`;
   if(!pg.ids.length) h+=`<button class="ib" type="button" data-pact="delpage" title="Delete this page">${IC.trash}</button>`;
-  return h+`<button class="ib" type="button" data-pact="close" title="Done (Esc)" aria-label="Done">${IC.close}</button>`;
+  return h+`<button class="ib" type="button" data-pact="close" title="Done (Esc)" aria-label="Done">${IC.close}</button>`+(S.shapeOpen?`<div class="row2">${shapeRowHTML("page:"+pi)}</div>`:"");
 }
 const insp2=$("#insp");
 insp2.addEventListener("change",e=>{
@@ -3177,6 +3555,7 @@ function setPanel(k){
   const h=$("#flyToggle"); h.textContent=k?"‹":"›"; h.setAttribute("aria-label",k?"Hide panel":"Show panel"); h.title=k?"Hide panel":"Show panel";
   if(k==="print") renderPrint();
   if(k==="templates") renderTemplates();
+  if(k==="shapes") renderShapes();
   saveUI(); requestAnimationFrame(()=>{applyZoom();scheduleMini()});
 }
 let lastPanel="photos";
@@ -3220,7 +3599,7 @@ function loadUI(){
   if(!o) return;
   if(o.secs) document.querySelectorAll("details.sec").forEach(d=>{if(d.dataset.sec in o.secs) d.open=!!o.secs[d.dataset.sec]});
   if(Array.isArray(o.closed)) S.closed=new Set(o.closed);
-  if(o.panel===null||["templates","photos","text","cover","layout","format","print"].includes(o.panel)) S.panel=o.panel;
+  if(o.panel===null||["templates","photos","text","shapes","cover","layout","format","print"].includes(o.panel)) S.panel=o.panel;
   if(["spreads","page","grid"].includes(o.view)) S.view=o.view;
   if(["spreads","page"].includes(o.lastView)) S.lastView=o.lastView;
   if(o.zoom>=25&&o.zoom<=300) S.zoom=o.zoom;
@@ -3241,6 +3620,7 @@ function syncForm(){
   $("#tScale").value=c.tScale; $("#tScaleOut").textContent=c.tScale+"%";
   $("#covTr").value=c.coverTr; $("#covTrOut").textContent=c.coverTr+"%";
   $("#covColor").value=c.coverColor; $("#cTitleAuto").checked=c.titleAuto;
+  document.querySelectorAll(".showTitleChk").forEach(x=>x.checked=c.showTitle!==false);
   $("#cTitleColor").value=c.titleAuto?coverInk():c.titleColor; $("#cTitleColor").disabled=c.titleAuto;
   fillFontSelects();
 }
@@ -3286,7 +3666,7 @@ $("#covTr").addEventListener("input",e=>{S.cfg.coverTr=+e.target.value;syncForm(
 $("#covColor").addEventListener("input",e=>{S.cfg.coverColor=e.target.value;syncForm();renderBook()});
 $("#cTitleAuto").addEventListener("change",e=>{S.cfg.titleAuto=e.target.checked;if(!e.target.checked)S.cfg.titleColor=$("#cTitleColor").value;syncForm();renderBook()});
 $("#cTitleColor").addEventListener("input",e=>{S.cfg.titleColor=e.target.value;renderBook()});
-$("#bCoverUse").addEventListener("click",()=>{if(!S.sel||isText(S.sel))return;S.cfg.coverImg=S.sel;if(S.cfg.coverTr>=100)S.cfg.coverTr=40;S.cfg.title=true;syncForm();render()});
+$("#bCoverUse").addEventListener("click",()=>{if(!S.sel||isItem(S.sel))return;S.cfg.coverImg=S.sel;if(S.cfg.coverTr>=100)S.cfg.coverTr=40;S.cfg.title=true;syncForm();render()});
 $("#bCoverClear").addEventListener("click",()=>{S.cfg.coverImg=null;syncForm();render()});
 $("#fEn").addEventListener("change",e=>{S.cfg.fEn=e.target.value;syncForm();render();ensureFonts().then(render)});
 $("#fAr").addEventListener("change",e=>{S.cfg.fAr=e.target.value;syncForm();render();ensureFonts().then(render)});
@@ -3352,8 +3732,10 @@ window.addEventListener("drop",async e=>{
   } else [...e.dataTransfer.files].forEach(f=>out.push({file:f,group:"Loose"}));
   const fonts=out.filter(x=>FONT_RE.test(x.file.name)).map(x=>x.file);
   if(fonts.length) await addFonts(fonts);
-  const imgs=out.filter(x=>!FONT_RE.test(x.file.name));
-  if(imgs.length||!fonts.length) addFiles(imgs);
+  const svgs=out.filter(x=>/\.svg$/i.test(x.file.name)).map(x=>x.file);
+  if(svgs.length) await addUserShapes(svgs);
+  const imgs=out.filter(x=>!FONT_RE.test(x.file.name)&&!/\.svg$/i.test(x.file.name));
+  if(imgs.length||(!fonts.length&&!svgs.length)) addFiles(imgs);
 });
 
 async function addFiles(list){
@@ -3434,8 +3816,10 @@ async function drawPage(cx,item,W,H,k){
   const mm=(x,y,w)=>[(x+b)*k,(y+b)*k,w*k];
   if(item.type==="photo"){
     const pg=item.pg, sx=item.half==="R"?c.w:0;
+    const drawPS=async()=>{const sp=pg.bgShape;if(!sp)return;const R=pageShapeRect(sp,!!item.half);await drawShape(cx,sp,(R.x-sx+b)*k,(R.y+b)*k,R.w,R.h,k)};
+    if(pg.style!=="chapter") await drawPS();
     if(pg.style==="chapter"){
-      const P=chapterParts(pg); cx.fillStyle=P.bg; cx.fillRect(0,0,W,H);
+      const P=chapterParts(pg); cx.fillStyle=P.bg; cx.fillRect(0,0,W,H); await drawPS();
       drawLines(cx,P.T,...mm(P.x,P.yT,c.w-2*c.margin),k,P.ink);
       if(P.Sb){cx.globalAlpha=.85;drawLines(cx,P.Sb,...mm(P.x,P.ySb,(c.w-2*c.margin)*.62),k,P.ink);cx.globalAlpha=1}
     } else if(pg.style==="poem"&&(pg.text||"").trim()){
@@ -3445,7 +3829,9 @@ async function drawPage(cx,item,W,H,k){
     for(const r0 of pg.rects){
       const r=sx?{...r0,x:r0.x-sx}:r0;
       const p=S.photos.get(r.id), X=(r.x+b)*k, Y=(r.y+b)*k, RW=r.w*k, RH=r.h*k;
+      if(p.kind==="shape"){await drawShape(cx,p.shape,X,Y,r.w,r.h,k);continue}
       if(p.kind==="text"){
+        if(p.bgShape) await drawShape(cx,p.bgShape,X,Y,r.w,r.h,k);
         if(!String(p.text||"").trim()) continue;
         const T=layoutText(p,r.w,r.h), total=T.lines.length*T.lh*k;
         const y0=Y+(p.valign==="middle"?(RH-total)/2:p.valign==="bottom"?RH-total:0);
@@ -3473,6 +3859,7 @@ async function drawPage(cx,item,W,H,k){
       drawPhoto(cx,src,cp,X,Y,RW,RH,pl,k,()=>{cx.beginPath();cx.rect(X,Y,RW,RH)},3);
       if(src.close) src.close();
     }
+    await drawCoverShape(cx,k); if(c.showTitle===false) return;
     const CL=coverLayout(G.text.w), ink2=c.titleAuto?inkFor(G.bg):c.titleColor, [tx,ty,tw]=mm(G.text.x,G.text.y,G.text.w);
     drawLines(cx,CL.T,tx,ty,tw,k,ink2);
     if(CL.Sb) drawLines(cx,CL.Sb,tx,ty+(CL.T.lines.length*CL.T.lh+CL.gap)*k,tw,k,CL.Sb.st.color||ink2);
@@ -3486,12 +3873,14 @@ async function drawPage(cx,item,W,H,k){
       if(src.close) src.close();
     }
     const a=(100-c.coverTr)/100; if(a>0){cx.globalAlpha=a;cx.fillStyle=c.coverColor;cx.fillRect(0,0,W,H);cx.globalAlpha=1}
+    await drawCoverShape(cx,k); if(c.showTitle===false) return;
     const v=c.tPos[0], pad=(b+c.margin)*k, CL=coverLayout(), blockH=CL.height*k, ink2=coverInk();
     const top=v==="t"?pad:v==="m"?(H-blockH)/2:H-pad-blockH;
     drawLines(cx,CL.T,pad,top,CL.avail*k,k,ink2);
     if(CL.Sb) drawLines(cx,CL.Sb,pad,top+(CL.T.lines.length*CL.T.lh+CL.gap)*k,CL.avail*k,k,CL.Sb.st.color||ink2);
   }
 }
+async function drawCoverShape(cx,k){const sp=S.cfg.coverShape;if(!sp)return;const R=pageShapeRect(sp,false),b=S.cfg.bleed;await drawShape(cx,sp,(R.x+b)*k,(R.y+b)*k,R.w,R.h,k)}
 async function loadExportFonts(){busy("Loading type","Fonts for the PDF",0);await ensureFonts()}
 const fileBase=()=>(S.cfg.titleText||"photobook").trim().replace(/[\\/:*?"<>|]+/g,"").replace(/\s+/g,"-").toLowerCase()||"photobook";
 async function exportPDF(){
